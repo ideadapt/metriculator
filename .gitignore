@@ -1,0 +1,98 @@
+# source: https://github.com/github/gitignore #
+# Java ignores #
+*.class
+# Package Files #
+*.jar
+*.war
+*.ear
+ 
+# maven #
+target/
+RemoteSystemsTempFiles/
+
+# C++ ignores #
+# Compiled Object files
+*.slo
+*.lo
+*.o
+# Compiled Dynamic libraries
+*.so
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Eclipse generic #
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+*.stackdump
+# External tool builders
+.externalToolBuilders/
+# Locally stored "Eclipse launch configurations"
+runtime-EclipseApplication
+runtime-EclipseApplication*
+*.launch
+# CDT-specific
+.cproject
+# PDT-specific
+.buildpath
+junit-workspace/**
+junit-workspace/**/*
+
+# Windows image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
+
+# Linux ignores #
+!.gitignore
+*~
+# KDE
+.directory
+
+#LATEX#
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.nav
+*.nlo
+*.out
+*.pdfsync
+*.ps
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.maf
+*.mtc
+*.mtc0
+*thesis.pdf
+
+# stuff
+*.exe
+
+
+!dev/testing-project/plugins/**
+#!dev/ch.hsr.ifs.cdt.metriculator.site/**
+#!dev/ch.hsr.ifs.cdt.metriculator.site/**/*
