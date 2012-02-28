@@ -1,0 +1,28 @@
+From e5959cd33bd50e9fcd6e123112c84b773e7a06a1 Mon Sep 17 00:00:00 2001
+From: ukunz <kunz@ideadapt.net>
+Date: Mon, 14 Nov 2011 13:43:58 +0100
+Subject: [PATCH] lines to patch added
+
+---
+ .../internal/ui/widgets/ParametersComposite.java   |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/dev/org.eclipse.cdt.codan.ui/src/org/eclipse/cdt/codan/internal/ui/widgets/ParametersComposite.java b/dev/org.eclipse.cdt.codan.ui/src/org/eclipse/cdt/codan/internal/ui/widgets/ParametersComposite.java
+index af48b46..5e5d997 100755
+--- a/dev/org.eclipse.cdt.codan.ui/src/org/eclipse/cdt/codan/internal/ui/widgets/ParametersComposite.java
++++ b/dev/org.eclipse.cdt.codan.ui/src/org/eclipse/cdt/codan/internal/ui/widgets/ParametersComposite.java
+@@ -132,6 +132,11 @@ public class ParametersComposite extends Composite {
+ 						addField(fe);
+ 						break;
+ 					}
++					case TYPE_INTEGER: {
++						IntegerFieldEditor fe = new IntegerFieldEditor(info.getQualifiedKey(), info.getLabel(), getFieldEditorParent());
++						addField(fe);
++						break;
++					}
+ 					case TYPE_LIST:
+ 						ListEditor le = new ListEditor(info.getQualifiedKey(), info.getLabel(), getFieldEditorParent()) {
+ 							@Override
+-- 
+1.7.5.1
+

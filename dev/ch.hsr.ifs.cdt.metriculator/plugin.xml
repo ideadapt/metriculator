@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.eclipse.cdt.codan.core.checkers" name="CodanCheckers" schema="schema/org.eclipse.cdt.codan.core.checkers.exsd"/>
+   <extension
+         point="org.eclipse.cdt.codan.core.checkers">
+      <category
+            id="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+            name="Metric Problems">
+      </category>
+      <checker
+            class="ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetricChecker"
+            id="ch.hsr.ifs.cdt.metriculator.mcCabe">
+         <problem
+               category="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="McCabe (cyclomatic complexity)"
+               id="ch.hsr.ifs.cdt.metriculator.mccabe"
+               messagePattern="Cyclomatic Complexity is above specified maximum of {0}."
+               name="McCabe (Cyclomatic Complexity)">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker"
+            id="ch.hsr.ifs.cdt.metriculator.lsloc">
+         <problem
+               category="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="logical source lines of code"
+               id="ch.hsr.ifs.cdt.metriculator.lsloc"
+               messagePattern="Lines of code is above specified maximum of {0}."
+               name="LSLOC">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cdt.metriculator.checkers.NumberParamsMetricChecker"
+            id="ch.hsr.ifs.cdt.metriculator.nbparams">
+         <problem
+               category="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Number Of Parameters"
+               id="ch.hsr.ifs.cdt.metriculator.nbparams"
+               messagePattern="Number of parameters is above specified maximum  of {0}."
+               name="Number of Parameters">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetricChecker"
+            id="ch.hsr.ifs.cdt.metriculator.classMembers">
+         <problem
+               category="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Number of Members per Type"
+               id="ch.hsr.ifs.cdt.metriculator.classmembers"
+               messagePattern="Number of members of type is above specified maximum of {0}."
+               name="Number of Type Members">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cdt.metriculator.checkers.EfferentCouplingMetricChecker"
+            id="ch.hsr.ifs.cdt.metriculator.efferentCoupling">
+         <problem
+               category="ch.hsr.ifs.cdt.metriculator.MetricCategory"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Efferent Coupling of Type"
+               id="ch.hsr.ifs.cdt.metriculator.efferentcoupling"
+               messagePattern="Number of couplings of type is above specified maximum of {0}."
+               name="Efferent Coupling of Type">
+         </problem>
+      </checker>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="ch.hsr.ifs.cdt.metriculator"
+            name="metriculator Category">
+      </category>
+      <view
+            category="org.eclipse.cdt.ui.views"
+            class="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"
+            icon="icons/obj16/flask.gif"
+            id="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"
+            name="metriculator">
+      </view>
+      <view
+            allowMultiple="true"
+            class="ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart"
+            id="ch.hsr.ifs.cdt.metriculator.tagcloud.TagCloudView"
+            icon="icons/view16/tagcloud.gif"
+            name="Source Cloud"
+            restorable="true">
+      </view>    
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+</plugin>

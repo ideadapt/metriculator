@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="metriculator update site">
+      update site for the eclipse CDT metriculator plugin
+   </description>
+   <feature url="features/ch.hsr.ifs.cdt.metriculator.feature_0.0.1.qualifier.jar" id="ch.hsr.ifs.cdt.metriculator.feature" version="0.0.1.qualifier">
+      <category name="metriculator"/>
+   </feature>
+   <category-def name="metriculator" label="metriculator"/>
+</site>

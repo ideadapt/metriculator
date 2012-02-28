@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+
+<target name="Restored Target" sequenceNumber="22">
+<locations>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.cdt.sdk.feature.group" version="8.0.0.201109151620"/>
+<repository location="http://download.eclipse.org/releases/indigo"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.zest.sdk.feature.group" version="2.0.0.201111241849"/>
+<repository location="https://hudson.eclipse.org/hudson/job/gef-zest-integration/ws/org.eclipse.zest.repository/target/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.platform.ide" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.platform.sdk" version="3.7.1.M20110909-1335"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.1.M20110909-1335"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
+</location>
+<location path="${workspace_loc}/testing-project" type="Directory"/>
+</locations>
+</target>
