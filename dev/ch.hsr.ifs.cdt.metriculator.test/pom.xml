@@ -11,6 +11,21 @@
   <artifactId>ch.hsr.ifs.cdt.metriculator.test</artifactId>
   <version>0.0.1.qualifier</version>
   <packaging>eclipse-test-plugin</packaging>
+<reporting>    
+    <plugins>  
+      <plugin>      
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>emma-maven-plugin</artifactId>
+        <version>1.0-alpha-3</version>
+        <inherited>true</inherited>          
+      </plugin>
+      <plugin> 
+        <groupId>org.codehaus.mojo</groupId> 
+        <artifactId>surefire-report-maven-plugin</artifactId> 
+        <inherited>true</inherited>
+      </plugin>       
+    </plugins>      
+  </reporting>    
 	<build>
 		<plugins>
 			<plugin>
@@ -21,7 +36,31 @@
 					<testSuite>ch.hsr.ifs.cdt.metriculator.test</testSuite>
 					<testClass>ch.hsr.ifs.cdt.metriculator.test.AllTests</testClass>
 				</configuration>
-			</plugin>				
+			</plugin>
+<plugin>      
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>emma-maven-plugin</artifactId>
+        <version>1.0-alpha-3</version>
+        <inherited>true</inherited>          
+        <executions>
+          <execution>
+            <phase>process-classes</phase>               
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <forkMode>once</forkMode>
+          <reportFormat>xml</reportFormat>
+          <classesDirectory>${project.build.directory}/generated-classes/emma/classes</classesDirectory>    
+        </configuration>        
+      </plugin>			
     	</plugins>
 	</build>  
 </project>
