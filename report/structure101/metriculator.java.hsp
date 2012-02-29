@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.5.1491" flavor="j2se">
+  <property name="show-needs-to-compile" value="false" />
+  <property name="hide-externals" value="true" />
+  <property name="detail-mode" value="true" />
+  <property name="project-type" value="classpath" />
+  <classpath>
+    <classpathentry kind="lib" path="D:\dev\Verschiedenes\SA\repo\metriculator\dev\ch.hsr.ifs.cdt.metriculator" />
+  </classpath>
+  <restructuring>
+    <set version="1" name="Sandbox 1" hiview="Codemap" active="true" todo="false" />
+    <set version="1" name="Flattened to classes" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="true">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+    <set version="1" name="Flattened to leaf packages" hiview="Codemap" active="false" todo="false">
+      <action type="flatten" active="true" description="Flatten root">
+        <params flattenLeafFolders="false">
+          <container-fqn fqn="root" type="root" path="" isroot="true" />
+        </params>
+        <composite-set />
+      </action>
+    </set>
+  </restructuring>
+  <grid-set sep="." version="3.5.1491">
+    <grid name="Diagram 1" enforce="true" strict="false">
+      <row>
+        <cell name="views" pattern="ch.hsr.ifs.cdt.metriculator.views.?" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="MetriculatorView" pattern="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="MetricColumnViewerSorter" pattern="ch.hsr.ifs.cdt.metriculator.views.MetricColumnViewerSorter" vexpanded="false" visibility="public" />
+              <cell name="NodeFilter" pattern="ch.hsr.ifs.cdt.metriculator.views.NodeFilter" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="AwtSwtColorConverter" pattern="ch.hsr.ifs.cdt.metriculator.views.AwtSwtColorConverter" vexpanded="false" visibility="public" />
+              <cell name="ColumnViewerSorter" pattern="ch.hsr.ifs.cdt.metriculator.views.ColumnViewerSorter" vexpanded="false" visibility="public" />
+              <cell name="FilterType" pattern="ch.hsr.ifs.cdt.metriculator.views.FilterType" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="metriculator" pattern="ch.hsr.ifs.cdt.metriculator.?" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="LSLOCMetricChecker" pattern="ch.hsr.ifs.cdt.metriculator.LSLOCMetricChecker" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="LSLOCScopedASTVisitor" pattern="ch.hsr.ifs.cdt.metriculator.LSLOCScopedASTVisitor" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="MetricKey" pattern="ch.hsr.ifs.cdt.metriculator.MetricKey" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="McCabeMetricChecker" pattern="ch.hsr.ifs.cdt.metriculator.McCabeMetricChecker" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="AbstractMetricChecker" pattern="ch.hsr.ifs.cdt.metriculator.AbstractMetricChecker" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="McCabeScopedASTVisitor" pattern="ch.hsr.ifs.cdt.metriculator.McCabeScopedASTVisitor" vexpanded="false" visibility="public" />
+              <cell name="MetriculatorPluginActivator" pattern="ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator" vexpanded="false" visibility="public" />
+            </row>
+            <row>
+              <cell name="CheckerLabels" pattern="ch.hsr.ifs.cdt.metriculator.CheckerLabels" vexpanded="false" visibility="public" />
+              <cell name="PluginObservable" pattern="ch.hsr.ifs.cdt.metriculator.PluginObservable" vexpanded="false" visibility="public" />
+              <cell name="ScopedASTVisitor" pattern="ch.hsr.ifs.cdt.metriculator.ScopedASTVisitor" vexpanded="false" visibility="public" />
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <row>
+        <cell name="model" pattern="ch.hsr.ifs.cdt.metriculator.model.*" vexpanded="true" visibility="public">
+          <grid>
+            <row>
+              <cell name="model" pattern="ch.hsr.ifs.cdt.metriculator.model.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="FlatTreeBuilder" pattern="ch.hsr.ifs.cdt.metriculator.model.FlatTreeBuilder" vexpanded="false" visibility="public" />
+                    <cell name="LogicTreeBuilder" pattern="ch.hsr.ifs.cdt.metriculator.model.LogicTreeBuilder" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="HybridTreeBuilder" pattern="ch.hsr.ifs.cdt.metriculator.model.HybridTreeBuilder" vexpanded="false" visibility="public" />
+                    <cell name="PreOrderFlatTreeVisitor" pattern="ch.hsr.ifs.cdt.metriculator.model.PreOrderFlatTreeVisitor" vexpanded="false" visibility="public" />
+                    <cell name="PreOrderLogicTreeVisitor" pattern="ch.hsr.ifs.cdt.metriculator.model.PreOrderLogicTreeVisitor" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="PreOrderTreeVisitor" pattern="ch.hsr.ifs.cdt.metriculator.model.PreOrderTreeVisitor" vexpanded="false" visibility="public" />
+                    <cell name="TreeBuilder" pattern="ch.hsr.ifs.cdt.metriculator.model.TreeBuilder" vexpanded="false" visibility="public" />
+                    <cell name="TreePrinter" pattern="ch.hsr.ifs.cdt.metriculator.model.TreePrinter" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+            <row>
+              <cell name="nodes" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.?" vexpanded="true" visibility="public">
+                <grid>
+                  <row>
+                    <cell name="FileNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="CompositeTypeNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode" vexpanded="false" visibility="public" />
+                    <cell name="FolderNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode" vexpanded="false" visibility="public" />
+                    <cell name="FunctionNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode" vexpanded="false" visibility="public" />
+                    <cell name="NamespaceNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode" vexpanded="false" visibility="public" />
+                    <cell name="ProjectNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode" vexpanded="false" visibility="public" />
+                    <cell name="WorkspaceNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="AbstractNode" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode" vexpanded="false" visibility="public" />
+                  </row>
+                  <row>
+                    <cell name="CompositeValue" pattern="ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeValue" vexpanded="false" visibility="public" />
+                  </row>
+                </grid>
+              </cell>
+            </row>
+          </grid>
+        </cell>
+      </row>
+      <description>Top-level breakout</description>
+    </grid>
+  </grid-set>
+</local-project>
+

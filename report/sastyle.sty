@@ -1,0 +1,82 @@
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{nomencl}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black, plainpages=false]{hyperref}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\setkomafont{sectioning}{\rmfamily \bfseries}
+\usepackage{fixltx2e} % Current patches for LaTeX
+\usepackage{multicol}
+\usepackage{color,soul}
+\usepackage{scrhack}
+
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\bibliographystyle{alpha}
+
+\makenomenclature
+
+\include{nomenclature}
+
+\usepackage{color}
+\usepackage{listings}
+
+% Title Page
+\definecolor{gray}{rgb}{0.9,0.9,0.9}
+\definecolor{keyword_color}{rgb}{0.643, 0.207, 0.478}
+\definecolor{string_color}{rgb}{0.165, 0, 1}
+\definecolor{comment_color}{rgb}{0.309, 0.541, 0.423}
+
+\lstset{basicstyle=\scriptsize\ttfamily, framexleftmargin=5mm, 
+framextopmargin=3mm, framexbottommargin=3mm, frame=shadowbox, rulesepcolor=\color{gray}, aboveskip=5mm, belowskip=5mm, xleftmargin=5mm, keywordstyle=\color{keyword_color}\bfseries, stringstyle=\color{string_color}, commentstyle=\color{comment_color},showstringspaces=false, tabsize=2, escapechar={�}, captionpos=b}
+
+\lstdefinelanguage{C++0x}{language=C++, morekeywords={constexpr, nullptr, thread_local, static_assert}}
+
+\lstdefinelanguage{ANTLR}{sensitive=true,
+keywords={scope,@init,@after,options,returns, throws,catch,finally}, 
+morecomment=[n]{/*}{*/} 
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,type}% list your attributes here
+}
+
+\lstdefinestyle{C++0x}{language=C++0x,basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{Java}{language=Java,basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{ANTLR}{language=ANTLR, basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{Ant}{language=Ant, basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{Std}{language=C++0x, basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{Inline}{basicstyle=\small\ttfamily}
+\lstdefinestyle{Console}{language=bash,basicstyle=\scriptsize\ttfamily}
+\lstdefinestyle{Xml}{language=XML,basicstyle=\scriptsize\ttfamily}
+
+
+\usepackage{fancyhdr}
+\setlength{\parindent}{0em}  % Absaetze erste Zeile nicht einruecken 
+\setlength{\topmargin}{0cm}  % Seitenrand oben 
+
+\pagestyle{fancy}
+
+\lhead{metriculator - CDT metric plug-in} 
+\chead{} 
+\rhead{} 
+\lfoot{ \hrule Ueli Kunz, Julius Weder } 
+\cfoot{\hrule \thepage} 
+\rfoot{\hrule \today}
+
+\fancypagestyle{plain}{
+\lhead{metriculator - CDT metric plug-in} 
+\chead{} 
+\rhead{} 
+\lfoot{ \hrule Ueli Kunz, Julius Weder } 
+\cfoot{\hrule \thepage} 
+\rfoot{\hrule \today}}
