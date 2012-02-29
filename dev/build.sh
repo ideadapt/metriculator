@@ -6,4 +6,4 @@ THIS=$(readlink -f $0)
 BUNDLE_ROOT="`dirname $THIS`"
 
 cd $BUNDLE_ROOT
-mvn -e clean install emma:emma
+mvn -e clean install emma
