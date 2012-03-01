@@ -80,9 +80,11 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 	private AbstractNode getDefinitionForDeclarationOf(AbstractNode child, AbstractNode parent) {
 		if(child.getNodeInfo().isElaboratedTypeSpecifier() || (child.getNodeInfo().isFunctionDeclarator() && !(parent.getNodeInfo().isFunctionDefinition()))){
-			IBinding binding = child.getNodeInfo().getBinding();
+			IBinding binding = null;
 			if(child.getNodeInfo().isElaboratedTypeSpecifier()){
 				binding = child.getNodeInfo().getTypeBinding();
+			}else{
+				binding = child.getNodeInfo().getBinding();
 			}
 			if(removedDeclarationBindings.containsKey(binding)){
 				return removedDeclarationBindings.get(binding);
