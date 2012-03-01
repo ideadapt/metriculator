@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TagCloud
+Bundle-SymbolicName: ch.hsr.ifs.cdt.metriculator.tagcloud
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: ch.hsr.ifs.cdt.metriculator.tagcloud.TagCloudActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.zest.cloudio;bundle-version="2.0.0",
+ ch.hsr.ifs.cdt.metriculator;bundle-version="0.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

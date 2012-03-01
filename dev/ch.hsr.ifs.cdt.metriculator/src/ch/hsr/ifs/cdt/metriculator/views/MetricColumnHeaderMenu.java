@@ -12,6 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.views;
 
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -50,10 +52,14 @@ public final class MetricColumnHeaderMenu {
 	public enum ItemType{
 		GenerateTagCloud, ToggleMetricColumn
 	}
+	
+	public static MenuManager menuManager = new MenuManager();
 
 	public static Menu create(Shell shell, final Tree treeObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
-		
+		final Menu headerMenu = menuManager.createContextMenu(treeObj);
+		menuManager.isDynamic();
+		//final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+
 		treeObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Point treeRelativePoint = Display.getDefault().map(null, treeObj, new Point(event.x, event.y));
@@ -142,9 +148,13 @@ public final class MetricColumnHeaderMenu {
 		
 		new MenuItem(menu, SWT.SEPARATOR);
 	}
-
+	
+	/**
+	 * @deprecated use updateItemSelections(MenuManager menu) instead
+	 * */
 	public static void updateItemSelections(Menu menu) {
 		for(MenuItem item : menu.getItems()){
+			
 			if(item.getData() != null && item.getData().equals(ItemType.ToggleMetricColumn)){
 				Object col = item.getData(DATAKEY_MENUITEM_COLUMN);
 				if(col instanceof TreeColumn){
@@ -155,5 +165,22 @@ public final class MetricColumnHeaderMenu {
 				}
 			}
 		}
+	}
+
+	public static void updateItemSelections(MenuManager menu) {
+		for(IContributionItem item : menu.getItems()){
+			
+			if(item instanceof ToggleColumnContributionActionItem){
+				Object col = ((ToggleColumnContributionActionItem<?>) item).getColumn();
+				
+				if(col instanceof TreeColumn){
+					((ToggleColumnContributionActionItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TreeColumn)col));
+				}
+				if(col instanceof TableColumn){
+					((ToggleColumnContributionActionItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TableColumn)col));
+				}
+			}
+		}
+		menuManager.isDirty();
 	}
 }

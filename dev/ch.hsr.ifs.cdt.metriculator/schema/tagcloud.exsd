@@ -3,7 +3,7 @@
 <schema targetNamespace="ch.hsr.ifs.cdt.metriculator" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="ch.hsr.ifs.cdt.metriculator" id="ch.hsr.ifs.metriculator.checkers" name="MetriculatorCheckers"/>
+         <meta.schema plugin="ch.hsr.ifs.cdt.metriculator" id="tagcloud" name="TagCloud"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

@@ -3,7 +3,7 @@
 <schema targetNamespace="ch.hsr.ifs.cdt.metriculator" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="ch.hsr.ifs.cdt.metriculator" id="org.eclipse.cdt.codan.core.checkers" name="CodanCheckers"/>
+         <meta.schema plugin="ch.hsr.ifs.cdt.metriculator" id="org.eclipse.cdt.codan.core.checkers" name="codan checkers"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

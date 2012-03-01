@@ -25,6 +25,7 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -223,8 +224,9 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createTreeHeaderMenu() {
-		
+
 		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
+		
 		MetricColumnHeaderMenu.createTagCloudMenuItem(treeHeaderMenu, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -234,11 +236,14 @@ public class MetriculatorView extends ViewPart implements Observer {
 				}
 			}
 		});
+		
+		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menu.colheader", MetricColumnHeaderMenu.menuManager, treeViewer);
 	}
 	
 	private void createTableHeaderMenu() {
 		
 		tableHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), tableViewer.getTable());
+		
 		MetricColumnHeaderMenu.createTagCloudMenuItem(tableHeaderMenu, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -251,7 +256,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 	
 	private void createAndUpdateMetricTreeColumns() {
-		
+		// TODO use toggleaction / togglecontritem as key element, hide column behind the action
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
 			TreeColumn col = metricsTreeColumns.get(metric);
 			
@@ -282,22 +287,23 @@ public class MetriculatorView extends ViewPart implements Observer {
 	
 	private void createMetricMenuItemFor(final TreeColumn column) {
 		
-		final MenuItem itemColName = new MenuItem(treeHeaderMenu, SWT.CHECK);
+		//final MenuItem itemColName = new MenuItem(treeHeaderMenu, SWT.CHECK);
+		MetricColumnHeaderMenu.menuManager.add(new ToggleColumnContributionActionItem<TreeColumn>(column));
 		
-		itemColName.setData(ItemType.ToggleMetricColumn);
-		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
-		itemColName.setText(column.getText());
-		itemColName.setSelection(MetricColumn.isVisible(column));
-		
-		itemColName.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				if (itemColName.getSelection()) {
-					MetricColumn.showColumn(column);
-				} else {
-					MetricColumn.hideColumn(column);
-				}
-			}
-		});
+//		itemColName.setData(ItemType.ToggleMetricColumn);
+//		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
+//		itemColName.setText(column.getText());
+//		itemColName.setSelection(MetricColumn.isVisible(column));
+//		
+//		itemColName.addListener(SWT.Selection, new Listener() {
+//			public void handleEvent(Event event) {
+//				if (itemColName.getSelection()) {
+//					MetricColumn.showColumn(column);
+//				} else {
+//					MetricColumn.hideColumn(column);
+//				}
+//			}
+//		});
 	}
 	
 	private void createMetricMenuItemFor(final TableColumn column) {
@@ -699,7 +705,9 @@ public class MetriculatorView extends ViewPart implements Observer {
 		createAndUpdateMetricTableColumns();
 		applyViewMode(ViewMode.Hybrid, null);
 		updateViewerData();
-		MetricColumnHeaderMenu.updateItemSelections(treeHeaderMenu);
+		//MetricColumnHeaderMenu.updateItemSelections(treeHeaderMenu);
+		//MetricColumnHeaderMenu.menuManager.getItems();
+		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.menuManager);
 		MetricColumnHeaderMenu.updateItemSelections(tableHeaderMenu);
 	}
 	
