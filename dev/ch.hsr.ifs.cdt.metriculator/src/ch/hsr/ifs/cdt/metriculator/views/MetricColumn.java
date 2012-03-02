@@ -26,8 +26,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
  * */
 public final class MetricColumn {
 
-	private static final int DEFAULT_WIDTH           = 100;
-	private static final String DATAKEY_COLUMNMETRIC = "metric";
+	static final int DEFAULT_WIDTH           = 100;
+	static final String DATAKEY_COLUMNMETRIC = "metric";
 	
 	public static void showColumn(TreeColumn column) {
 		column.setWidth(DEFAULT_WIDTH);
@@ -91,6 +91,16 @@ public final class MetricColumn {
 			showColumn(column);
 		}else{
 			hideColumn(column);
+		}
+	}
+	
+	public static void toggleVisibility(ToggleColumnActionContrItem<TreeColumn> actionItem) {
+		if (((AbstractMetric) actionItem.getColumn().getData(DATAKEY_COLUMNMETRIC)).getChecker().hasEnabledProblems()) {
+			actionItem.getAction().setChecked(true);
+//			showColumn(actionItem.getColumn());
+		}else{
+			actionItem.getAction().setChecked(false);
+//			hideColumn(actionItem.getColumn());
 		}
 	}
 	

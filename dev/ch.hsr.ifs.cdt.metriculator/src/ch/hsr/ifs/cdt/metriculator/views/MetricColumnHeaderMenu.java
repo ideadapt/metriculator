@@ -170,15 +170,16 @@ public final class MetricColumnHeaderMenu {
 	public static void updateItemSelections(MenuManager menu) {
 		for(IContributionItem item : menu.getItems()){
 			
-			if(item instanceof ToggleColumnContributionActionItem){
-				Object col = ((ToggleColumnContributionActionItem<?>) item).getColumn();
-				
-				if(col instanceof TreeColumn){
-					((ToggleColumnContributionActionItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TreeColumn)col));
-				}
-				if(col instanceof TableColumn){
-					((ToggleColumnContributionActionItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TableColumn)col));
-				}
+			if(item instanceof ToggleColumnActionContrItem){
+				((ToggleColumnActionContrItem<?>) item).toggleVisibility();
+//				Object col = ((ToggleColumnActionContrItem<?>) item).getColumn();
+//				
+//				if(col instanceof TreeColumn){
+//					((ToggleColumnActionContrItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TreeColumn)col));
+//				}
+//				if(col instanceof TableColumn){
+//					((ToggleColumnActionContrItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TableColumn)col));
+//				}
 			}
 		}
 		menuManager.isDirty();

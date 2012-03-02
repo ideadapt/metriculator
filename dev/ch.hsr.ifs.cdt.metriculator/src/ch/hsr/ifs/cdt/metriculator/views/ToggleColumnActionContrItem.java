@@ -4,13 +4,13 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Item;
 
-public class ToggleColumnContributionActionItem<T extends Item> extends ActionContributionItem{
+public abstract class ToggleColumnActionContrItem<T extends Item> extends ActionContributionItem{
 
-	private ToggleColumnContributionActionItem(IAction action) {
+	private ToggleColumnActionContrItem(IAction action) {
 		super(action);
 	}
 	
-	public ToggleColumnContributionActionItem(T column){
+	public ToggleColumnActionContrItem(T column){
 		super(new ToggleColumnAction<T>(column));
 	}
 	
@@ -23,4 +23,6 @@ public class ToggleColumnContributionActionItem<T extends Item> extends ActionCo
 	public boolean isDynamic() {
 		return true;
 	}
+	
+	public abstract void toggleVisibility();
 }

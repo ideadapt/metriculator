@@ -25,7 +25,6 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -89,7 +88,8 @@ public class MetriculatorView extends ViewPart implements Observer {
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
 	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
 	
-	private HashMap<AbstractMetric, TreeColumn> metricsTreeColumns   = new HashMap<AbstractMetric, TreeColumn>();
+//	private HashMap<AbstractMetric, TreeColumn> metricsTreeColumns   = new HashMap<AbstractMetric, TreeColumn>();
+	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>>();
 	private HashMap<AbstractMetric, TableColumn> metricsTableColumns = new HashMap<AbstractMetric, TableColumn>();
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
@@ -256,17 +256,18 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 	
 	private void createAndUpdateMetricTreeColumns() {
-		// TODO use toggleaction / togglecontritem as key element, hide column behind the action
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
-			TreeColumn col = metricsTreeColumns.get(metric);
 			
-			if (col == null) {
+			ToggleColumnActionContrItem<TreeColumn> actionItem = metricsTreeColumnActions.get(metric);
+			
+			if (actionItem == null) {
 
-				col = MetricColumn.createFor(metric, treeViewer);
-				createMetricMenuItemFor(col);
-				metricsTreeColumns.put(metric, col);
+				TreeColumn col = MetricColumn.createFor(metric, treeViewer);
+				actionItem = createMetricMenuItemFor(col);
+				metricsTreeColumnActions.put(metric, actionItem);
 			}
-			MetricColumn.toggleVisibility(metric, col);
+			
+			MetricColumn.toggleVisibility(actionItem);
 		}
 	}
 	
@@ -285,12 +286,14 @@ public class MetriculatorView extends ViewPart implements Observer {
 		}
 	}	
 	
-	private void createMetricMenuItemFor(final TreeColumn column) {
+	private ToggleColumnActionContrItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
 		
 		//final MenuItem itemColName = new MenuItem(treeHeaderMenu, SWT.CHECK);
-		MetricColumnHeaderMenu.menuManager.add(new ToggleColumnContributionActionItem<TreeColumn>(column));
-		
-//		itemColName.setData(ItemType.ToggleMetricColumn);
+		ToggleTreeColumnActionContrItem actionItem = new ToggleTreeColumnActionContrItem(column);
+		MetricColumnHeaderMenu.menuManager.add(actionItem);
+		return actionItem;
+
+//      itemColName.setData(ItemType.ToggleMetricColumn);
 //		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
 //		itemColName.setText(column.getText());
 //		itemColName.setSelection(MetricColumn.isVisible(column));

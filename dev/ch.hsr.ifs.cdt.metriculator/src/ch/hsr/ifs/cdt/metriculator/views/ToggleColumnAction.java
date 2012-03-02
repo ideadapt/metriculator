@@ -11,13 +11,6 @@ public class ToggleColumnAction<T extends Item> extends Action {
 	public ToggleColumnAction(T col) {
 		column = col;
 	}
-	
-	private boolean isChecked = true;
-	
-	@Override
-	public boolean isChecked() {
-		return isChecked;
-	}
 
 	@Override
 	public int getStyle() {
@@ -31,8 +24,8 @@ public class ToggleColumnAction<T extends Item> extends Action {
 
 	@Override
 	public void run() {
-		isChecked = !isChecked;
-		if(isChecked){
+		
+		if(isChecked()){
 			if(column instanceof TreeColumn){
 				MetricColumn.showColumn((TreeColumn)column);
 			}
@@ -41,6 +34,5 @@ public class ToggleColumnAction<T extends Item> extends Action {
 				MetricColumn.hideColumn((TreeColumn)column);
 			}
 		}
-		setChecked(isChecked);
 	}
 }
