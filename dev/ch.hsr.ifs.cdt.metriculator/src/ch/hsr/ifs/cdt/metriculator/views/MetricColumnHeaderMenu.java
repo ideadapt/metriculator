@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.metriculator.views;
 
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
  * @author Ueli Kunz
@@ -56,10 +58,11 @@ public final class MetricColumnHeaderMenu {
 	public static MenuManager menuManager = new MenuManager();
 
 	public static Menu create(Shell shell, final Tree treeObj){
-		final Menu headerMenu = menuManager.createContextMenu(treeObj);
 		menuManager.isDynamic();
-		//final Menu headerMenu = new Menu(shell, SWT.POP_UP);
-
+		menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = menuManager.createContextMenu(treeObj);
+		treeObj.setMenu(headerMenu);
+		
 		treeObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Point treeRelativePoint = Display.getDefault().map(null, treeObj, new Point(event.x, event.y));
@@ -69,7 +72,6 @@ public final class MetricColumnHeaderMenu {
 				
 				if(inMetricColumn){
 					setCurrColumn(headerMenu, treeObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					treeObj.setMenu(headerMenu);
 				}else{
 					event.doit = false;
 				}
@@ -172,14 +174,6 @@ public final class MetricColumnHeaderMenu {
 			
 			if(item instanceof ToggleColumnActionContrItem){
 				((ToggleColumnActionContrItem<?>) item).toggleVisibility();
-//				Object col = ((ToggleColumnActionContrItem<?>) item).getColumn();
-//				
-//				if(col instanceof TreeColumn){
-//					((ToggleColumnActionContrItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TreeColumn)col));
-//				}
-//				if(col instanceof TableColumn){
-//					((ToggleColumnActionContrItem<?>) item).getAction().setChecked(MetricColumn.isVisible((TableColumn)col));
-//				}
 			}
 		}
 		menuManager.isDirty();

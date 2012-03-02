@@ -14,7 +14,6 @@ package ch.hsr.ifs.cdt.metriculator.views;
 
 import java.awt.Color;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Observable;
@@ -23,12 +22,10 @@ import java.util.Observer;
 import org.eclipse.cdt.codan.core.model.CodanSeverity;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -57,9 +54,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -74,8 +69,6 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
-import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
-import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
 import ch.hsr.ifs.cdt.metriculator.views.MetricColumnHeaderMenu.ItemType;
 
 /**
@@ -88,7 +81,6 @@ public class MetriculatorView extends ViewPart implements Observer {
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
 	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
 	
-//	private HashMap<AbstractMetric, TreeColumn> metricsTreeColumns   = new HashMap<AbstractMetric, TreeColumn>();
 	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>>();
 	private HashMap<AbstractMetric, TableColumn> metricsTableColumns = new HashMap<AbstractMetric, TableColumn>();
 	private TreeViewer treeViewer;
@@ -227,32 +219,36 @@ public class MetriculatorView extends ViewPart implements Observer {
 
 		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
 		
-		MetricColumnHeaderMenu.createTagCloudMenuItem(treeHeaderMenu, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
-				if(selectedCol != null){
-					generateTagCloud(MetricColumn.getMetric(selectedCol));
-				}
-			}
-		});
-		
-		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menu.colheader", MetricColumnHeaderMenu.menuManager, treeViewer);
+		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menuTreeColumnHeader", MetricColumnHeaderMenu.menuManager, treeViewer);
+	}
+	
+	// TODO provide a better way for tagcloud components to retrieve input data
+	public AbstractMetric getSelectedMetric(){
+		TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
+		if(selectedCol != null){
+			return MetricColumn.getMetric(selectedCol);
+		}
+		return null;
+	}
+	
+	public Collection<AbstractNode> getSelectedNodes(){
+		Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(currTreeBuilder.root.getChildren());
+		return filteredNodes;
 	}
 	
 	private void createTableHeaderMenu() {
 		
 		tableHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), tableViewer.getTable());
 		
-		MetricColumnHeaderMenu.createTagCloudMenuItem(tableHeaderMenu, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
-				if(selectedCol != null){
-					generateTagCloud(MetricColumn.getMetric(selectedCol));
-				}
-			}
-		});
+//		MetricColumnHeaderMenu.createTagCloudMenuItem(tableHeaderMenu, new Listener() {
+//			@Override
+//			public void handleEvent(Event e) {
+//				TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
+//				if(selectedCol != null){
+//					generateTagCloud(MetricColumn.getMetric(selectedCol));
+//				}
+//			}
+//		});
 	}
 	
 	private void createAndUpdateMetricTreeColumns() {
@@ -288,25 +284,9 @@ public class MetriculatorView extends ViewPart implements Observer {
 	
 	private ToggleColumnActionContrItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
 		
-		//final MenuItem itemColName = new MenuItem(treeHeaderMenu, SWT.CHECK);
 		ToggleTreeColumnActionContrItem actionItem = new ToggleTreeColumnActionContrItem(column);
 		MetricColumnHeaderMenu.menuManager.add(actionItem);
 		return actionItem;
-
-//      itemColName.setData(ItemType.ToggleMetricColumn);
-//		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
-//		itemColName.setText(column.getText());
-//		itemColName.setSelection(MetricColumn.isVisible(column));
-//		
-//		itemColName.addListener(SWT.Selection, new Listener() {
-//			public void handleEvent(Event event) {
-//				if (itemColName.getSelection()) {
-//					MetricColumn.showColumn(column);
-//				} else {
-//					MetricColumn.hideColumn(column);
-//				}
-//			}
-//		});
 	}
 	
 	private void createMetricMenuItemFor(final TableColumn column) {
@@ -459,40 +439,40 @@ public class MetriculatorView extends ViewPart implements Observer {
 		actionHybridView.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FILESYSTEM));
 	}
 
-	private void generateTagCloud(AbstractMetric metric) {
-		ProgressMonitorDialog dialog = null;
-		try {
-			dialog = new ProgressMonitorDialog(null);
-			dialog.setBlockOnOpen(false);
-			dialog.open();
-			IProgressMonitor pm = dialog.getProgressMonitor();
-			pm.beginTask("Generating tag cloud ...", IProgressMonitor.UNKNOWN);
-			
-			TreeBuilder builder                    = MetriculatorPluginActivator.getDefault().getFlatTreeBuilder();
-			Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(builder.root.getChildren());
-			ArrayList<Type> types                  = new ArrayList<Type>();
-			
-			for(AbstractNode n : filteredNodes){
-				String nodeName = n.toString();
-				// shorten strings, otherwise TagCloudViewPart 
-				// throws drawing exceptions due to the limited size of the drawing area.
-				if(nodeName.length() > 20){
-					nodeName = nodeName.substring(0, 20);
-				}
-				types.add(new Type(nodeName, n.getNodeValue(metric.getKey())));			
-			}
-
-			IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TagCloudViewPart.VIEW_ID);
-			((TagCloudViewPart) view).getViewer().setInput(types, pm);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			if(dialog != null){
-				dialog.close();
-			}
-		}
-	}
+//	private void generateTagCloud(AbstractMetric metric) {
+//		ProgressMonitorDialog dialog = null;
+//		try {
+//			dialog = new ProgressMonitorDialog(null);
+//			dialog.setBlockOnOpen(false);
+//			dialog.open();
+//			IProgressMonitor pm = dialog.getProgressMonitor();
+//			pm.beginTask("Generating tag cloud ...", IProgressMonitor.UNKNOWN);
+//			
+//			TreeBuilder builder                    = MetriculatorPluginActivator.getDefault().getFlatTreeBuilder();
+//			Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(builder.root.getChildren());
+//			ArrayList<Type> types                  = new ArrayList<Type>();
+//			
+//			for(AbstractNode n : filteredNodes){
+//				String nodeName = n.toString();
+//				// shorten strings, otherwise TagCloudViewPart 
+//				// throws drawing exceptions due to the limited size of the drawing area.
+//				if(nodeName.length() > 20){
+//					nodeName = nodeName.substring(0, 20);
+//				}
+//				types.add(new Type(nodeName, n.getNodeValue(metric.getKey())));			
+//			}
+//
+//			IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TagCloudViewPart.VIEW_ID);
+//			((TagCloudViewPart) view).getViewer().setInput(types, pm);
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}finally{
+//			if(dialog != null){
+//				dialog.close();
+//			}
+//		}
+//	}
 	
 	private void createActionLogicalView() {
 		
