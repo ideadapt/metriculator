@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
@@ -24,6 +24,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.ICompositeType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
@@ -32,6 +33,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
+
+import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
 
 public class NodeInfo {
@@ -55,6 +58,17 @@ public class NodeInfo {
 	private int nodeOffsetEnd;
 	private boolean isEclosedInMacroExpansion;
 	private boolean isFriend;
+	private String logicalOwnerName;
+	
+	public String getLogicalOwnerName() {
+		return logicalOwnerName;
+	}
+
+	private boolean isMember;
+
+	public boolean isMember() {
+		return isMember;
+	}
 
 	public NodeInfo(){
 		hasInfos = false;
@@ -157,7 +171,7 @@ public class NodeInfo {
 	public boolean isCompositeTypeSpecifier() {
 		return isCompositeTypeSpecifier;
 	}
-	
+
 	public boolean isFriend(){
 		return isFriend;
 	}
@@ -172,27 +186,49 @@ public class NodeInfo {
 
 	private void prepareBindingFor(IASTTranslationUnit tu, IASTFunctionDeclarator declarator) {
 		prepareBindingFor(tu, declarator.getName());
+		prepareMembers(indexBinding.getOwner());
+		if(isMember){
+			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
+			System.out.println("Logical Owner: "+logicalOwnerName);
+		}
 	}
 
-    private void prepareBindingFor(IASTTranslationUnit tu, IASTName name) {
-        typeBinding  = name.resolveBinding();
-        IIndex index = tu.getIndex();
-        indexBinding = index.adaptBinding(typeBinding);
-        
-        if(indexBinding == null){
-        	indexBinding = typeBinding;
-        }
-    }
-    
-    public static IBinding getBindingFor(IASTName name, IASTTranslationUnit tu){
-    	IBinding typeBinding, indexBinding;
-    	
-        typeBinding  = name.resolveBinding();
-        IIndex index = tu.getIndex();
-        indexBinding = index.adaptBinding(typeBinding);
-        
-        return indexBinding == null ? typeBinding : indexBinding;
-    }
+
+	private void prepareMembers(IBinding owner) {
+		if(!isMember && owner != null && owner instanceof ICompositeType){
+			isMember = true;
+		}
+	}
+
+	private void prepareBindingFor(IASTTranslationUnit tu, IASTName name) {
+		typeBinding  = name.resolveBinding();
+		IIndex index = tu.getIndex();
+		indexBinding = index.adaptBinding(typeBinding);
+
+		if(indexBinding == null){
+			indexBinding = typeBinding;
+		}
+	}
+
+	private String prepareLogicalOwnerName(IBinding owner) {
+
+		if(owner.getOwner() == null){
+			return owner.getName().toString();
+		}
+
+		return prepareLogicalOwnerName(owner.getOwner()) + TreeBuilder.PATH_SEPARATOR + owner.getName();
+	}
+
+
+	public static IBinding getBindingFor(IASTName name, IASTTranslationUnit tu){
+		IBinding typeBinding, indexBinding;
+
+		typeBinding  = name.resolveBinding();
+		IIndex index = tu.getIndex();
+		indexBinding = index.adaptBinding(typeBinding);
+
+		return indexBinding == null ? typeBinding : indexBinding;
+	}
 
 	private void prepareNodeLocations(IASTNode astNode){
 		nodeOffSet = astNode.getNodeLocations()[0].getNodeOffset();
@@ -211,22 +247,22 @@ public class NodeInfo {
 	public IBinding getTypeBinding(){
 		return typeBinding;
 	}
-	
+
 	public String getASTNodeHash() {
 		return astNodeHashCode;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		  assert false : "hashCode not designed";
-		  return 23;
+		assert false : "hashCode not designed";
+	return 23;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
 		if(!(obj instanceof NodeInfo)) return false;
-		
+
 		NodeInfo other = (NodeInfo) obj;
 		boolean same = false;
 
@@ -245,7 +281,7 @@ public class NodeInfo {
 
 		return same;
 	}
-	
+
 	public IProblemLocation createAndGetProblemLocation(IFile file) {
 		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
 		if(isEclosedInMacroExpansion || startingLineNumber == endingLineNumber){
@@ -256,32 +292,32 @@ public class NodeInfo {
 
 	private void prepareProblemLocation(IASTNode astNode){
 		IASTFileLocation astLocation       = astNode.getFileLocation();
-		
+
 		startingLineNumber = astLocation.getStartingLineNumber();
-		
+
 		if (enclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
 			isEclosedInMacroExpansion = true;
 			IASTImageLocation imageLocation = ((IASTName) astNode).getImageLocation();
-			
+
 			if (imageLocation != null) {
 				nodeOffSetStart = imageLocation.getNodeOffset();
 				nodeOffsetEnd   = nodeOffSetStart + imageLocation.getNodeLength();
 				return;
 			}
 		}
-		
+
 		endingLineNumber = astLocation.getEndingLineNumber();
 		if (startingLineNumber == endingLineNumber) {
 			nodeOffSetStart = astLocation.getNodeOffset();
 			nodeOffsetEnd = nodeOffSetStart + astLocation.getNodeLength();
 			return;
 		}
-		
+
 	}
 
 	private static boolean enclosedInMacroExpansion(IASTNode node) {
 		IASTNodeLocation[] nodeLocations = node.getNodeLocations();
 		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
 	}
-	
+
 }
