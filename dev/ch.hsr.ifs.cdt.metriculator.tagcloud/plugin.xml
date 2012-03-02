@@ -4,12 +4,12 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="ch.hsr.ifs.cdt.metriculator.tagcloud.metriculatorContribution"
-            targetID="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView.menuTreeColumnHeader">
+            id="ch.hsr.ifs.cdt.metriculator.tagcloud.menuContribution"
+            targetID="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView.menuTableColumnHeader">
          <action
                class="ch.hsr.ifs.cdt.metriculator.tagcloud.generateTagCloudAction"
                id="ch.hsr.ifs.cdt.metriculator.tagcloud.generateTagCloudAction"
-               label="generate TagCloud"
+               label="generate &amp;TagCloud"
                menubarPath="additions">
          </action>
       </viewerContribution>

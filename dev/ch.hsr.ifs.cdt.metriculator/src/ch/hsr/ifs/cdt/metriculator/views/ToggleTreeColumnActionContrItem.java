@@ -4,21 +4,20 @@ import org.eclipse.swt.widgets.TreeColumn;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 
-public class ToggleTreeColumnActionContrItem extends ToggleColumnActionContrItem<TreeColumn>{
+public class ToggleTreeColumnActionContrItem extends ToggleColumnActionContrItem<TreeColumn> {
 
 	public ToggleTreeColumnActionContrItem(TreeColumn column) {
-		super(column);
+		super(new ToggleTreeColumnAction(column));
 	}
 
 	@Override
 	public void toggleVisibility() {
-		if(((AbstractMetric) getColumn().getData(MetricColumn.DATAKEY_COLUMNMETRIC)).getChecker().hasEnabledProblems()){
+		if (((AbstractMetric) getColumn().getData(MetricColumn.DATAKEY_COLUMNMETRIC)).getChecker().hasEnabledProblems()) {
 			MetricColumn.showColumn(getColumn());
 			getAction().setChecked(true);
-		}else{
+		} else {
 			MetricColumn.hideColumn(getColumn());
 			getAction().setChecked(false);
 		}
 	}
-
 }

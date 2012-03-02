@@ -45,10 +45,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
@@ -69,7 +66,6 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
-import ch.hsr.ifs.cdt.metriculator.views.MetricColumnHeaderMenu.ItemType;
 
 /**
  * @author Jules Weder, Ueli Kunz
@@ -82,7 +78,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
 	
 	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>>();
-	private HashMap<AbstractMetric, TableColumn> metricsTableColumns = new HashMap<AbstractMetric, TableColumn>();
+	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TableColumn>> metricsTableColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TableColumn>>();
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
 	private NodeViewerFilter viewerFilter;
@@ -215,13 +211,6 @@ public class MetriculatorView extends ViewPart implements Observer {
 		scopeSorter.setSorter(scopeSorter, INITIAL_SORT_ORDER);
 	}
 
-	private void createTreeHeaderMenu() {
-
-		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
-		
-		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menuTreeColumnHeader", MetricColumnHeaderMenu.menuManager, treeViewer);
-	}
-	
 	// TODO provide a better way for tagcloud components to retrieve input data
 	public AbstractMetric getSelectedMetric(){
 		TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
@@ -236,19 +225,14 @@ public class MetriculatorView extends ViewPart implements Observer {
 		return filteredNodes;
 	}
 	
+	private void createTreeHeaderMenu() {
+		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
+	}
+	
+	
 	private void createTableHeaderMenu() {
-		
 		tableHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), tableViewer.getTable());
-		
-//		MetricColumnHeaderMenu.createTagCloudMenuItem(tableHeaderMenu, new Listener() {
-//			@Override
-//			public void handleEvent(Event e) {
-//				TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
-//				if(selectedCol != null){
-//					generateTagCloud(MetricColumn.getMetric(selectedCol));
-//				}
-//			}
-//		});
+		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menuTableColumnHeader", MetricColumnHeaderMenu.tableMenuManager, tableViewer);
 	}
 	
 	private void createAndUpdateMetricTreeColumns() {
@@ -262,51 +246,38 @@ public class MetriculatorView extends ViewPart implements Observer {
 				actionItem = createMetricMenuItemFor(col);
 				metricsTreeColumnActions.put(metric, actionItem);
 			}
-			
-			MetricColumn.toggleVisibility(actionItem);
+			actionItem.toggleVisibility();
 		}
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
 		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
-			TableColumn col = metricsTableColumns.get(metric);
 			
-			if (col == null) {
+			ToggleColumnActionContrItem<TableColumn> actionItem = metricsTableColumnActions.get(metric);
+			
+			if (actionItem == null) {
 
-				col = MetricColumn.createFor(metric, tableViewer);
-				createMetricMenuItemFor(col);
-				metricsTableColumns.put(metric, col);
+				TableColumn col = MetricColumn.createFor(metric, tableViewer);
+				actionItem = createMetricMenuItemFor(col);
+				metricsTableColumnActions.put(metric, actionItem);
 			}
-			MetricColumn.toggleVisibility(metric, col);
-		}
+			actionItem.toggleVisibility();
+		}		
 	}	
 	
 	private ToggleColumnActionContrItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
 		
 		ToggleTreeColumnActionContrItem actionItem = new ToggleTreeColumnActionContrItem(column);
-		MetricColumnHeaderMenu.menuManager.add(actionItem);
+		MetricColumnHeaderMenu.treeMenuManager.add(actionItem);
 		return actionItem;
 	}
 	
-	private void createMetricMenuItemFor(final TableColumn column) {
+	private ToggleColumnActionContrItem<TableColumn> createMetricMenuItemFor(final TableColumn column) {
 		
-		final MenuItem itemColName = new MenuItem(tableHeaderMenu, SWT.CHECK);
-		
-		itemColName.setData(ItemType.ToggleMetricColumn);
-		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
-		itemColName.setText(column.getText());
-		itemColName.setSelection(MetricColumn.isVisible(column));
-		
-		itemColName.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				if (itemColName.getSelection()) {
-					MetricColumn.showColumn(column);
-				} else {
-					MetricColumn.hideColumn(column);
-				}
-			}
-		});
+		ToggleTableColumnActionContrItem actionItem = new ToggleTableColumnActionContrItem(column);
+		MetricColumnHeaderMenu.tableMenuManager.add(actionItem);
+		return actionItem;
 	}
 	
 	private void createActions() {
@@ -688,10 +659,8 @@ public class MetriculatorView extends ViewPart implements Observer {
 		createAndUpdateMetricTableColumns();
 		applyViewMode(ViewMode.Hybrid, null);
 		updateViewerData();
-		//MetricColumnHeaderMenu.updateItemSelections(treeHeaderMenu);
-		//MetricColumnHeaderMenu.menuManager.getItems();
-		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.menuManager);
-		MetricColumnHeaderMenu.updateItemSelections(tableHeaderMenu);
+		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.treeMenuManager);
+		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.tableMenuManager);
 	}
 	
 	private void initCodanStartedState(){

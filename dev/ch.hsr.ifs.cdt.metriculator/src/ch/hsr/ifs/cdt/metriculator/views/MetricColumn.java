@@ -64,7 +64,6 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, treeViewer);
 		
 		return column;
@@ -77,43 +76,9 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, tableViewer);
 		
 		return column;
-	}
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TreeColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
-	}
-	
-	public static void toggleVisibility(ToggleColumnActionContrItem<TreeColumn> actionItem) {
-		if (((AbstractMetric) actionItem.getColumn().getData(DATAKEY_COLUMNMETRIC)).getChecker().hasEnabledProblems()) {
-			actionItem.getAction().setChecked(true);
-//			showColumn(actionItem.getColumn());
-		}else{
-			actionItem.getAction().setChecked(false);
-//			hideColumn(actionItem.getColumn());
-		}
-	}
-	
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TableColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
 	}
 
 	public static AbstractMetric getMetric(Widget column) {

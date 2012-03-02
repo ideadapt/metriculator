@@ -52,15 +52,15 @@ public final class MetricColumnHeaderMenu {
 	}
 
 	public enum ItemType{
-		GenerateTagCloud, ToggleMetricColumn
+		ToggleMetricColumn
 	}
 	
-	public static MenuManager menuManager = new MenuManager();
-
+	public static MenuManager tableMenuManager = new MenuManager();
+	public static MenuManager treeMenuManager = new MenuManager();
+	
 	public static Menu create(Shell shell, final Tree treeObj){
-		menuManager.isDynamic();
-		menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
-		final Menu headerMenu = menuManager.createContextMenu(treeObj);
+		treeMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = treeMenuManager.createContextMenu(treeObj);
 		treeObj.setMenu(headerMenu);
 		
 		treeObj.addListener(SWT.MenuDetect, new Listener() {
@@ -101,7 +101,9 @@ public final class MetricColumnHeaderMenu {
 	}
 	
 	public static Menu create(Shell shell, final Table tableObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+		tableMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = tableMenuManager.createContextMenu(tableObj);
+		tableObj.setMenu(headerMenu);
 		
 		tableObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
@@ -112,7 +114,6 @@ public final class MetricColumnHeaderMenu {
 				
 				if(inMetricColumn){
 					setCurrColumn(headerMenu, tableObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					tableObj.setMenu(headerMenu);
 				}else{
 					event.doit = false;
 				}
@@ -139,16 +140,6 @@ public final class MetricColumnHeaderMenu {
 		});	
 		
 		return headerMenu;
-	}	
-
-	public static void createTagCloudMenuItem(Menu menu, Listener listener) {
-		
-		MenuItem tagCloudItem = new MenuItem(menu, SWT.PUSH);
-		tagCloudItem.setText("Generate TagCloud");
-		tagCloudItem.setData(ItemType.GenerateTagCloud);
-		tagCloudItem.addListener(SWT.Selection, listener);
-		
-		new MenuItem(menu, SWT.SEPARATOR);
 	}
 	
 	/**
@@ -176,6 +167,6 @@ public final class MetricColumnHeaderMenu {
 				((ToggleColumnActionContrItem<?>) item).toggleVisibility();
 			}
 		}
-		menuManager.isDirty();
+		menu.isDirty();
 	}
 }
