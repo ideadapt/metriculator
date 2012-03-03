@@ -186,19 +186,9 @@ public class NodeInfo {
 
 	private void prepareBindingFor(IASTTranslationUnit tu, IASTFunctionDeclarator declarator) {
 		prepareBindingFor(tu, declarator.getName());
-		prepareMembers(indexBinding.getOwner());
-		if(isMember){
-			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
-			System.out.println("Logical Owner: "+logicalOwnerName);
-		}
+//		prepareMembers(indexBinding.getOwner());
 	}
 
-
-	private void prepareMembers(IBinding owner) {
-		if(!isMember && owner != null && owner instanceof ICompositeType){
-			isMember = true;
-		}
-	}
 
 	private void prepareBindingFor(IASTTranslationUnit tu, IASTName name) {
 		typeBinding  = name.resolveBinding();
@@ -207,6 +197,15 @@ public class NodeInfo {
 
 		if(indexBinding == null){
 			indexBinding = typeBinding;
+		}
+		prepareMembers(indexBinding.getOwner());
+	}
+	
+	private void prepareMembers(IBinding owner) {
+		if(owner != null && owner instanceof ICompositeType){
+			isMember = true;
+			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
+			System.out.println("Logical Owner: "+logicalOwnerName);
 		}
 	}
 

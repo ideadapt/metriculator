@@ -88,7 +88,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 //				members.put(node, owner);
 //			}
 //		}
-		if(node.getNodeInfo().hasInfos()){
+		if(node.getNodeInfo().hasInfos() && (node instanceof FunctionNode || node instanceof CompositeTypeNode)){
 			if(node.getNodeInfo().isMember()){
 				members2.put(node, node.getNodeInfo().getLogicalOwnerName());
 			}
