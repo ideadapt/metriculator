@@ -186,7 +186,6 @@ public class NodeInfo {
 
 	private void prepareBindingFor(IASTTranslationUnit tu, IASTFunctionDeclarator declarator) {
 		prepareBindingFor(tu, declarator.getName());
-//		prepareMembers(indexBinding.getOwner());
 	}
 
 
