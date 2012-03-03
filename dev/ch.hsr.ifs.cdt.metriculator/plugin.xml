@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.eclipse.cdt.codan.core.checkers" name="CodanCheckers" schema="schema/org.eclipse.cdt.codan.core.checkers.exsd"/>
+   <extension-point id="org.eclipse.cdt.codan.core.checkers" name="codan checkers" schema="schema/org.eclipse.cdt.codan.core.checkers.exsd"/>
    <extension
          point="org.eclipse.cdt.codan.core.checkers">
       <category
@@ -86,15 +86,7 @@
             icon="icons/obj16/flask.gif"
             id="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"
             name="metriculator">
-      </view>
-      <view
-            allowMultiple="true"
-            class="ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart"
-            id="ch.hsr.ifs.cdt.metriculator.tagcloud.TagCloudView"
-            icon="icons/view16/tagcloud.gif"
-            name="Source Cloud"
-            restorable="true">
-      </view>    
+      </view>   
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

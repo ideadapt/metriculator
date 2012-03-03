@@ -26,8 +26,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
  * */
 public final class MetricColumn {
 
-	private static final int DEFAULT_WIDTH           = 100;
-	private static final String DATAKEY_COLUMNMETRIC = "metric";
+	static final int DEFAULT_WIDTH           = 100;
+	static final String DATAKEY_COLUMNMETRIC = "metric";
 	
 	public static void showColumn(TreeColumn column) {
 		column.setWidth(DEFAULT_WIDTH);
@@ -64,7 +64,6 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, treeViewer);
 		
 		return column;
@@ -77,33 +76,9 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, tableViewer);
 		
 		return column;
-	}
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TreeColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
-	}
-	
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TableColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
 	}
 
 	public static AbstractMetric getMetric(Widget column) {

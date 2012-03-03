@@ -12,6 +12,9 @@
 
 package ch.hsr.ifs.cdt.metriculator.views;
 
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -26,6 +29,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
  * @author Ueli Kunz
@@ -48,11 +52,16 @@ public final class MetricColumnHeaderMenu {
 	}
 
 	public enum ItemType{
-		GenerateTagCloud, ToggleMetricColumn
+		ToggleMetricColumn
 	}
-
+	
+	public static MenuManager tableMenuManager = new MenuManager();
+	public static MenuManager treeMenuManager = new MenuManager();
+	
 	public static Menu create(Shell shell, final Tree treeObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+		treeMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = treeMenuManager.createContextMenu(treeObj);
+		treeObj.setMenu(headerMenu);
 		
 		treeObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
@@ -63,7 +72,6 @@ public final class MetricColumnHeaderMenu {
 				
 				if(inMetricColumn){
 					setCurrColumn(headerMenu, treeObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					treeObj.setMenu(headerMenu);
 				}else{
 					event.doit = false;
 				}
@@ -93,7 +101,9 @@ public final class MetricColumnHeaderMenu {
 	}
 	
 	public static Menu create(Shell shell, final Table tableObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+		tableMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = tableMenuManager.createContextMenu(tableObj);
+		tableObj.setMenu(headerMenu);
 		
 		tableObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
@@ -104,7 +114,6 @@ public final class MetricColumnHeaderMenu {
 				
 				if(inMetricColumn){
 					setCurrColumn(headerMenu, tableObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					tableObj.setMenu(headerMenu);
 				}else{
 					event.doit = false;
 				}
@@ -131,20 +140,14 @@ public final class MetricColumnHeaderMenu {
 		});	
 		
 		return headerMenu;
-	}	
-
-	public static void createTagCloudMenuItem(Menu menu, Listener listener) {
-		
-		MenuItem tagCloudItem = new MenuItem(menu, SWT.PUSH);
-		tagCloudItem.setText("Generate TagCloud");
-		tagCloudItem.setData(ItemType.GenerateTagCloud);
-		tagCloudItem.addListener(SWT.Selection, listener);
-		
-		new MenuItem(menu, SWT.SEPARATOR);
 	}
-
+	
+	/**
+	 * @deprecated use updateItemSelections(MenuManager menu) instead
+	 * */
 	public static void updateItemSelections(Menu menu) {
 		for(MenuItem item : menu.getItems()){
+			
 			if(item.getData() != null && item.getData().equals(ItemType.ToggleMetricColumn)){
 				Object col = item.getData(DATAKEY_MENUITEM_COLUMN);
 				if(col instanceof TreeColumn){
@@ -155,5 +158,15 @@ public final class MetricColumnHeaderMenu {
 				}
 			}
 		}
+	}
+
+	public static void updateItemSelections(MenuManager menu) {
+		for(IContributionItem item : menu.getItems()){
+			
+			if(item instanceof ToggleColumnActionContrItem){
+				((ToggleColumnActionContrItem<?>) item).toggleVisibility();
+			}
+		}
+		menu.isDirty();
 	}
 }
