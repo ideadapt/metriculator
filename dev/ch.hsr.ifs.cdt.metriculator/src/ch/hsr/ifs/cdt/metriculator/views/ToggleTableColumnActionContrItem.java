@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 
-public class ToggleTableColumnActionContrItem extends ToggleColumnActionContrItem<TableColumn>{
+public class ToggleTableColumnActionContrItem extends ToggleColumnActionItem<TableColumn>{
 
 	public ToggleTableColumnActionContrItem(TableColumn column) {
 		super(new ToggleTableColumnAction(column));

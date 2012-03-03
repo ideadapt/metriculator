@@ -14,35 +14,30 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
-import ch.hsr.ifs.cdt.metriculator.views.MetriculatorView;
+import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 
-public class generateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
-	private MetriculatorView view;
+	private ITagCloudDataProvider view;
 	
 	@Override
 	public void run(IAction action) {
 
-		System.out.println("running tag cloud");
-		
 		if(view != null){
-			AbstractMetric metric = ((MetriculatorView) view).getSelectedMetric();
-			Collection<AbstractNode> nodes = ((MetriculatorView) view).getSelectedNodes();
+			AbstractMetric metric = ((ITagCloudDataProvider) view).getMetric();
+			Collection<AbstractNode> nodes = ((ITagCloudDataProvider) view).getNodes();
 			this.generateTagCloud(nodes, metric);
 		}
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		System.out.println("selection tag cloud");
 	}
 
 	@Override
 	public void init(IViewPart view) {
-		System.out.println("init tagcloud action");	
-		
-		if(view instanceof MetriculatorView){
-			this.view = (MetriculatorView) view;
+		if(view instanceof ITagCloudDataProvider){
+			this.view = (ITagCloudDataProvider) view;
 		}
 	}
 	

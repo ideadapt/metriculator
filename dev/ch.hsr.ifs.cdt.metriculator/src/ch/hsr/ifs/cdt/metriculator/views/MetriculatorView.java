@@ -70,15 +70,16 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 /**
  * @author Jules Weder, Ueli Kunz
  * */
-public class MetriculatorView extends ViewPart implements Observer {
+public class MetriculatorView extends ViewPart implements Observer, ITagCloudDataProvider {
 
 	private static final int INITIAL_SORT_ORDER           = TreeColumnViewerSorter.NONE;
 	private static final int SCOPE_COLUMN_DEFAULT_WIDTH   = 160;
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
 	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
+	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader";
 	
-	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TreeColumn>>();
-	private HashMap<AbstractMetric, ToggleColumnActionContrItem<TableColumn>> metricsTableColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionContrItem<TableColumn>>();
+	private HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>>();
+	private HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>> metricsTableColumnActions   = new HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>>();
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
 	private NodeViewerFilter viewerFilter;
@@ -211,34 +212,19 @@ public class MetriculatorView extends ViewPart implements Observer {
 		scopeSorter.setSorter(scopeSorter, INITIAL_SORT_ORDER);
 	}
 
-	// TODO provide a better way for tagcloud components to retrieve input data
-	public AbstractMetric getSelectedMetric(){
-		TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
-		if(selectedCol != null){
-			return MetricColumn.getMetric(selectedCol);
-		}
-		return null;
-	}
-	
-	public Collection<AbstractNode> getSelectedNodes(){
-		Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(currTreeBuilder.root.getChildren());
-		return filteredNodes;
-	}
-	
 	private void createTreeHeaderMenu() {
 		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
 	}
 	
-	
 	private void createTableHeaderMenu() {
 		tableHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), tableViewer.getTable());
-		getSite().registerContextMenu(MetriculatorView.VIEW_ID+".menuTableColumnHeader", MetricColumnHeaderMenu.tableMenuManager, tableViewer);
+		getSite().registerContextMenu(TABLE_COLUMN_HEADER_MENU_ID, MetricColumnHeaderMenu.tableMenuManager, tableViewer);
 	}
 	
 	private void createAndUpdateMetricTreeColumns() {
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
 			
-			ToggleColumnActionContrItem<TreeColumn> actionItem = metricsTreeColumnActions.get(metric);
+			ToggleColumnActionItem<TreeColumn> actionItem = metricsTreeColumnActions.get(metric);
 			
 			if (actionItem == null) {
 
@@ -254,7 +240,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
 			
-			ToggleColumnActionContrItem<TableColumn> actionItem = metricsTableColumnActions.get(metric);
+			ToggleColumnActionItem<TableColumn> actionItem = metricsTableColumnActions.get(metric);
 			
 			if (actionItem == null) {
 
@@ -266,18 +252,33 @@ public class MetriculatorView extends ViewPart implements Observer {
 		}		
 	}	
 	
-	private ToggleColumnActionContrItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
+	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
 		
 		ToggleTreeColumnActionContrItem actionItem = new ToggleTreeColumnActionContrItem(column);
 		MetricColumnHeaderMenu.treeMenuManager.add(actionItem);
 		return actionItem;
 	}
 	
-	private ToggleColumnActionContrItem<TableColumn> createMetricMenuItemFor(final TableColumn column) {
+	private ToggleColumnActionItem<TableColumn> createMetricMenuItemFor(final TableColumn column) {
 		
 		ToggleTableColumnActionContrItem actionItem = new ToggleTableColumnActionContrItem(column);
 		MetricColumnHeaderMenu.tableMenuManager.add(actionItem);
 		return actionItem;
+	}
+	
+	@Override
+	public AbstractMetric getMetric(){
+		TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
+		if(selectedCol != null){
+			return MetricColumn.getMetric(selectedCol);
+		}
+		return null;
+	}
+	
+	@Override
+	public Collection<AbstractNode> getNodes(){
+		Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(currTreeBuilder.root.getChildren());
+		return filteredNodes;
 	}
 	
 	private void createActions() {
@@ -359,8 +360,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionFilterNamespace() {
-		actionFilterNamespace = new Action(
-				"only show namespace nodes", IAction.AS_CHECK_BOX)
+		actionFilterNamespace = new Action("only show namespace nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -409,44 +409,8 @@ public class MetriculatorView extends ViewPart implements Observer {
 		};
 		actionHybridView.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FILESYSTEM));
 	}
-
-//	private void generateTagCloud(AbstractMetric metric) {
-//		ProgressMonitorDialog dialog = null;
-//		try {
-//			dialog = new ProgressMonitorDialog(null);
-//			dialog.setBlockOnOpen(false);
-//			dialog.open();
-//			IProgressMonitor pm = dialog.getProgressMonitor();
-//			pm.beginTask("Generating tag cloud ...", IProgressMonitor.UNKNOWN);
-//			
-//			TreeBuilder builder                    = MetriculatorPluginActivator.getDefault().getFlatTreeBuilder();
-//			Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(builder.root.getChildren());
-//			ArrayList<Type> types                  = new ArrayList<Type>();
-//			
-//			for(AbstractNode n : filteredNodes){
-//				String nodeName = n.toString();
-//				// shorten strings, otherwise TagCloudViewPart 
-//				// throws drawing exceptions due to the limited size of the drawing area.
-//				if(nodeName.length() > 20){
-//					nodeName = nodeName.substring(0, 20);
-//				}
-//				types.add(new Type(nodeName, n.getNodeValue(metric.getKey())));			
-//			}
-//
-//			IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TagCloudViewPart.VIEW_ID);
-//			((TagCloudViewPart) view).getViewer().setInput(types, pm);
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}finally{
-//			if(dialog != null){
-//				dialog.close();
-//			}
-//		}
-//	}
 	
 	private void createActionLogicalView() {
-		
 		actionLogicalView = new Action("change to logical view mode", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
@@ -565,7 +529,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					initCodanFinishedState();
+					applyCodanFinishedState();
 				}
 			});
 		}
@@ -575,7 +539,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					initCodanStartedState();
+					applyCodanStartedState();
 				}
 			});
 		}
@@ -654,7 +618,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 		}		
 	}
 
-	private void initCodanFinishedState(){
+	private void applyCodanFinishedState(){
 		createAndUpdateMetricTreeColumns();
 		createAndUpdateMetricTableColumns();
 		applyViewMode(ViewMode.Hybrid, null);
@@ -663,7 +627,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.tableMenuManager);
 	}
 	
-	private void initCodanStartedState(){
+	private void applyCodanStartedState(){
 		treeViewer.setInput(null);
 		tableViewer.setInput(null);
 	}

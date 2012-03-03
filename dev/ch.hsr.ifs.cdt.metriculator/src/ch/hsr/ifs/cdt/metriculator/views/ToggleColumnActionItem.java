@@ -6,9 +6,9 @@ import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TreeColumn;
 
-abstract class ToggleColumnActionContrItem<T extends Item> extends ActionContributionItem{
+abstract class ToggleColumnActionItem<T extends Item> extends ActionContributionItem{
 
-	protected ToggleColumnActionContrItem(IAction action) {
+	protected ToggleColumnActionItem(IAction action) {
 		super(action);
 	}
 		
