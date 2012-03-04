@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="ch.hsr.ifs.metriculator.tagcloud.feature"
+      id="ch.hsr.ifs.cdt.metriculator.tagcloud.feature"
       label="C++ TagCloud"
       version="0.0.1.qualifier">
 
