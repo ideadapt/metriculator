@@ -204,7 +204,6 @@ public class NodeInfo {
 		if(owner != null && owner instanceof ICompositeType){
 			isMember = true;
 			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
-			System.out.println("Logical Owner: "+logicalOwnerName);
 		}
 	}
 

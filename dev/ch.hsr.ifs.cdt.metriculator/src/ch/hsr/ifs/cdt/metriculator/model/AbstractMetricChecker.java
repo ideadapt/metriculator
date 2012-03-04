@@ -72,6 +72,9 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 		currentScopeNode = builder.getChildBy(fileSystemLeaf.getHybridId());
 
 		processTanslationUnit(ast);
+		
+		// remove IBindings in this method
+		builder.mergeDeclarationsAndDefinitions(ast);
 
 		currentScopeNode = fileSystemTop.getParent();
 	}
