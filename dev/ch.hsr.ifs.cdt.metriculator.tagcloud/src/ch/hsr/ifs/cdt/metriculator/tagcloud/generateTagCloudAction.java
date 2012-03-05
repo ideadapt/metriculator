@@ -22,7 +22,7 @@ public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegat
 	
 	@Override
 	public void run(IAction action) {
-
+ 
 		if(view != null){
 			AbstractMetric metric = ((ITagCloudDataProvider) view).getMetric();
 			Collection<AbstractNode> nodes = ((ITagCloudDataProvider) view).getNodes();
