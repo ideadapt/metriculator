@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>ch.hsr.ifs.cdt.metriculator</groupId>
-  <artifactId>dev</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.hsr.ifs.cdt.metriculator</groupId>
+	<artifactId>dev</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<prerequisites>
+	<maven>3.0</maven>
+	</prerequisites>
+
 	<properties>
 		<encoding>UTF-8</encoding>
 		<tycho-version>0.10.0</tycho-version>
+		<java-version>1.6</java-version>
 	</properties>  
 	<dependencies>
-    	<dependency>
-       		<groupId>junit</groupId>
-       		<artifactId>junit</artifactId>
-       		<version>4.8.1</version>
-     	</dependency>
-    </dependencies>	
-  <modules>
-    <module>ch.hsr.ifs.cdt.metriculator.tagcloud.feature</module>
-	<module>ch.hsr.ifs.cdt.metriculator.tagcloud</module>
-	<module>ch.hsr.ifs.cdt.metriculator.feature</module>  
-    <module>ch.hsr.ifs.cdt.metriculator</module>
-    <module>ch.hsr.ifs.cdt.metriculator.test</module>
-	<module>ch.hsr.ifs.cdt.metriculator.site</module>
-  </modules>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
+	</dependencies>	
+
+	<modules>
+		<module>ch.hsr.ifs.cdt.metriculator.tagcloud.feature</module>
+		<module>ch.hsr.ifs.cdt.metriculator.tagcloud</module>
+		<module>ch.hsr.ifs.cdt.metriculator.feature</module>  
+		<module>ch.hsr.ifs.cdt.metriculator</module>
+		<module>ch.hsr.ifs.cdt.metriculator.test</module>
+		<module>ch.hsr.ifs.cdt.metriculator.site</module>
+	</modules>
+  
 	<repositories>
        <repository>
          <id>cdt-indigo</id>
@@ -55,6 +63,7 @@
          <url>https://hudson.eclipse.org/hudson/job/gef-zest-integration/ws/org.eclipse.zest.repository/target/repository/</url>
       </repository>	   
 	</repositories>
+	
 	<pluginRepositories>
     	<pluginRepository>
       		<id>org.sonatype.tycho</id>
@@ -62,54 +71,58 @@
    	   		<url>https://repository.sonatype.org/content/repositories/snapshots</url>
     	</pluginRepository>
   	</pluginRepositories>  
-  <build>
-    <plugins>
-		<plugin>
-			<groupId>org.sonatype.tycho</groupId>
-			<artifactId>tycho-maven-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<extensions>true</extensions>
-		</plugin>
-		<plugin>
-			<groupId>org.sonatype.tycho</groupId>
-			<artifactId>maven-osgi-compiler-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<configuration>
-				<source>1.6</source>	
-				<target>1.6</target>      					
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.sonatype.tycho</groupId>
-			<artifactId>target-platform-configuration</artifactId>
-			<version>${tycho-version}</version>
-			<configuration>
-				<resolver>p2</resolver>
-				 <environments>
-					<environment>
-						<os>win32</os>
-						<ws>win32</ws>
-						<arch>x86</arch>
-					</environment>
-					<environment>
-						<os>linux</os>
-						<ws>gtk</ws>
-						<arch>x86_64</arch>
-					</environment>
-				</environments>
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.3.2</version>
-			<configuration>
-			  <verbose>true</verbose>
-			  <fork>true</fork>
-			  <executable>${JAVA_HOME}/bin/javac</executable>
-			  <compilerVersion>1.7</compilerVersion>
-			</configuration>
-		</plugin>			
-    </plugins>
-  </build>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>maven-osgi-compiler-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<source>${java-version}</source>				
+					<target>${java-version}</target>      					
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					 <environments>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+				  <verbose>true</verbose>
+				  <fork>true</fork>
+				  <executable>${JAVA_HOME}/bin/javac</executable>
+				  <compilerVersion>${java-version}</compilerVersion>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
 </project>
