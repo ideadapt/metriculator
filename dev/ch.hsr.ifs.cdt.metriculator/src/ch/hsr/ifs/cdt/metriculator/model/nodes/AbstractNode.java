@@ -146,7 +146,7 @@ public abstract class AbstractNode implements Cloneable {
 	}
 
 	/**
-	 * @return String path from the root node down to this one. Each nodes scopeUniqueName is separated by a period.
+	 * @return String path from the root node down to this one. The concatenated scopeUniqueNames are separated by period.
 	 * <code>e.g. Workspace1.Project0.FileX.ClassA</code>
 	 * */
 	public String getPath() {

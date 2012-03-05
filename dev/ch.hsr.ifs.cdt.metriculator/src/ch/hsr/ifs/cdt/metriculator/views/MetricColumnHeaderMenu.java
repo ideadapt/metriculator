@@ -20,15 +20,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
@@ -39,16 +38,15 @@ public final class MetricColumnHeaderMenu {
 	private static final String DATAKEY_CURR_COLUMN    = "current_column";
 	public static final String DATAKEY_MENUITEM_COLUMN = "menuitem_column";
 
-	public static void setCurrColumn(Menu menu, TableColumn column) {
+	/**
+	 * @column is either of type TableColumn or TreeColumn
+	 * */
+	public static void setCurrColumn(Menu menu, Item column) {
 		menu.setData(DATAKEY_CURR_COLUMN, column);
 	}	
 	
-	public static void setCurrColumn(Menu menu, TreeColumn column) {
-		menu.setData(DATAKEY_CURR_COLUMN, column);
-	}	
-	
-	public static Widget getCurrColumn(Menu menu) {
-		return (Widget) menu.getData(DATAKEY_CURR_COLUMN);
+	public static Item getCurrColumn(Menu menu) {
+		return (Item) menu.getData(DATAKEY_CURR_COLUMN);
 	}
 
 	public enum ItemType{
@@ -56,10 +54,11 @@ public final class MetricColumnHeaderMenu {
 	}
 	
 	public static MenuManager tableMenuManager = new MenuManager();
-	public static MenuManager treeMenuManager = new MenuManager();
+	public static MenuManager treeMenuManager  = new MenuManager();
 	
 	public static Menu create(Shell shell, final Tree treeObj){
-		treeMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		treeMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));	
+		treeMenuManager.add(new Separator());
 		final Menu headerMenu = treeMenuManager.createContextMenu(treeObj);
 		treeObj.setMenu(headerMenu);
 		
@@ -137,34 +136,16 @@ public final class MetricColumnHeaderMenu {
 			public void handleEvent(Event event) {
 				headerMenu.dispose();
 			}
-		});	
+		});
 		
 		return headerMenu;
-	}
-	
-	/**
-	 * @deprecated use updateItemSelections(MenuManager menu) instead
-	 * */
-	public static void updateItemSelections(Menu menu) {
-		for(MenuItem item : menu.getItems()){
-			
-			if(item.getData() != null && item.getData().equals(ItemType.ToggleMetricColumn)){
-				Object col = item.getData(DATAKEY_MENUITEM_COLUMN);
-				if(col instanceof TreeColumn){
-					item.setSelection(MetricColumn.isVisible((TreeColumn)col));
-				}
-				if(col instanceof TableColumn){
-					item.setSelection(MetricColumn.isVisible((TableColumn)col));
-				}
-			}
-		}
 	}
 
 	public static void updateItemSelections(MenuManager menu) {
 		for(IContributionItem item : menu.getItems()){
 			
-			if(item instanceof ToggleColumnActionContrItem){
-				((ToggleColumnActionContrItem<?>) item).toggleVisibility();
+			if(item instanceof ToggleColumnActionItem){
+				((ToggleColumnActionItem<?>) item).toggleVisibility();
 			}
 		}
 		menu.isDirty();

@@ -9,4 +9,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.zest.cloudio;bundle-version="2.0.0",
  ch.hsr.ifs.cdt.metriculator;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7, JavaSE-1.6
