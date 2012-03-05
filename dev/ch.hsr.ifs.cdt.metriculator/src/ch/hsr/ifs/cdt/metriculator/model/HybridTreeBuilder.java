@@ -164,19 +164,12 @@ public class HybridTreeBuilder extends TreeBuilder {
 				}
 				for(IName name : tu.getDefinitions(declBinding)){
 					if(name instanceof IASTName && name.isDefinition()){
-						//						System.out.println("Decl: " + declBinding);
-						//						IIndexBinding defBinding = tu.getIndex().adaptBinding(((IASTName)name).getBinding());
-						//						System.out.println("Def:  " + defBinding);
-						//						System.out.println(declBinding.equals(defBinding));
-
-						//works, therefore remove the declaration from the hybrid tree
-
 						AbstractNode funcDeclaration = funcDeclarations.get(tu.getIndex().adaptBinding(((IASTName)name).getBinding()));
-						funcDeclaration.removeFromParent();
-						funcDeclaration = null;
-
+						if(funcDeclaration != null){
+							funcDeclaration.removeFromParent();
+							funcDeclaration = null;
+						}
 					}
-
 				}
 			}
 		}

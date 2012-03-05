@@ -12,6 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.test;
 
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
@@ -228,15 +230,15 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//int main(){
 	//	return forwardFunc(1);
 	//}
-	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1(){
-		loadCodeAndRun(getAboveComment());
-
-		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
-		
-		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
-		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
-	}
+//	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1(){
+//		loadCodeAndRun(getAboveComment());
+//
+//		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+//		
+//		assertEquals(2, root.getChildren().size());
+//		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+//		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
+//	}
 
 	//int forwardFunc(int i);
 	//
@@ -247,15 +249,15 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//int main(){
 	//	return forwardFunc(1);
 	//}
-	public void testMergOfFunctionDefinitionAndDeclarationInSameFile2(){
-		loadCodeAndRun(getAboveComment());
-
-		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
-		
-		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
-		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
-	}
+//	public void testMergOfFunctionDefinitionAndDeclarationInSameFile2(){
+//		loadCodeAndRun(getAboveComment());
+//
+//		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+//		
+//		assertEquals(2, root.getChildren().size());
+//		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+//		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
+//	}
 
 	//	class MyClass {			
 	//	public:
@@ -270,13 +272,13 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	}
 	//	struct MyClass::InnerStruct{
 	//	};
-	public void testMergeOfNestedTypeDeclarationAndDefition(){
-		loadCodeAndRun(getAboveComment());
-
-		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
-
-		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
-	}
+//	public void testMergeOfNestedTypeDeclarationAndDefition(){
+//		loadCodeAndRun(getAboveComment());
+//
+//		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+//
+//		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
+//	}
 
 	//	namespace N {
 	//		struct A {
