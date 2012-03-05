@@ -204,6 +204,8 @@ public class NodeInfo {
 		if(owner != null && owner instanceof ICompositeType){
 			isMember = true;
 			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
+//			indexBinding = null;
+//			typeBinding = null;
 		}
 	}
 
