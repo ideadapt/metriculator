@@ -65,6 +65,11 @@ public class NodeInfo {
 	}
 
 	private boolean isMember;
+	private String logicalName;
+
+	public String getLogicalName() {
+		return logicalName;
+	}
 
 	public boolean isMember() {
 		return isMember;
@@ -204,9 +209,10 @@ public class NodeInfo {
 		if(owner != null && owner instanceof ICompositeType){
 			isMember = true;
 			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
+			logicalName = indexBinding.toString();
 			//TODO:
-//			indexBinding = null;
-//			typeBinding = null;
+			indexBinding = null;
+			typeBinding = null;
 		}
 	}
 

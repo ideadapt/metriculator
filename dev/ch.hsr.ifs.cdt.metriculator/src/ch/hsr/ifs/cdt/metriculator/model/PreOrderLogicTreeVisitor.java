@@ -14,8 +14,6 @@ package ch.hsr.ifs.cdt.metriculator.model;
 
 import java.util.HashMap;
 
-import org.eclipse.cdt.core.dom.ast.IBinding;
-
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
@@ -109,30 +107,28 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	}
 
 	public void mergeFunctionDefinitionsAndDeclarations() {
-		for(AbstractNode node : members.keySet()){
-			if(node.getNodeInfo().isFunctionDefinition()){
-				replaceDeclarationWith(node);
+		for(AbstractNode def : members.keySet()){
+			if(def.getNodeInfo().isFunctionDefinition()){
+				replaceDeclarationWith(def);
 			}
 		}
 	}
 
 	private void replaceDeclarationWith(AbstractNode def) {
-		IBinding binding = def.getNodeInfo().getBinding();
-		for(AbstractNode node : members.keySet()){
-			if(node.getNodeInfo().isFunctionDeclarator()){
-				node = removeDeclaration(binding, node);
+		for(AbstractNode decl : members.keySet()){
+			if(decl.getNodeInfo().isFunctionDeclarator()){
+				removeDeclaration(def, decl);
 			}
 		}
 	}
 
-	private AbstractNode removeDeclaration(IBinding binding, AbstractNode node) {
-		
-		if(binding.equals(node.getNodeInfo().getBinding())){
-			node.removeFromParent();
-			node = null;
+	private void removeDeclaration(AbstractNode def, AbstractNode decl) {
+		if(def.getNodeInfo().getLogicalOwnerName().equals(decl.getNodeInfo().getLogicalOwnerName())){
+			if(def.getNodeInfo().getLogicalName().equals(decl.getNodeInfo().getLogicalName())){
+				decl.removeFromParent();
+				decl = null;
+			}
 		}
-
-		return node;
 	}
-
+	
 }
