@@ -18,7 +18,8 @@
      	</dependency>
     </dependencies>	
   <modules>
-    <!--<module>ch.hsr.ifs.cdt.metriculator.tagcloud.feature</module>-->
+    <module>ch.hsr.ifs.cdt.metriculator.tagcloud.feature</module>
+	<module>ch.hsr.ifs.cdt.metriculator.tagcloud</module>
 	<module>ch.hsr.ifs.cdt.metriculator.feature</module>  
     <module>ch.hsr.ifs.cdt.metriculator</module>
     <module>ch.hsr.ifs.cdt.metriculator.test</module>

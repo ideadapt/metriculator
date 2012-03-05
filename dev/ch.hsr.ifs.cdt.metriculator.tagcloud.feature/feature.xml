@@ -16,6 +16,13 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.zest.cloudio" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cdt.metriculator" version="0.0.1" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="ch.hsr.ifs.cdt.metriculator.tagcloud"
          download-size="0"

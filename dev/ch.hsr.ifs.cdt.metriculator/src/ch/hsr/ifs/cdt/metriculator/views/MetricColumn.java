@@ -49,14 +49,6 @@ public final class MetricColumn {
 		column.setResizable(false);
 	}
 	
-	public static boolean isVisible(TreeColumn column){
-		return column.getWidth() > 0 && column.getResizable();
-	}
-	
-	public static boolean isVisible(TableColumn column){
-		return column.getWidth() > 0 && column.getResizable();
-	}
-
 	public static TreeColumn createFor(AbstractMetric metric, TreeViewer treeViewer) {
 
 		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);

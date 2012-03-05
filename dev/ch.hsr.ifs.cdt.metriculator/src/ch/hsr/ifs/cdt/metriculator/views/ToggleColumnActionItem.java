@@ -26,34 +26,38 @@ abstract class ToggleColumnActionItem<T extends Item> extends ActionContribution
 	
 }
 
-class ToggleTreeColumnAction extends ToggleColumnAction<TreeColumn>{
+class ToggleTableColumnActionContrItem extends ToggleColumnActionItem<TableColumn>{
 
-	public ToggleTreeColumnAction(TreeColumn col) {
-		super(col);
+	public ToggleTableColumnActionContrItem(TableColumn column) {
+		super(new ToggleTableColumnAction(column));
 	}
 
 	@Override
-	public void run() {
-		if(isChecked()){
-			MetricColumn.showColumn(column);
+	public void toggleVisibility() {
+		if(MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()){
+			MetricColumn.showColumn(getColumn());
+			getAction().setChecked(true);
 		}else{
-			MetricColumn.hideColumn(column);
+			MetricColumn.hideColumn(getColumn());
+			getAction().setChecked(false);
 		}
 	}
 }
 
-class ToggleTableColumnAction extends ToggleColumnAction<TableColumn>{
+class ToggleTreeColumnActionContrItem extends ToggleColumnActionItem<TreeColumn> {
 
-	public ToggleTableColumnAction(TableColumn col) {
-		super(col);
+	public ToggleTreeColumnActionContrItem(TreeColumn column) {
+		super(new ToggleTreeColumnAction(column));
 	}
 
 	@Override
-	public void run() {
-		if(isChecked()){
-			MetricColumn.showColumn(column);
-		}else{
-			MetricColumn.hideColumn(column);
+	public void toggleVisibility() {
+		if(MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()){
+			MetricColumn.showColumn(getColumn());
+			getAction().setChecked(true);
+		} else {
+			MetricColumn.hideColumn(getColumn());
+			getAction().setChecked(false);
 		}
 	}
 }
