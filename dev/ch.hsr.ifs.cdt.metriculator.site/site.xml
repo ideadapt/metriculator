@@ -6,8 +6,10 @@
    <feature url="features/ch.hsr.ifs.cdt.metriculator.feature_0.0.1.201203041634.jar" id="ch.hsr.ifs.cdt.metriculator.feature" version="0.0.1.201203041634">
       <category name="metriculator"/>
    </feature>
+   <!--
    <feature url="features/ch.hsr.ifs.cdt.metriculator.tagcloud.feature_0.0.1.201203041634.jar" id="ch.hsr.ifs.cdt.metriculator.tagcloud.feature" version="0.0.1.201203041634">
       <category name="metriculator"/>
    </feature>
+   -->
    <category-def name="metriculator" label="metriculator"/>
 </site>

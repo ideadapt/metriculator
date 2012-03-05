@@ -108,14 +108,13 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <requires>
-      <import plugin="org.eclipse.cdt.core" version="5.3.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.codan.core" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.zest.cloudio" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.core" version="5.3.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.7.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.ui" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.editors"/>
    </requires>
 
