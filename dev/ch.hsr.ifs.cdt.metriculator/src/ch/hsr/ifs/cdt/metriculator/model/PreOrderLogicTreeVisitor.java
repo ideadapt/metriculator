@@ -24,7 +24,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.ILogicNode;
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	private HashMap<String, AbstractNode> logicChildren = new HashMap<String, AbstractNode>();
-	private HashMap<AbstractNode, String> members     = new HashMap<AbstractNode, String>();
+	private HashMap<AbstractNode, String> members       = new HashMap<AbstractNode, String>();
 
 	private AbstractNode currentNode = null;
 
@@ -37,6 +37,9 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 			if(n instanceof ILogicNode){
 				AbstractNode copy = n.shallowClone();
 				AbstractNode existing = logicChildren.get(getLogicalUniqueNameOf(copy));
+				// TODO 
+				// - func(int) und func(int i){} haben nicht den gleichen LogicalUniqueName, somit werden sich diese nie finden.
+				// - evtl. funzt auch deshalb der unit test nicht (testMergOfFunctionDefinitionAndDeclarationInSameFile1)
 				if(existing != null){
 					currentNode = existing;
 					currentNode.addNodeValuesFrom(copy);
@@ -60,6 +63,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		return getLogicalUniqueNameOf(node, "");
 	}
 
+	// TODO use StringBuilder
 	private String getLogicalUniqueNameOf(AbstractNode node, String logicalNamePrefix){
 
 		if(node instanceof ILogicNode){

@@ -15,7 +15,6 @@ package ch.hsr.ifs.cdt.metriculator.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import ch.hsr.ifs.cdt.metriculator.model.test.IndexBindingTests;
 import ch.hsr.ifs.cdt.metriculator.model.test.NodeCompositeTest;
 import ch.hsr.ifs.cdt.metriculator.model.test.NodeFilterTest;
 import ch.hsr.ifs.cdt.metriculator.model.test.TreeBuilderIndexerTest;
