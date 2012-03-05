@@ -16,7 +16,7 @@ import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
 import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 
-public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
 	private ITagCloudDataProvider view;
 	
