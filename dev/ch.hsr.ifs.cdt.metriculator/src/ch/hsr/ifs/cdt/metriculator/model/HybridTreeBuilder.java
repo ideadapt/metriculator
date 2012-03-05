@@ -167,6 +167,9 @@ public class HybridTreeBuilder extends TreeBuilder {
 					IASTDeclarator[] declarators = ((IASTSimpleDeclaration)decl).getDeclarators();
 					if(declarators.length > 0){
 						declBinding = tu.getIndex().adaptBinding(declarators[0].getName().getBinding());
+						if(declBinding == null){
+							declBinding = declarators[0].getName().getBinding();
+						}
 					}
 
 				}
@@ -178,6 +181,9 @@ public class HybridTreeBuilder extends TreeBuilder {
 								declaration = typeDeclarations.get(((IASTName)name).getBinding());
 							}else{
 								declaration = funcDeclarations.get(tu.getIndex().adaptBinding(((IASTName)name).getBinding()));
+								if(declaration == null){
+									declaration = funcDeclarations.get(((IASTName)name).getBinding());
+								}
 							}
 							if(declaration != null){
 								declaration.removeFromParent();
