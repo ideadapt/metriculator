@@ -40,6 +40,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 				// TODO 
 				// - func(int) und func(int i){} haben nicht den gleichen LogicalUniqueName, somit werden sich diese nie finden.
 				// - evtl. funzt auch deshalb der unit test nicht (testMergOfFunctionDefinitionAndDeclarationInSameFile1)
+				// - OR: try calling CheckerTestCase.runOnProject() method (as in StatementHasNoEffectCheckerTest.test2FilesUnaryExpression())
 				if(existing != null){
 					currentNode = existing;
 					currentNode.addNodeValuesFrom(copy);
