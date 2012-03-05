@@ -6,58 +6,58 @@ import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TreeColumn;
 
-abstract class ToggleColumnActionItem<T extends Item> extends ActionContributionItem{
+public abstract class ToggleColumnActionItem<T extends Item> extends ActionContributionItem {
 
 	protected ToggleColumnActionItem(IAction action) {
 		super(action);
 	}
-		
+
 	@SuppressWarnings("unchecked")
-	public T getColumn(){
-		return ((ToggleColumnAction<T>)getAction()).column;
+	public T getColumn() {
+		return ((ToggleColumnAction<T>) getAction()).column;
 	}
 
 	@Override
 	public boolean isDynamic() {
 		return true;
 	}
-	
+
 	public abstract void toggleVisibility();
+
 	
-}
+	static class ToggleTableColumnActionContrItem extends ToggleColumnActionItem<TableColumn> {
 
-class ToggleTableColumnActionContrItem extends ToggleColumnActionItem<TableColumn>{
+		public ToggleTableColumnActionContrItem(TableColumn column) {
+			super(new ToggleColumnAction.ToggleTableColumnAction(column));
+		}
 
-	public ToggleTableColumnActionContrItem(TableColumn column) {
-		super(new ToggleTableColumnAction(column));
-	}
-
-	@Override
-	public void toggleVisibility() {
-		if(MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()){
-			MetricColumn.showColumn(getColumn());
-			getAction().setChecked(true);
-		}else{
-			MetricColumn.hideColumn(getColumn());
-			getAction().setChecked(false);
+		@Override
+		public void toggleVisibility() {
+			if (MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()) {
+				MetricColumn.showColumn(getColumn());
+				getAction().setChecked(true);
+			} else {
+				MetricColumn.hideColumn(getColumn());
+				getAction().setChecked(false);
+			}
 		}
 	}
-}
+	
+	static class ToggleTreeColumnActionContrItem extends ToggleColumnActionItem<TreeColumn> {
 
-class ToggleTreeColumnActionContrItem extends ToggleColumnActionItem<TreeColumn> {
+		public ToggleTreeColumnActionContrItem(TreeColumn column) {
+			super(new ToggleColumnAction.ToggleTreeColumnAction(column));
+		}
 
-	public ToggleTreeColumnActionContrItem(TreeColumn column) {
-		super(new ToggleTreeColumnAction(column));
-	}
-
-	@Override
-	public void toggleVisibility() {
-		if(MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()){
-			MetricColumn.showColumn(getColumn());
-			getAction().setChecked(true);
-		} else {
-			MetricColumn.hideColumn(getColumn());
-			getAction().setChecked(false);
+		@Override
+		public void toggleVisibility() {
+			if (MetricColumn.getMetric(getColumn()).getChecker().hasEnabledProblems()) {
+				MetricColumn.showColumn(getColumn());
+				getAction().setChecked(true);
+			} else {
+				MetricColumn.hideColumn(getColumn());
+				getAction().setChecked(false);
+			}
 		}
 	}
 }

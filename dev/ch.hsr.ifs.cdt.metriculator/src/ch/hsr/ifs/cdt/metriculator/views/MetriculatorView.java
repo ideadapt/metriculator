@@ -66,6 +66,8 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
+import ch.hsr.ifs.cdt.metriculator.views.ToggleColumnActionItem.ToggleTableColumnActionContrItem;
+import ch.hsr.ifs.cdt.metriculator.views.ToggleColumnActionItem.ToggleTreeColumnActionContrItem;
 
 /**
  * @author Jules Weder, Ueli Kunz
