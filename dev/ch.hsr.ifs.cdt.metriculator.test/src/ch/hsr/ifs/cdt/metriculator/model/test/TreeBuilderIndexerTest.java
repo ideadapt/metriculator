@@ -272,13 +272,13 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	}
 	//	struct MyClass::InnerStruct{
 	//	};
-//	public void testMergeOfNestedTypeDeclarationAndDefition(){
-//		loadCodeAndRun(getAboveComment());
-//
-//		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
-//
-//		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
-//	}
+	public void testMergeOfNestedTypeDeclarationAndDefition(){
+		loadCodeAndRun(getAboveComment());
+
+		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+
+		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
+	}
 
 	//	namespace N {
 	//		struct A {

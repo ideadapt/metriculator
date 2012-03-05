@@ -111,15 +111,18 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		return addAstHashes(logicalName, node.getParent());
 	}
 
-	public void mergeFunctionDefinitionsAndDeclarations() {
+	public void mergeDefinitionsAndDeclarations() {
 		for(AbstractNode def : members.keySet()){
 			if(def.getNodeInfo().isFunctionDefinition()){
-				replaceDeclarationWith(def);
+				replaceFuncDeclarationWith(def);
+			}else if(def.getNodeInfo().isCompositeTypeSpecifier()){
+				replaceTypeDeclarationWith(def);
 			}
 		}
 	}
 
-	private void replaceDeclarationWith(AbstractNode def) {
+
+	private void replaceFuncDeclarationWith(AbstractNode def) {
 		for(AbstractNode decl : members.keySet()){
 			if(decl.getNodeInfo().isFunctionDeclarator()){
 				removeDeclaration(def, decl);
@@ -127,6 +130,14 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		}
 	}
 
+	private void replaceTypeDeclarationWith(AbstractNode def) {
+		for(AbstractNode decl : members.keySet()){
+			if(decl.getNodeInfo().isElaboratedTypeSpecifier()){
+				removeDeclaration(def, decl);
+			}
+		}
+	}
+	
 	private void removeDeclaration(AbstractNode def, AbstractNode decl) {
 		if(def.getNodeInfo().getLogicalOwnerName().equals(decl.getNodeInfo().getLogicalOwnerName())){
 			if(def.getNodeInfo().getLogicalName().equals(decl.getNodeInfo().getLogicalName())){
