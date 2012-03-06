@@ -88,7 +88,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 				IBinding declBinding = null;
 				if(isTypeDecl(decl)){
 					declBinding = getTypeBinding(decl);
-					findDecslOfDefs(tu, declBinding, true);
+					findDeclsOfDefs(tu, declBinding, true);
 				}else{
 					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
 					findDecslOfDefs(tu, declBinding);
@@ -100,20 +100,17 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 
 	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
-		findDecslOfDefs(tu, declBinding, false);
+		findDeclsOfDefs(tu, declBinding, false);
 	}
 
-	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding, boolean type) {
+	private void findDeclsOfDefs(IASTTranslationUnit tu, IBinding declBinding, boolean isTypeDecl) {
 		if(declBinding != null){
 			for(IName name : tu.getDefinitions(declBinding)){
 				if(name instanceof IASTName && name.isDefinition()){
 					IASTName iastName = (IASTName)name;
 					AbstractNode foundDecl;
-					if(!type){
+					if(!isTypeDecl){
 						foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
-						if(foundDecl == null){
-							foundDecl = funcDeclarations.get(iastName.getBinding());
-						}
 					}else{
 						foundDecl = typeDeclarations.get(iastName.getBinding());
 					}
