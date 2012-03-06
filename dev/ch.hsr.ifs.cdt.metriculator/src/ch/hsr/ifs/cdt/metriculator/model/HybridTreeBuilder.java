@@ -109,10 +109,10 @@ public class HybridTreeBuilder extends TreeBuilder {
 				if(name instanceof IASTName && name.isDefinition()){
 					IASTName iastName = (IASTName)name;
 					AbstractNode foundDecl;
-					if(!isTypeDecl){
-						foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
-					}else{
+					if(isTypeDecl){
 						foundDecl = typeDeclarations.get(iastName.getBinding());
+					}else{
+						foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
 					}
 					removeFoundDecl(foundDecl);
 				}
