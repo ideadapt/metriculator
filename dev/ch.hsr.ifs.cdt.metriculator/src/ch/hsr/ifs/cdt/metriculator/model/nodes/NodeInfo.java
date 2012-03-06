@@ -171,7 +171,7 @@ public class NodeInfo {
 	public int getTypeKey() {
 		return typeKey;
 	}
-	
+
 	public String getLogicalOwnerName() {
 		return logicalOwnerName;
 	}
@@ -204,25 +204,26 @@ public class NodeInfo {
 		}
 		prepareMembers(indexBinding.getOwner());
 	}
-	
+
 	private void prepareMembers(IBinding owner) {
-		if(owner != null && owner instanceof ICompositeType){
-			isMember = true;
-			logicalOwnerName = prepareLogicalOwnerName(indexBinding.getOwner());
-			logicalName = indexBinding.toString();
-			//TODO:
-			indexBinding = null;
-			typeBinding = null;
+		logicalName = indexBinding.toString();
+		if(owner != null){
+			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner());
+			if(owner instanceof ICompositeType){
+				isMember = true;
+				indexBinding = null;
+				typeBinding = null;
+			}
 		}
 	}
 
-	private String prepareLogicalOwnerName(IBinding owner) {
+	private String buildLogicalOwnerName(IBinding owner) {
 
 		if(owner.getOwner() == null){
 			return owner.getName().toString();
 		}
 
-		return prepareLogicalOwnerName(owner.getOwner()) + TreeBuilder.PATH_SEPARATOR + owner.getName();
+		return buildLogicalOwnerName(owner.getOwner()) + TreeBuilder.PATH_SEPARATOR + owner.getName();
 	}
 
 
@@ -258,37 +259,37 @@ public class NodeInfo {
 		return astNodeHashCode;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		assert false : "hashCode not designed";
-//	return 23;
-//	}
+	//	@Override
+	//	public int hashCode() {
+	//		assert false : "hashCode not designed";
+	//	return 23;
+	//	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		if(obj == null) return false;
-//		if(!(obj instanceof NodeInfo)) return false;
-//
-//		NodeInfo other = (NodeInfo) obj;
-//		boolean same = false;
-//
-//		same = (hasInfos == other.hasInfos &&
-//				astNodeHashCode.equals(other.astNodeHashCode) &&
-//				isCompositeTypeSpecifier == other.isCompositeTypeSpecifier && 
-//				isElaboratedTypeSpecifier == other.isElaboratedTypeSpecifier &&
-//				isFunctionDeclarator == other.isFunctionDeclarator && 
-//				isFunctionDefinition == other.isFunctionDefinition && 
-//				isHeaderUnit == other.isHeaderUnit &&
-//				indexBinding != null ? indexBinding.equals(other.indexBinding) : other.indexBinding == null && 
-//				filePath.equals(other.filePath) && 
-//				typeKey == other.typeKey && 
-//				nodeLength == other.nodeLength && 
-//				nodeOffSet == other.nodeOffSet);
-//
-//		return same;
-//	}
-	
-	
+	//	@Override
+	//	public boolean equals(Object obj) {
+	//		if(obj == null) return false;
+	//		if(!(obj instanceof NodeInfo)) return false;
+	//
+	//		NodeInfo other = (NodeInfo) obj;
+	//		boolean same = false;
+	//
+	//		same = (hasInfos == other.hasInfos &&
+	//				astNodeHashCode.equals(other.astNodeHashCode) &&
+	//				isCompositeTypeSpecifier == other.isCompositeTypeSpecifier && 
+	//				isElaboratedTypeSpecifier == other.isElaboratedTypeSpecifier &&
+	//				isFunctionDeclarator == other.isFunctionDeclarator && 
+	//				isFunctionDefinition == other.isFunctionDefinition && 
+	//				isHeaderUnit == other.isHeaderUnit &&
+	//				indexBinding != null ? indexBinding.equals(other.indexBinding) : other.indexBinding == null && 
+	//				filePath.equals(other.filePath) && 
+	//				typeKey == other.typeKey && 
+	//				nodeLength == other.nodeLength && 
+	//				nodeOffSet == other.nodeOffSet);
+	//
+	//		return same;
+	//	}
+
+
 
 	public IProblemLocation createAndGetProblemLocation(IFile file) {
 		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
@@ -298,7 +299,7 @@ public class NodeInfo {
 		return locFactory.createProblemLocation(file, startingLineNumber);
 	}
 
-	
+
 
 	@Override
 	public int hashCode() {
