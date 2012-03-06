@@ -29,14 +29,13 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	@Override
 	void visitNode(AbstractNode n) {
 		if(n.getParent() == null){
-			rootNode = n.shallowClone();
+			rootNode    = n.shallowClone();
 			currentNode = rootNode;
 		}else{
 			if(n instanceof ILogicNode){
-				AbstractNode copy = n.shallowClone();
+				AbstractNode copy     = n.shallowClone();
 				AbstractNode existing = logicChildren.get(getLogicalUniqueNameOf(copy));
-				// TODO 
-				// - OR: try calling CheckerTestCase.runOnProject() method (as in StatementHasNoEffectCheckerTest.test2FilesUnaryExpression())
+
 				if(existing != null){
 					currentNode = existing;
 					currentNode.addNodeValuesFrom(copy);
