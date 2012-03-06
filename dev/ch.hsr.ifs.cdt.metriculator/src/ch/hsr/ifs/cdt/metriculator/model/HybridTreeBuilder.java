@@ -88,15 +88,41 @@ public class HybridTreeBuilder extends TreeBuilder {
 				IBinding declBinding = null;
 				if(isTypeDecl(decl)){
 					declBinding = getTypeBinding(decl);
+					findDecslOfDefs(tu, declBinding, true);
 				}else{
 					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
+					findDecslOfDefs(tu, declBinding);
 				}
-				findDecslOfDefs(tu, declBinding);
 			}
 		}
 		removeAllBindings();
 	}
-	
+
+
+	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
+		findDecslOfDefs(tu, declBinding, false);
+	}
+
+	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding, boolean type) {
+		if(declBinding != null){
+			for(IName name : tu.getDefinitions(declBinding)){
+				if(name instanceof IASTName && name.isDefinition()){
+					IASTName iastName = (IASTName)name;
+					AbstractNode foundDecl;
+					if(!type){
+						foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
+						if(foundDecl == null){
+							foundDecl = funcDeclarations.get(iastName.getBinding());
+						}
+					}else{
+						foundDecl = typeDeclarations.get(iastName.getBinding());
+					}
+					removeFoundDecl(foundDecl);
+				}
+			}
+		}
+	}
+
 	private boolean isTypeDecl(IASTDeclaration decl) {
 		return ((IASTSimpleDeclaration) decl).getDeclSpecifier() instanceof ICPPASTElaboratedTypeSpecifier;
 	}
@@ -106,32 +132,19 @@ public class HybridTreeBuilder extends TreeBuilder {
 		IBinding declBinding = typeDecl.getName().getBinding();
 		return declBinding;
 	}
-	
+
 	private IBinding getFuncBinding(IASTTranslationUnit tu,IASTDeclarator[] declarators) {
-		IBinding declBinding;
+		IBinding declBinding = null;
 		if(declarators.length > 0){
 			declBinding = tu.getIndex().adaptBinding(declarators[0].getName().getBinding());
 			if(declBinding == null){
 				return declarators[0].getName().getBinding();
 			}
 		}
-		return null;
+		return declBinding;
 	}
 
-	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
-		if(declBinding != null){
-			for(IName name : tu.getDefinitions(declBinding)){
-				if(name instanceof IASTName && name.isDefinition()){
-					IASTName iastName = (IASTName)name;
-					AbstractNode foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
-					if(foundDecl == null){
-						foundDecl = funcDeclarations.get(iastName.getBinding());
-					}
-					removeFoundDecl(foundDecl);
-				}
-			}
-		}
-	}
+
 
 	private void removeFoundDecl(AbstractNode foundDecl) {
 		if(foundDecl != null){
