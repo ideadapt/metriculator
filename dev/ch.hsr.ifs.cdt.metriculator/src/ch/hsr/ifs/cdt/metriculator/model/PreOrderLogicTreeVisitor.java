@@ -36,8 +36,6 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 				AbstractNode copy = n.shallowClone();
 				AbstractNode existing = logicChildren.get(getLogicalUniqueNameOf(copy));
 				// TODO 
-				// - func(int) und func(int i){} haben nicht den gleichen LogicalUniqueName, somit werden sich diese nie finden.
-				// - evtl. funzt auch deshalb der unit test nicht (testMergOfFunctionDefinitionAndDeclarationInSameFile1)
 				// - OR: try calling CheckerTestCase.runOnProject() method (as in StatementHasNoEffectCheckerTest.test2FilesUnaryExpression())
 				if(existing != null){
 					currentNode = existing;
