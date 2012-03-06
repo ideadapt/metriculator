@@ -207,9 +207,8 @@ public class NodeInfo {
 
 	private void prepareMembers(IBinding owner) {
 		logicalName = indexBinding.toString();
-		logicalOwnerName = "";
 		if(owner != null){
-			logicalOwnerName = logicalOwnerName + buildLogicalOwnerName(indexBinding.getOwner());
+			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner());
 			if(owner instanceof ICompositeType){
 				isMember = true;
 				indexBinding = null;
