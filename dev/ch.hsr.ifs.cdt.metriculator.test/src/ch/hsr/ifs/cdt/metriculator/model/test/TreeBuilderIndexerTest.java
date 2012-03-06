@@ -142,7 +142,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition(){
 		loadCodeAndRun(getAboveComment());
-		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -230,7 +229,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	return forwardFunc(1);
 	//}
 	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
 		runOnProject();
 		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
@@ -250,7 +249,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	return forwardFunc(1);
 	//}
 	public void testMergOfFunctionDefinitionAndDeclarationInSameFile2(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
 		runOnProject();
 		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
