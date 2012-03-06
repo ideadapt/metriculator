@@ -258,35 +258,37 @@ public class NodeInfo {
 		return astNodeHashCode;
 	}
 
-	@Override
-	public int hashCode() {
-		assert false : "hashCode not designed";
-	return 23;
-	}
+//	@Override
+//	public int hashCode() {
+//		assert false : "hashCode not designed";
+//	return 23;
+//	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if(obj == null) return false;
-		if(!(obj instanceof NodeInfo)) return false;
-
-		NodeInfo other = (NodeInfo) obj;
-		boolean same = false;
-
-		same = (hasInfos == other.hasInfos &&
-				astNodeHashCode.equals(other.astNodeHashCode) &&
-				isCompositeTypeSpecifier == other.isCompositeTypeSpecifier && 
-				isElaboratedTypeSpecifier == other.isElaboratedTypeSpecifier &&
-				isFunctionDeclarator == other.isFunctionDeclarator && 
-				isFunctionDefinition == other.isFunctionDefinition && 
-				isHeaderUnit == other.isHeaderUnit &&
-				indexBinding != null ? indexBinding.equals(other.indexBinding) : other.indexBinding == null && 
-				filePath.equals(other.filePath) && 
-				typeKey == other.typeKey && 
-				nodeLength == other.nodeLength && 
-				nodeOffSet == other.nodeOffSet);
-
-		return same;
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if(obj == null) return false;
+//		if(!(obj instanceof NodeInfo)) return false;
+//
+//		NodeInfo other = (NodeInfo) obj;
+//		boolean same = false;
+//
+//		same = (hasInfos == other.hasInfos &&
+//				astNodeHashCode.equals(other.astNodeHashCode) &&
+//				isCompositeTypeSpecifier == other.isCompositeTypeSpecifier && 
+//				isElaboratedTypeSpecifier == other.isElaboratedTypeSpecifier &&
+//				isFunctionDeclarator == other.isFunctionDeclarator && 
+//				isFunctionDefinition == other.isFunctionDefinition && 
+//				isHeaderUnit == other.isHeaderUnit &&
+//				indexBinding != null ? indexBinding.equals(other.indexBinding) : other.indexBinding == null && 
+//				filePath.equals(other.filePath) && 
+//				typeKey == other.typeKey && 
+//				nodeLength == other.nodeLength && 
+//				nodeOffSet == other.nodeOffSet);
+//
+//		return same;
+//	}
+	
+	
 
 	public IProblemLocation createAndGetProblemLocation(IFile file) {
 		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
@@ -294,6 +296,118 @@ public class NodeInfo {
 			return locFactory.createProblemLocation(file, nodeOffSetStart, nodeOffsetEnd, startingLineNumber);
 		}
 		return locFactory.createProblemLocation(file, startingLineNumber);
+	}
+
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((astNodeHashCode == null) ? 0 : astNodeHashCode.hashCode());
+		result = prime * result + endingLineNumber;
+		result = prime * result
+				+ ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + (hasInfos ? 1231 : 1237);
+		result = prime * result
+				+ ((indexBinding == null) ? 0 : indexBinding.hashCode());
+		result = prime * result + (isCompositeTypeSpecifier ? 1231 : 1237);
+		result = prime * result + (isEclosedInMacroExpansion ? 1231 : 1237);
+		result = prime * result + (isElaboratedTypeSpecifier ? 1231 : 1237);
+		result = prime * result + (isFriend ? 1231 : 1237);
+		result = prime * result + (isFunctionDeclarator ? 1231 : 1237);
+		result = prime * result + (isFunctionDefinition ? 1231 : 1237);
+		result = prime * result + (isHeaderUnit ? 1231 : 1237);
+		result = prime * result + (isMember ? 1231 : 1237);
+		result = prime * result
+				+ ((logicalName == null) ? 0 : logicalName.hashCode());
+		result = prime
+				* result
+				+ ((logicalOwnerName == null) ? 0 : logicalOwnerName.hashCode());
+		result = prime * result + nodeLength;
+		result = prime * result + nodeOffSet;
+		result = prime * result + nodeOffSetStart;
+		result = prime * result + nodeOffsetEnd;
+		result = prime * result + startingLineNumber;
+		result = prime * result
+				+ ((typeBinding == null) ? 0 : typeBinding.hashCode());
+		result = prime * result + typeKey;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeInfo other = (NodeInfo) obj;
+		if (astNodeHashCode == null) {
+			if (other.astNodeHashCode != null)
+				return false;
+		} else if (!astNodeHashCode.equals(other.astNodeHashCode))
+			return false;
+		if (endingLineNumber != other.endingLineNumber)
+			return false;
+		if (filePath == null) {
+			if (other.filePath != null)
+				return false;
+		} else if (!filePath.equals(other.filePath))
+			return false;
+		if (hasInfos != other.hasInfos)
+			return false;
+		if (indexBinding == null) {
+			if (other.indexBinding != null)
+				return false;
+		} else if (!indexBinding.equals(other.indexBinding))
+			return false;
+		if (isCompositeTypeSpecifier != other.isCompositeTypeSpecifier)
+			return false;
+		if (isEclosedInMacroExpansion != other.isEclosedInMacroExpansion)
+			return false;
+		if (isElaboratedTypeSpecifier != other.isElaboratedTypeSpecifier)
+			return false;
+		if (isFriend != other.isFriend)
+			return false;
+		if (isFunctionDeclarator != other.isFunctionDeclarator)
+			return false;
+		if (isFunctionDefinition != other.isFunctionDefinition)
+			return false;
+		if (isHeaderUnit != other.isHeaderUnit)
+			return false;
+		if (isMember != other.isMember)
+			return false;
+		if (logicalName == null) {
+			if (other.logicalName != null)
+				return false;
+		} else if (!logicalName.equals(other.logicalName))
+			return false;
+		if (logicalOwnerName == null) {
+			if (other.logicalOwnerName != null)
+				return false;
+		} else if (!logicalOwnerName.equals(other.logicalOwnerName))
+			return false;
+		if (nodeLength != other.nodeLength)
+			return false;
+		if (nodeOffSet != other.nodeOffSet)
+			return false;
+		if (nodeOffSetStart != other.nodeOffSetStart)
+			return false;
+		if (nodeOffsetEnd != other.nodeOffsetEnd)
+			return false;
+		if (startingLineNumber != other.startingLineNumber)
+			return false;
+		if (typeBinding == null) {
+			if (other.typeBinding != null)
+				return false;
+		} else if (!typeBinding.equals(other.typeBinding))
+			return false;
+		if (typeKey != other.typeKey)
+			return false;
+		return true;
 	}
 
 	private void prepareProblemLocation(IASTNode astNode){
