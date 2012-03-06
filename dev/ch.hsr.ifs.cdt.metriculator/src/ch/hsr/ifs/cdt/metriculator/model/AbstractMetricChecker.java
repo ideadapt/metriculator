@@ -73,7 +73,6 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 
 		processTanslationUnit(ast);
 		
-		// TODO: remove IBindings in this method
 		builder.mergeDeclarationsAndDefinitions(ast);
 
 		currentScopeNode = fileSystemTop.getParent();

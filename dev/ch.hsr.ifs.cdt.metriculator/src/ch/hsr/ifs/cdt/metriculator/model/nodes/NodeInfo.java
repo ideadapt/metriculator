@@ -58,22 +58,9 @@ public class NodeInfo {
 	private int nodeOffsetEnd;
 	private boolean isEclosedInMacroExpansion;
 	private boolean isFriend;
-	private String logicalOwnerName;
-	
-	public String getLogicalOwnerName() {
-		return logicalOwnerName;
-	}
-
 	private boolean isMember;
+	private String logicalOwnerName;
 	private String logicalName;
-
-	public String getLogicalName() {
-		return logicalName;
-	}
-
-	public boolean isMember() {
-		return isMember;
-	}
 
 	public NodeInfo(){
 		hasInfos = false;
@@ -183,6 +170,19 @@ public class NodeInfo {
 
 	public int getTypeKey() {
 		return typeKey;
+	}
+	
+	public String getLogicalOwnerName() {
+		return logicalOwnerName;
+	}
+
+
+	public String getLogicalName() {
+		return logicalName;
+	}
+
+	public boolean isMember() {
+		return isMember;
 	}
 
 	private void prepareFilePath(IASTNode node){
