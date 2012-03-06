@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cdt.metriculator.model.test;
 
+import org.eclipse.cdt.codan.core.test.CheckerTestCase;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.IPDOMManager;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -45,7 +46,7 @@ import org.osgi.framework.Bundle;
 ////		
 ////	}
 //}
-public class IndexBindingTest extends IndexBindingResolutionTestBase {
+public class IndexBindingTest extends CheckerTestCase {
 	
 //	public static TestSuite suite() {
 //		return suite(IndexBindingTest.class);
@@ -56,37 +57,37 @@ public class IndexBindingTest extends IndexBindingResolutionTestBase {
 //		public static TestSuite suite() {return suite(SingleProject.class);}
 //	}
 	
-	@Override
-	protected void setUp() throws Exception {
-//		super.setUp();
-		CPPASTNameBase.sAllowRecursionBindings = false;
-		CPPASTNameBase.sAllowNameComputation   = false;
-
-		strat = new MySinglePDOMTestStrategy(true);
-		strat.setUp();
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		TestScannerProvider.clear();
-	}
-	
-	@Override
-	protected IASTName findName(String section, int len) {
-		IASTTranslationUnit ast = strat.getAst();
-		final IASTNodeSelector nodeSelector = ast.getNodeSelector(null);
-		final int offset = strat.getTestData()[1].indexOf(section);
-		IASTName name= nodeSelector.findName(offset, len);
-		if (name == null)
-			name= nodeSelector.findImplicitName(offset, len);
-		
-		return name;
-	}
-	
-	@Override
-	protected IIndex getIndex() {
-		return strat.getIndex();
-	}
+//	@Override
+//	protected void setUp() throws Exception {
+////		super.setUp();
+//		CPPASTNameBase.sAllowRecursionBindings = false;
+//		CPPASTNameBase.sAllowNameComputation   = false;
+//
+//		strat = new MySinglePDOMTestStrategy(true);
+//		strat.setUp();
+//	}
+//
+//	@Override
+//	protected void tearDown() throws Exception {
+//		TestScannerProvider.clear();
+//	}
+//	
+//	@Override
+//	protected IASTName findName(String section, int len) {
+//		IASTTranslationUnit ast = strat.getAst();
+//		final IASTNodeSelector nodeSelector = ast.getNodeSelector(null);
+//		final int offset = strat.getTestData()[1].indexOf(section);
+//		IASTName name= nodeSelector.findName(offset, len);
+//		if (name == null)
+//			name= nodeSelector.findImplicitName(offset, len);
+//		
+//		return name;
+//	}
+//	
+//	@Override
+//	protected IIndex getIndex() {
+//		return strat.getIndex();
+//	}
 
 	class MySinglePDOMTestStrategy implements IMyTestStrategy {
 		private IIndex index;
@@ -169,12 +170,10 @@ public class IndexBindingTest extends IndexBindingResolutionTestBase {
 	//int main(){
 	//	return forwardFunc(1);
 	//}
-	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1() throws Exception{
-		
-		IBinding tdAST = getBindingFromASTName("forwardFunc;", 11);
-		assertFalse(tdAST instanceof IIndexBinding);
-		IBinding tdIndex= getIndex().adaptBinding(tdAST);
-		assertTrue(tdIndex instanceof IIndexBinding);	
-	}
+//	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1() throws Exception{
+//		runOnProject();
+//		IBinding tdIndex= getIndex().adaptBinding(tdAST);
+//		assertTrue(tdIndex instanceof IIndexBinding);	
+//	}
 }
 
