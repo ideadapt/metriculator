@@ -16,13 +16,17 @@ import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
 import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 
-public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+/**
+ * TODO
+ * resolve bug #205
+ * */
+class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
 	private ITagCloudDataProvider view;
 	
 	@Override
 	public void run(IAction action) {
- 
+
 		if(view != null){
 			AbstractMetric metric = view.getMetric();
 			Collection<AbstractNode> nodes = view.getNodes();
