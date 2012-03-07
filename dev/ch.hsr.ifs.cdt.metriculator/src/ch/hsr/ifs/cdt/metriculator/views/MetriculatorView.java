@@ -270,7 +270,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	
 	@Override
 	public AbstractMetric getMetric(){
-		TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
+		TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
 		if(selectedCol != null){
 			return MetricColumn.getMetric(selectedCol);
 		}

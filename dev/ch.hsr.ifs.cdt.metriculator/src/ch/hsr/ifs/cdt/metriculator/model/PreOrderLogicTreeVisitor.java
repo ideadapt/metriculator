@@ -42,7 +42,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 				}else{
 					currentNode = currentNode.add(copy);
 					logicChildren.put(getLogicalUniqueNameOf(copy), copy);
-					prepareMemberFunctionsAndNestedTypes(currentNode);
+					prepareMembers(currentNode);
 				}
 			}
 		}
@@ -76,8 +76,8 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		return logicalNamePrefix;
 	}
 
-	private void prepareMemberFunctionsAndNestedTypes(AbstractNode node) {
-		if(node.getNodeInfo().hasInfos() && (node instanceof FunctionNode || node instanceof CompositeTypeNode)){
+	private void prepareMembers(AbstractNode node) {
+		if(node instanceof FunctionNode || node instanceof CompositeTypeNode){
 			if(node.getNodeInfo().isMember()){
 				members.put(node, node.getNodeInfo().getLogicalOwnerName());
 			}
@@ -89,6 +89,8 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		for (AbstractNode node : members.keySet()) {
 			node.removeFromParent();
 			logicalName = members.get(node);
+			// TODO: store members with a key that already uses asthashes (i.e. refactor getLogicalOwnerName todo so, as getLogicalUniqueNameOf already does)
+			// this will make addAstHashes obsolete
 			logicalName = addAstHashes(logicalName, node);
 			if(logicChildren.get(logicalName) != null ){
 				logicChildren.get(logicalName).add(node);

@@ -6,7 +6,7 @@
 <!-- get new time w/ `date +%s000` -->
 <property name='p2.timestamp' value='1321898302000'/>
 </properties>
-<children size='5'>
+<children size='3'>
 <child location='./ch.hsr.ifs.cdt.metriculator.site'/>
 <child location='http://download.eclipse.org/tools/cdt/releases/indigo'/>
 <child location='https://hudson.eclipse.org/hudson/job/gef-zest-integration/ws/org.eclipse.zest.repository/target/repository/'/>
