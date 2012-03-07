@@ -9,7 +9,7 @@
          <action
                class="ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudAction"
                id="ch.hsr.ifs.cdt.metriculator.tagcloud.generateTagCloudAction"
-               label="Generate &amp;Source Cloud"
+               label="Generate &amp;tag cloud"
                menubarPath="additions">
          </action>
       </viewerContribution>

@@ -16,7 +16,7 @@ import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
 import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 
-class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
 	private ITagCloudDataProvider view;
 	
@@ -41,7 +41,7 @@ class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 		}
 	}
 	
-	private void generateTagCloud(Collection<AbstractNode> nodes, AbstractMetric metric) {
+	void generateTagCloud(Collection<AbstractNode> nodes, AbstractMetric metric) {
 		ProgressMonitorDialog dialog = null;
 		try {
 			dialog = new ProgressMonitorDialog(null);

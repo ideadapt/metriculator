@@ -44,7 +44,6 @@ public class NodeInfo {
 	private boolean isElaboratedTypeSpecifier = false;
 	private boolean isCompositeTypeSpecifier = false;
 	private boolean isHeaderUnit = false;
-	private boolean hasInfos = true;
 	private IBinding indexBinding;
 	private IBinding typeBinding;
 	private String filePath;
@@ -63,7 +62,6 @@ public class NodeInfo {
 	private String logicalName;
 
 	public NodeInfo(){
-		hasInfos = false;
 	}
 
 	public NodeInfo(IASTNode astNode) {
@@ -247,10 +245,6 @@ public class NodeInfo {
 		return isHeaderUnit;
 	}
 
-	public boolean hasInfos() {
-		return hasInfos;
-	}
-
 	public IBinding getTypeBinding(){
 		return typeBinding;
 	}
@@ -310,7 +304,6 @@ public class NodeInfo {
 		result = prime * result + endingLineNumber;
 		result = prime * result
 				+ ((filePath == null) ? 0 : filePath.hashCode());
-		result = prime * result + (hasInfos ? 1231 : 1237);
 		result = prime * result
 				+ ((indexBinding == null) ? 0 : indexBinding.hashCode());
 		result = prime * result + (isCompositeTypeSpecifier ? 1231 : 1237);
@@ -357,8 +350,6 @@ public class NodeInfo {
 			if (other.filePath != null)
 				return false;
 		} else if (!filePath.equals(other.filePath))
-			return false;
-		if (hasInfos != other.hasInfos)
 			return false;
 		if (indexBinding == null) {
 			if (other.indexBinding != null)
