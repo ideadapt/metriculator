@@ -122,6 +122,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 	}
 
@@ -145,6 +146,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
@@ -169,6 +171,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
@@ -193,6 +196,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
