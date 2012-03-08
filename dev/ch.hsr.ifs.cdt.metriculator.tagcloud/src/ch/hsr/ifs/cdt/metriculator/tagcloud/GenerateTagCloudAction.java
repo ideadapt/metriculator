@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cdt.metriculator.tagcloud;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,10 +18,9 @@ import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
 import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 
 /**
- * TODO
- * resolve bug #205
+ * @see http://javamoods.blogspot.com/2010/02/override-changes-in-java-6.html
  * */
-class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
 	private ITagCloudDataProvider view;
 	
