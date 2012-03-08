@@ -29,7 +29,6 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 public class HybridTreeBuilder extends TreeBuilder {
 
 	private HashMap<String,AbstractNode> descendants         = new HashMap<String,AbstractNode>();
-	//new merging
 	private HashMap<IBinding, AbstractNode> declarations = new HashMap<IBinding, AbstractNode>();
 
 	public HybridTreeBuilder(String workspace){

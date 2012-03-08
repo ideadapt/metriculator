@@ -253,37 +253,6 @@ public class NodeInfo {
 		return astNodeHashCode;
 	}
 
-	//	@Override
-	//	public int hashCode() {
-	//		assert false : "hashCode not designed";
-	//	return 23;
-	//	}
-
-	//	@Override
-	//	public boolean equals(Object obj) {
-	//		if(obj == null) return false;
-	//		if(!(obj instanceof NodeInfo)) return false;
-	//
-	//		NodeInfo other = (NodeInfo) obj;
-	//		boolean same = false;
-	//
-	//		same = (hasInfos == other.hasInfos &&
-	//				astNodeHashCode.equals(other.astNodeHashCode) &&
-	//				isCompositeTypeSpecifier == other.isCompositeTypeSpecifier && 
-	//				isElaboratedTypeSpecifier == other.isElaboratedTypeSpecifier &&
-	//				isFunctionDeclarator == other.isFunctionDeclarator && 
-	//				isFunctionDefinition == other.isFunctionDefinition && 
-	//				isHeaderUnit == other.isHeaderUnit &&
-	//				indexBinding != null ? indexBinding.equals(other.indexBinding) : other.indexBinding == null && 
-	//				filePath.equals(other.filePath) && 
-	//				typeKey == other.typeKey && 
-	//				nodeLength == other.nodeLength && 
-	//				nodeOffSet == other.nodeOffSet);
-	//
-	//		return same;
-	//	}
-
-
 
 	public IProblemLocation createAndGetProblemLocation(IFile file) {
 		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
@@ -292,7 +261,6 @@ public class NodeInfo {
 		}
 		return locFactory.createProblemLocation(file, startingLineNumber);
 	}
-
 
 
 	@Override
