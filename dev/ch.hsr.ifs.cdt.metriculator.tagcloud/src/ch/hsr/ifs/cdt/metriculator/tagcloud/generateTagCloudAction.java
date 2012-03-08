@@ -1,5 +1,10 @@
 package ch.hsr.ifs.cdt.metriculator.tagcloud;
 
+public class GenerateTagCloudAction{
+	
+}
+
+/*
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,8 +24,8 @@ import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
 /**
  * TODO
  * resolve bug #205
- * */
-public class GenerateTagCloudAction /*implements org.eclipse.ui.IViewActionDelegate*/ {
+ * *
+public class GenerateTagCloudAction /*implements org.eclipse.ui.IViewActionDelegate* {
 
 	private ITagCloudDataProvider view;
 	
@@ -75,3 +80,4 @@ public class GenerateTagCloudAction /*implements org.eclipse.ui.IViewActionDeleg
 		}
 	}
 }
+*/
