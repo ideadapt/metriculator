@@ -57,8 +57,8 @@ public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegat
 			
 			for(AbstractNode n : nodes){
 				String nodeName = n.toString();
-				// shorten strings, otherwise TagCloudViewPart 
-				// throws drawing exceptions due to the limited size of the drawing area.
+				// shorten strings, otherwise cloudio 
+				// throws drawing exceptions due to the limited size of the drawing area. see bug #176
 				if(nodeName.length() > 20){
 					nodeName = nodeName.substring(0, 20);
 				}
