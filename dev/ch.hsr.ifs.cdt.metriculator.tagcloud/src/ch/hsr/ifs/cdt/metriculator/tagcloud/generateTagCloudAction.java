@@ -20,7 +20,7 @@ import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
  * TODO
  * resolve bug #205
  * */
-public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+public class GenerateTagCloudAction /*implements org.eclipse.ui.IViewActionDelegate*/ {
 
 	private ITagCloudDataProvider view;
 	
