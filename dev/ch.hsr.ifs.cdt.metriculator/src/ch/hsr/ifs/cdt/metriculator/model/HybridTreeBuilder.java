@@ -30,8 +30,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 	private HashMap<String,AbstractNode> descendants         = new HashMap<String,AbstractNode>();
 	//new merging
-	private HashMap<IBinding, AbstractNode> funcDeclarations = new HashMap<IBinding, AbstractNode>();
-	private HashMap<IBinding, AbstractNode> typeDeclarations = new HashMap<IBinding, AbstractNode>();
+	private HashMap<IBinding, AbstractNode> declarations = new HashMap<IBinding, AbstractNode>();
 
 	public HybridTreeBuilder(String workspace){
 		root = new WorkspaceNode(workspace);
@@ -75,9 +74,9 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 	private void prepareDeclDefMerging(AbstractNode child) {
 		if(child.getNodeInfo().isFunctionDeclarator()){
-			funcDeclarations.put(child.getNodeInfo().getBinding(), child);
+			declarations.put(child.getNodeInfo().getBinding(), child);
 		}else if(child.getNodeInfo().isElaboratedTypeSpecifier()){
-			typeDeclarations.put(child.getNodeInfo().getTypeBinding(), child);
+			declarations.put(child.getNodeInfo().getTypeBinding(), child);
 		}
 	}
 
@@ -110,9 +109,9 @@ public class HybridTreeBuilder extends TreeBuilder {
 					IASTName iastName = (IASTName)name;
 					AbstractNode foundDecl;
 					if(isTypeDecl){
-						foundDecl = typeDeclarations.get(iastName.getBinding());
+						foundDecl = declarations.get(iastName.getBinding());
 					}else{
-						foundDecl = funcDeclarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
+						foundDecl = declarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
 					}
 					removeFoundDecl(foundDecl);
 				}
@@ -141,8 +140,6 @@ public class HybridTreeBuilder extends TreeBuilder {
 		return declBinding;
 	}
 
-
-
 	private void removeFoundDecl(AbstractNode foundDecl) {
 		if(foundDecl != null){
 			foundDecl.removeFromParent();
@@ -152,8 +149,10 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 
 	private void removeAllBindings() {
-		funcDeclarations.clear();
-		typeDeclarations.clear();
+		for (AbstractNode node : declarations.values()) {
+			node.getNodeInfo().clearBindings();
+		}
+		declarations.clear();
 	}
 
 }

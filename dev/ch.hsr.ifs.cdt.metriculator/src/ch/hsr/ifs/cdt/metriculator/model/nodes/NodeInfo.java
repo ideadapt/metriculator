@@ -432,4 +432,9 @@ public class NodeInfo {
 		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
 	}
 
+	public void clearBindings() {
+		indexBinding = null;
+		typeBinding = null;	
+	}
+
 }
