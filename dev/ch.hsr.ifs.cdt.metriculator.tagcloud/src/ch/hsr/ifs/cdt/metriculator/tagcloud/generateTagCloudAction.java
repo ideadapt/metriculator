@@ -20,11 +20,10 @@ import ch.hsr.ifs.cdt.metriculator.views.ITagCloudDataProvider;
  * TODO
  * resolve bug #205
  * */
-class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
+public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 
 	private ITagCloudDataProvider view;
 	
-	@Override
 	public void run(IAction action) {
 
 		if(view != null){
@@ -34,11 +33,9 @@ class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegate {
 		}
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	@Override
 	public void init(IViewPart view) {
 		if(view instanceof ITagCloudDataProvider){
 			this.view = (ITagCloudDataProvider) view;
