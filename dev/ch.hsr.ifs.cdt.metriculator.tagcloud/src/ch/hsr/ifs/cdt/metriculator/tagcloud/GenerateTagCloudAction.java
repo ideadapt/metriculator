@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cdt.metriculator.tagcloud;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 
