@@ -7,7 +7,7 @@
             id="ch.hsr.ifs.cdt.metriculator.tagcloud.menuContribution"
             targetID="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView.menuTableColumnHeader">
          <action
-               class="ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudActionX"
+               class="ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudAction"
                id="ch.hsr.ifs.cdt.metriculator.tagcloud.generateTagCloudAction"
                label="Generate &amp;tag cloud"
                menubarPath="additions">
