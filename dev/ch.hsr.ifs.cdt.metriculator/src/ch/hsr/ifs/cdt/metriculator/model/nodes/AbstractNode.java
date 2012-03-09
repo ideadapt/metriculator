@@ -115,7 +115,7 @@ public abstract class AbstractNode implements Cloneable {
 	}
 
 	public String getScopeUniqueName() {
-		if(this instanceof ILogicNode){
+		if(this instanceof LogicNode){
 			return new StringBuilder(scopeName).append(nodeInfo.getASTNodeHash() == null ? "" : nodeInfo.getASTNodeHash()).toString();
 		}else{
 			return scopeName;

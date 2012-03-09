@@ -328,7 +328,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
 	}
 	
-
 	// TODO: test merging in logical view of def und decl within ano namespaces.
 	
 	//	namespace {
@@ -336,7 +335,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		    virtual void fx();
 	//		};
 	//	}
-	//
 	//	void A::fx(){}
 	public void testAnonymousNamespaceNoMemberMerging(){
 		loadCodeAndRun(getAboveComment());
@@ -361,7 +359,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//		void A::fx(){}
 	//	}
-	//
 	public void testAnonymousNamespaceMemberMerging(){
 		loadCodeAndRun(getAboveComment());
 		
@@ -370,6 +367,23 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
-		
 	}
+	
+	//	namespace Outer { // at depth 0
+	//		namespace {   // at depth 1
+	//			struct A {// at depth 2
+	//		    	virtual void fx();
+	//			};
+	//          void A::fx(){}
+	//		}
+	//	}
+	public void testNestedAnonymousNamespaceMemberMerging(){
+		loadCodeAndRun(getAboveComment());
+
+		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+
+		assertEquals(1, root.getChildren().size());
+		assertEquals(1, getFirstChildInDepth(root, 1).getChildren().size());
+		//assertEquals(1, getFirstChildInDepth(root, 2).getChildren().size());
+	}	
 }

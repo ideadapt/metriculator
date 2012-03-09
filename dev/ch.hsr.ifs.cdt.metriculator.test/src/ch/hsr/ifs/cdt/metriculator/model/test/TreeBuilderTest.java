@@ -15,6 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.model.test;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
+import sun.reflect.generics.tree.Tree;
+
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetric;
@@ -143,8 +145,8 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromPathAndMergeWithHybrid()  {
-		AbstractNode file1 = TreeBuilder.createTreeFromPath("workspace:project", new Path("/src/cute/folder1/test.cpp"), null);
-		AbstractNode file11 = TreeBuilder.createTreeFromPath("workspace:project", new Path("/src/cute/folder1/folder11/test.cpp"), null);
+		AbstractNode file1 = TreeBuilder.createTreeFromPath("workspace"+TreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/test.cpp"), null);
+		AbstractNode file11 = TreeBuilder.createTreeFromPath("workspace"+TreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/folder11/test.cpp"), null);
 		AbstractNode fileSystemTop1  = file1.getRoot();
 		AbstractNode fileSystemTop11  = file11.getRoot();
 		

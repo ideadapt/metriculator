@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class FunctionNode extends AbstractNode implements ILogicNode {
+public class FunctionNode extends LogicNode {
 
 	public FunctionNode(String name) {
 		super(name);

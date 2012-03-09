@@ -26,7 +26,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 public abstract class TreeBuilder {
 	
 	public AbstractNode root;
-	public static final String PATH_SEPARATOR = ":";
+	public static final String PATH_SEPARATOR = "#";
 	
 	public AbstractNode addChild(AbstractNode parent, AbstractNode child){
 		child = parent.add(child);
