@@ -82,10 +82,12 @@ public class HybridTreeBuilder extends TreeBuilder {
 	public void mergeDeclarationsAndDefinitions(IASTTranslationUnit tu) {
 
 		for (IASTDeclaration decl : tu.getDeclarations()) {
+			
 			if(decl instanceof IASTSimpleDeclaration){
 				IBinding declBinding = null;
-				if(isTypeDecl(decl)){
-					declBinding = getTypeBinding(decl);
+				
+				if(isTypeDecl((IASTSimpleDeclaration) decl)){
+					declBinding = getTypeBinding((IASTSimpleDeclaration) decl);
 					findDeclsOfDefs(tu, declBinding, true);
 				}else{
 					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
@@ -118,12 +120,12 @@ public class HybridTreeBuilder extends TreeBuilder {
 		}
 	}
 
-	private boolean isTypeDecl(IASTDeclaration decl) {
-		return ((IASTSimpleDeclaration) decl).getDeclSpecifier() instanceof ICPPASTElaboratedTypeSpecifier;
+	private boolean isTypeDecl(IASTSimpleDeclaration decl) {
+		return decl.getDeclSpecifier() instanceof ICPPASTElaboratedTypeSpecifier;
 	}
 
-	private IBinding getTypeBinding(IASTDeclaration decl) {
-		ICPPASTElaboratedTypeSpecifier typeDecl = (ICPPASTElaboratedTypeSpecifier)((IASTSimpleDeclaration) decl).getDeclSpecifier();
+	private IBinding getTypeBinding(IASTSimpleDeclaration decl) {
+		ICPPASTElaboratedTypeSpecifier typeDecl = (ICPPASTElaboratedTypeSpecifier)decl.getDeclSpecifier();
 		IBinding declBinding = typeDecl.getName().getBinding();
 		return declBinding;
 	}

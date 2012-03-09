@@ -63,8 +63,14 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 	public boolean runInEditor() {
 		return false; // do not run this checker 'as you type'. only run on user command.
 	}
-
+	
 	public void processAst(IASTTranslationUnit ast) {
+		
+		// ignore c files, #201
+		if(ast.getFilePath().lastIndexOf(".c") == ast.getFilePath().length() - 2){
+			return;
+		}
+		
 		AbstractNode fileSystemLeaf = TreeBuilder.createTreeFromPath((ProjectNode) currentScopeNode, ast);
 		AbstractNode fileSystemTop  = fileSystemLeaf.getRoot(); 
 

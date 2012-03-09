@@ -12,7 +12,6 @@
 
 package ch.hsr.ifs.cdt.metriculator.checkers;
 
-import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTCaseStatement;
 import org.eclipse.cdt.core.dom.ast.IASTConditionalExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -52,21 +51,17 @@ public class McCabeScopedASTVisitor extends ScopedASTVisitor {
 		return PROCESS_CONTINUE;
 	}
 
-
 	@Override
 	public int visit(IASTExpression expression) {
-		if(expression instanceof IASTBinaryExpression && isComplexityLogic(expression)){
-			if(isNotOverloaded(expression)){
+		if(expression instanceof ICPPASTBinaryExpression && isComplexityLogic((ICPPASTBinaryExpression) expression)){
+			if(isNotOverloaded((ICPPASTBinaryExpression) expression)){
 				count();
 			}
-			return PROCESS_CONTINUE;
-		}
-		if(expression instanceof IASTConditionalExpression){
+		}else if(expression instanceof IASTConditionalExpression){
 			count();
 		}
 		return PROCESS_CONTINUE;
 	}
-
 
 	@Override
 	public int visit(IASTTranslationUnit tu) {
@@ -78,8 +73,8 @@ public class McCabeScopedASTVisitor extends ScopedASTVisitor {
 		return PROCESS_CONTINUE;
 	}
 
-	private boolean isNotOverloaded(IASTExpression expression) {
-		return 	((ICPPASTBinaryExpression) expression).getOverload() == null;
+	private boolean isNotOverloaded(ICPPASTBinaryExpression expression) {
+		return 	expression.getOverload() == null;
 	}
 
 	private void count(){
@@ -95,8 +90,8 @@ public class McCabeScopedASTVisitor extends ScopedASTVisitor {
 		return statement instanceof IASTPreprocessorIfStatement || statement instanceof IASTPreprocessorIfdefStatement || statement instanceof IASTPreprocessorIfndefStatement || statement instanceof IASTPreprocessorElifStatement;
 	}
 
-	private boolean isComplexityLogic(IASTExpression expression) {
-		return ((IASTBinaryExpression) expression).getOperator() == IASTBinaryExpression.op_logicalAnd || ((IASTBinaryExpression) expression).getOperator() == IASTBinaryExpression.op_logicalOr;
+	private boolean isComplexityLogic(ICPPASTBinaryExpression expression) {
+		return expression.getOperator() == ICPPASTBinaryExpression.op_logicalAnd || expression.getOperator() == ICPPASTBinaryExpression.op_logicalOr;
 	}
 
 }
