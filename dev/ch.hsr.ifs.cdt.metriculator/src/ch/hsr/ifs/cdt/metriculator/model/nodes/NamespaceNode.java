@@ -19,9 +19,8 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 public class NamespaceNode extends LogicNode {
 
 	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
-		super(nsNode);
+		super(nsNode.getName().toString());
 		setAstNode(new NodeInfo(nsNode));
-		setScopeName(nsNode.getName().toString());
 	}
 
 	public NamespaceNode(String namespace) {

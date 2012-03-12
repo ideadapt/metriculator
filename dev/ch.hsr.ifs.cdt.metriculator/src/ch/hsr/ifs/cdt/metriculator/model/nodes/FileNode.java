@@ -23,9 +23,8 @@ public class FileNode extends AbstractNode {
 	String projectRelativePath;
 	
 	public FileNode(IASTTranslationUnit tu, String filename) {
-		super(tu);
+		super(filename);
 		setAstNode(new NodeInfo(tu));
-		setScopeName(filename);
 	}
 
 	public FileNode(String name) {

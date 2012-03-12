@@ -24,23 +24,14 @@ public class FunctionNode extends LogicNode {
 	}
 
 	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
-		super(fnNode);
+		super(fnNode.getDeclarator().getRawSignature());
 		setAstNode(new NodeInfo(fnNode));
-
-		setScopeUniqueName(fnNode.getDeclarator().getRawSignature());
 	}
 
 	public FunctionNode(ICPPASTFunctionDeclarator fnNode) {
-		super(fnNode);
-		setAstNode(new NodeInfo(fnNode));
-		
-		setScopeUniqueName(fnNode.getRawSignature());
+		super(fnNode.getRawSignature());
+		setAstNode(new NodeInfo(fnNode));		
 	}
-
-	private void setScopeUniqueName(String name) {
-		setScopeName(name);
-	}
-
 
 	@Override
 	public String toString() {

@@ -21,9 +21,8 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 public class CompositeTypeNode extends LogicNode {
 
 	public CompositeTypeNode(ICPPASTCompositeTypeSpecifier astNode) {
-		super(astNode);
+		super(astNode.getName().toString());
 		setAstNode(new NodeInfo(astNode));
-		setScopeName(astNode.getName().toString());
 	}
 
 	public CompositeTypeNode(String name) {
@@ -31,9 +30,8 @@ public class CompositeTypeNode extends LogicNode {
 	}
 
 	public CompositeTypeNode(ICPPASTElaboratedTypeSpecifier astNode) {
-		super(astNode);
+		super(astNode.getName().toString());
 		setAstNode(new NodeInfo(astNode));
-		setScopeName(astNode.getName().toString());
 	}
 
 	@Override
