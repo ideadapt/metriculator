@@ -37,7 +37,7 @@ public abstract class AbstractNode implements Cloneable {
 	private HashMap<String, CompositeValue> metricValues  = new HashMap<String, CompositeValue>();
 	
 	protected AbstractNode(String scopeUniqueName) {
-		this.scopeName = scopeUniqueName;
+		setScopeName(scopeUniqueName);
 		nodeInfo = new NodeInfo();
 	}
 
