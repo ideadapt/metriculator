@@ -10,3 +10,4 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cdt.metriculator;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7, JavaSE-1.6
+Export-Package: ch.hsr.ifs.cdt.metriculator.tagcloud

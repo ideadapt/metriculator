@@ -44,7 +44,7 @@ public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegat
 		}
 	}
 	
-	void generateTagCloud(Collection<AbstractNode> nodes, AbstractMetric metric) {
+	public void generateTagCloud(Collection<AbstractNode> nodes, AbstractMetric metric) {
 		ProgressMonitorDialog dialog = null;
 		try {
 			dialog = new ProgressMonitorDialog(null);

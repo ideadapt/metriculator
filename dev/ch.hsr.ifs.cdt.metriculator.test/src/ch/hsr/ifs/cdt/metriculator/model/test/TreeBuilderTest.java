@@ -15,8 +15,6 @@ package ch.hsr.ifs.cdt.metriculator.model.test;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-import sun.reflect.generics.tree.Tree;
-
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetric;
@@ -40,7 +38,6 @@ import ch.hsr.ifs.cdt.metriculator.test.MetriculatorCheckerTestCase;
 
 /**
  * Test for {@see AbtractNode} and other model classes. Validates tree structure operations like 'add a node' and recursive metric calculation.
- * 
  */
 public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 
