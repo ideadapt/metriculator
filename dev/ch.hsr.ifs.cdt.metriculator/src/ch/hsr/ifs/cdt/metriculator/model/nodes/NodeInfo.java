@@ -216,6 +216,10 @@ public class NodeInfo {
 
 	private String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
+		if(owner == null){
+			return "";
+		}
+		
 		IASTNode node = null;
 
 		if(tu.getDeclarationsInAST(owner).length > 0){
