@@ -14,7 +14,9 @@ package ch.hsr.ifs.cdt.metriculator.tagcloud.test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
@@ -27,7 +29,7 @@ import ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudAction;
  */
 public class GenerateTagCloudActionTest extends TestCase {
 
-	private GenerateTagCloudAction action;
+	private GenerateTagCloudAction action = null;
 	
 	@Override
 	public void setUp() throws Exception {
@@ -42,22 +44,35 @@ public class GenerateTagCloudActionTest extends TestCase {
 		super.tearDown();
 	}
 	
+	private static String repeatString(String str, int times){
+		return times == 0 ? "" : String.format("%0" + times + "d", 0).replace("0", str);
+	}
+	
 	public void testGenerationWithLargeInputWorks(){
 		
 		Collection<AbstractNode> nodes = new ArrayList<AbstractNode>();
 		AbstractMetric metric = new LSLOCMetric(null, "LSLOC", "LSLOC Descr");
 		
-		int randomValue = 2;
-		String randomName = "jlijijijijijijijijijijijiiji";
+		int randomValue = 1;
+		Random random = new Random();
+		String randomName = repeatString("123", 1);
 		int nodeCount   = 1000;
 		
 		for(int i = 0; i<nodeCount; i++){
+						
+			System.out.println(randomName + ", " +  randomValue);
 			
 			AbstractNode node = new FunctionNode(randomName);
 			node.setNodeValue(metric.getKey(), randomValue);
 			nodes.add(node);
+						
+			randomName = repeatString("123", i%10+1);
+			randomValue = random.nextInt(10)+1;
 		}
-		
-		action.generateTagCloud(nodes, metric);
+		try{
+			action.generateTagCloud(nodes, metric);
+		}catch(Exception ex){
+			Assert.fail("test fails");
+		}
 	}
 }

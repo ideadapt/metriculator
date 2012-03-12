@@ -22,7 +22,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	private HashMap<String, AbstractNode> logicNodes  = new HashMap<String, AbstractNode>();
-	private HashMap<AbstractNode, String> memberNodes = new HashMap<AbstractNode, String>();
+	private HashMap<LogicNode, String> memberNodes = new HashMap<LogicNode, String>();
 	private AbstractNode currentNode = null;
 
 	@Override
@@ -41,7 +41,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 				}else{
 					currentNode = currentNode.add(copy);
 					logicNodes.put(getLogicalUniqueNameOf(copy), copy);
-					prepareMembers(currentNode);
+					prepareMembers((LogicNode)currentNode);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		return logicalNamePrefix.toString();
 	}
 	
-	private void prepareMembers(AbstractNode node) {
+	private void prepareMembers(LogicNode node) {
 		if(node instanceof FunctionNode || node instanceof CompositeTypeNode){
 			if(node.getNodeInfo().isMember()){
 				memberNodes.put(node, node.getNodeInfo().getLogicalOwnerName());
@@ -100,7 +100,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	}
 
 	public void mergeDefinitionsAndDeclarations() {
-		for(AbstractNode def : memberNodes.keySet()){
+		for(LogicNode def : memberNodes.keySet()){
 			if(def.getNodeInfo().isFunctionDefinition()){
 				replaceFuncDeclarationWith(def);
 			}else if(def.getNodeInfo().isCompositeTypeSpecifier()){
@@ -109,23 +109,23 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		}
 	}
 
-	private void replaceFuncDeclarationWith(AbstractNode def) {
-		for(AbstractNode decl : memberNodes.keySet()){
+	private void replaceFuncDeclarationWith(LogicNode def) {
+		for(LogicNode decl : memberNodes.keySet()){
 			if(decl.getNodeInfo().isFunctionDeclarator()){
 				removeDeclaration(def, decl);
 			}
 		}
 	}
 
-	private void replaceTypeDeclarationWith(AbstractNode def) {
-		for(AbstractNode decl : memberNodes.keySet()){
+	private void replaceTypeDeclarationWith(LogicNode def) {
+		for(LogicNode decl : memberNodes.keySet()){
 			if(decl.getNodeInfo().isElaboratedTypeSpecifier()){
 				removeDeclaration(def, decl);
 			}
 		}
 	}
 	
-	private void removeDeclaration(AbstractNode def, AbstractNode decl) {
+	private void removeDeclaration(LogicNode def, LogicNode decl) {
 		if(def.getNodeInfo().getLogicalOwnerName().equals(decl.getNodeInfo().getLogicalOwnerName())){
 			if(def.getNodeInfo().getLogicalName().equals(decl.getNodeInfo().getLogicalName())){
 				decl.removeFromParent();
