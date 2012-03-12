@@ -22,6 +22,9 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
+/**
+ * Test for {@see NumberParamsChecker} class, validates the implementation for Number Params per Function.
+ */
 public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	private NumberParamsMetricChecker checker;
 	private WorkspaceNode workspaceNode;

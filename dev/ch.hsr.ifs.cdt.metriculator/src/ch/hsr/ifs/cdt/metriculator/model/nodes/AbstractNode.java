@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
-import org.eclipse.cdt.core.dom.ast.IASTNode;
-
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
@@ -37,12 +35,13 @@ public abstract class AbstractNode implements Cloneable {
 	private HashMap<String, CompositeValue> metricValues  = new HashMap<String, CompositeValue>();
 	
 	protected AbstractNode(String scopeUniqueName) {
-		this.scopeName = scopeUniqueName;
+		setScopeName(scopeUniqueName);
 		nodeInfo = new NodeInfo();
 	}
 
-	public AbstractNode(IASTNode astNode) {
-		nodeInfo = new NodeInfo(astNode);
+	protected AbstractNode(String filename, NodeInfo nodeInfo) {
+		this(filename);
+		this.nodeInfo = nodeInfo;
 	}
 
 	public Collection<AbstractNode> getChildren() {
@@ -122,8 +121,10 @@ public abstract class AbstractNode implements Cloneable {
 		}
 	}
 
+	/**
+	 * normalize string, remove new lines and extra whitespace
+	 * */
 	protected void setScopeName(String scopeName) {
-		// normalize string, remove new lines and extra whitespace
 		this.scopeName = scopeName.replaceAll("[\n\r\t]", emptyString).replaceAll("\\s{2,}", emptyString);
 	}
 	
@@ -183,10 +184,6 @@ public abstract class AbstractNode implements Cloneable {
 		return nodeInfo;
 	}
 	
-	protected void setAstNode(NodeInfo astNode) {
-		this.nodeInfo = astNode;
-	}
-
 	public AbstractNode getRoot() {
 		if(parent == null){
 			return this;

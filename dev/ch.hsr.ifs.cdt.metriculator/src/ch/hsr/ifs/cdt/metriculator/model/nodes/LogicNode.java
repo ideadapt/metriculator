@@ -12,18 +12,17 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 public abstract class LogicNode extends AbstractNode {
 
 	public final static String ANONYMOUS_LABEL = "(anonymous)"; //$NON-NLS-1$
 	
-	public LogicNode(IASTNode astNode) {
-		super(astNode);
+	protected LogicNode(String scopeUniqueName) {
+		super(scopeUniqueName);
 	}
 	
-	public LogicNode(String scopeUniqueName) {
-		super(scopeUniqueName);
+	protected LogicNode(String scopeUniqueName, NodeInfo nodeInfo){
+		super(scopeUniqueName, nodeInfo);
 	}
 
 	public abstract boolean isAnonymous();

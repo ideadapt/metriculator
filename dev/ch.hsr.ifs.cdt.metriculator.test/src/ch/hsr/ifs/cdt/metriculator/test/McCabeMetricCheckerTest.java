@@ -22,6 +22,9 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
+/**
+ * Test for {@see McCabeMetricChecker} class, validates the implementation for McCabe.
+ */
 public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 
 	private AbstractMetricChecker checker;
