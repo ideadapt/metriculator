@@ -41,7 +41,7 @@ public abstract class AbstractNode implements Cloneable {
 		nodeInfo = new NodeInfo();
 	}
 
-	public AbstractNode(IASTNode astNode) {
+	protected AbstractNode(IASTNode astNode) {
 		nodeInfo = new NodeInfo(astNode);
 	}
 
