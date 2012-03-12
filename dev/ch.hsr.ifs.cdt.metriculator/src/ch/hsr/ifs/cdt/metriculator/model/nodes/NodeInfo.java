@@ -191,7 +191,6 @@ public class NodeInfo {
 		prepareBindingFor(tu, declarator.getName());
 	}
 
-
 	private void prepareBindingFor(IASTTranslationUnit tu, IASTName name) {
 		typeBinding  = name.resolveBinding();
 		IIndex index = tu.getIndex();
@@ -200,13 +199,13 @@ public class NodeInfo {
 		if(indexBinding == null){
 			indexBinding = typeBinding;
 		}
-		prepareMembers(indexBinding.getOwner());
+		prepareOwnership(indexBinding.getOwner(), tu);
 	}
 
-	private void prepareMembers(IBinding owner) {
+	private void prepareOwnership(IBinding owner, IASTTranslationUnit tu) {
 		logicalName = indexBinding.toString();
 		if(owner != null){
-			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner());
+			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner(), tu);
 			if(owner instanceof ICompositeType){
 				isMember = true;
 				indexBinding = null;
@@ -215,13 +214,18 @@ public class NodeInfo {
 		}
 	}
 
-	private String buildLogicalOwnerName(IBinding owner) {
+	private String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
+		IASTNode node = tu.getDeclarationsInAST(owner)[0].getParent();
 		if(owner.getOwner() == null){
-			return owner.getName().toString();
+			if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
+				return owner.getName().toString() + node.hashCode();
+			}else{
+				return owner.getName().toString();
+			}
 		}
 
-		return buildLogicalOwnerName(owner.getOwner()) + TreeBuilder.PATH_SEPARATOR + owner.getName();
+		return buildLogicalOwnerName(owner.getOwner(), tu) + TreeBuilder.PATH_SEPARATOR + owner.getName() + ((node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()) ? node.hashCode() : "");
 	}
 
 
@@ -240,7 +244,6 @@ public class NodeInfo {
 		nodeLength = astNode.getNodeLocations()[0].getNodeLength();
 	}
 
-
 	public boolean isHeaderUnit() {
 		return isHeaderUnit;
 	}
@@ -253,7 +256,6 @@ public class NodeInfo {
 		return astNodeHashCode;
 	}
 
-
 	public IProblemLocation createAndGetProblemLocation(IFile file) {
 		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
 		if(isEclosedInMacroExpansion || startingLineNumber == endingLineNumber){
@@ -262,120 +264,12 @@ public class NodeInfo {
 		return locFactory.createProblemLocation(file, startingLineNumber);
 	}
 
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((astNodeHashCode == null) ? 0 : astNodeHashCode.hashCode());
-		result = prime * result + endingLineNumber;
-		result = prime * result
-				+ ((filePath == null) ? 0 : filePath.hashCode());
-		result = prime * result
-				+ ((indexBinding == null) ? 0 : indexBinding.hashCode());
-		result = prime * result + (isCompositeTypeSpecifier ? 1231 : 1237);
-		result = prime * result + (isEclosedInMacroExpansion ? 1231 : 1237);
-		result = prime * result + (isElaboratedTypeSpecifier ? 1231 : 1237);
-		result = prime * result + (isFriend ? 1231 : 1237);
-		result = prime * result + (isFunctionDeclarator ? 1231 : 1237);
-		result = prime * result + (isFunctionDefinition ? 1231 : 1237);
-		result = prime * result + (isHeaderUnit ? 1231 : 1237);
-		result = prime * result + (isMember ? 1231 : 1237);
-		result = prime * result
-				+ ((logicalName == null) ? 0 : logicalName.hashCode());
-		result = prime
-				* result
-				+ ((logicalOwnerName == null) ? 0 : logicalOwnerName.hashCode());
-		result = prime * result + nodeLength;
-		result = prime * result + nodeOffSet;
-		result = prime * result + nodeOffSetStart;
-		result = prime * result + nodeOffsetEnd;
-		result = prime * result + startingLineNumber;
-		result = prime * result
-				+ ((typeBinding == null) ? 0 : typeBinding.hashCode());
-		result = prime * result + typeKey;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NodeInfo other = (NodeInfo) obj;
-		if (astNodeHashCode == null) {
-			if (other.astNodeHashCode != null)
-				return false;
-		} else if (!astNodeHashCode.equals(other.astNodeHashCode))
-			return false;
-		if (endingLineNumber != other.endingLineNumber)
-			return false;
-		if (filePath == null) {
-			if (other.filePath != null)
-				return false;
-		} else if (!filePath.equals(other.filePath))
-			return false;
-		if (indexBinding == null) {
-			if (other.indexBinding != null)
-				return false;
-		} else if (!indexBinding.equals(other.indexBinding))
-			return false;
-		if (isCompositeTypeSpecifier != other.isCompositeTypeSpecifier)
-			return false;
-		if (isEclosedInMacroExpansion != other.isEclosedInMacroExpansion)
-			return false;
-		if (isElaboratedTypeSpecifier != other.isElaboratedTypeSpecifier)
-			return false;
-		if (isFriend != other.isFriend)
-			return false;
-		if (isFunctionDeclarator != other.isFunctionDeclarator)
-			return false;
-		if (isFunctionDefinition != other.isFunctionDefinition)
-			return false;
-		if (isHeaderUnit != other.isHeaderUnit)
-			return false;
-		if (isMember != other.isMember)
-			return false;
-		if (logicalName == null) {
-			if (other.logicalName != null)
-				return false;
-		} else if (!logicalName.equals(other.logicalName))
-			return false;
-		if (logicalOwnerName == null) {
-			if (other.logicalOwnerName != null)
-				return false;
-		} else if (!logicalOwnerName.equals(other.logicalOwnerName))
-			return false;
-		if (nodeLength != other.nodeLength)
-			return false;
-		if (nodeOffSet != other.nodeOffSet)
-			return false;
-		if (nodeOffSetStart != other.nodeOffSetStart)
-			return false;
-		if (nodeOffsetEnd != other.nodeOffsetEnd)
-			return false;
-		if (startingLineNumber != other.startingLineNumber)
-			return false;
-		if (typeBinding == null) {
-			if (other.typeBinding != null)
-				return false;
-		} else if (!typeBinding.equals(other.typeBinding))
-			return false;
-		if (typeKey != other.typeKey)
-			return false;
-		return true;
-	}
-
 	private void prepareProblemLocation(IASTNode astNode){
 		IASTFileLocation astLocation       = astNode.getFileLocation();
 
 		startingLineNumber = astLocation.getStartingLineNumber();
 
-		if (enclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
+		if (isEnclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
 			isEclosedInMacroExpansion = true;
 			IASTImageLocation imageLocation = ((IASTName) astNode).getImageLocation();
 
@@ -395,7 +289,7 @@ public class NodeInfo {
 
 	}
 
-	private static boolean enclosedInMacroExpansion(IASTNode node) {
+	private static boolean isEnclosedInMacroExpansion(IASTNode node) {
 		IASTNodeLocation[] nodeLocations = node.getNodeLocations();
 		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
 	}
@@ -404,5 +298,4 @@ public class NodeInfo {
 		indexBinding = null;
 		typeBinding = null;	
 	}
-
 }

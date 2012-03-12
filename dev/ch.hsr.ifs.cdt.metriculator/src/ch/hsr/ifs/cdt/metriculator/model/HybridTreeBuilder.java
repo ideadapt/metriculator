@@ -28,7 +28,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
 public class HybridTreeBuilder extends TreeBuilder {
 
-	private HashMap<String,AbstractNode> descendants         = new HashMap<String,AbstractNode>();
+	private HashMap<String,AbstractNode> descendants     = new HashMap<String,AbstractNode>();
 	private HashMap<IBinding, AbstractNode> declarations = new HashMap<IBinding, AbstractNode>();
 
 	public HybridTreeBuilder(String workspace){
@@ -41,7 +41,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 		String childsHybridId = combine(TreeBuilder.PATH_SEPARATOR, parent.getHybridId(), child.getScopeUniqueName());
 		AbstractNode existing = parent.getChildBy(childsHybridId);
 
-		prepareDeclDefMerging(child);
+		prepareDeclBinding(child);
 
 		if(existing != null){
 			mergeChildrenOf(child, existing);
@@ -71,9 +71,10 @@ public class HybridTreeBuilder extends TreeBuilder {
 		return descendants.get(hybridId);
 	}
 
-	private void prepareDeclDefMerging(AbstractNode child) {
+	private void prepareDeclBinding(AbstractNode child) {
 		if(child.getNodeInfo().isFunctionDeclarator()){
 			declarations.put(child.getNodeInfo().getBinding(), child);
+			
 		}else if(child.getNodeInfo().isElaboratedTypeSpecifier()){
 			declarations.put(child.getNodeInfo().getTypeBinding(), child);
 		}
@@ -91,30 +92,34 @@ public class HybridTreeBuilder extends TreeBuilder {
 					findDeclsOfDefs(tu, declBinding, true);
 				}else{
 					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
-					findDecslOfDefs(tu, declBinding);
+					findDeclsOfDefs(tu, declBinding);
 				}
 			}
 		}
-		removeAllBindings();
+		deleteBindings();
 	}
 
 
-	private void findDecslOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
+	private void findDeclsOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
 		findDeclsOfDefs(tu, declBinding, false);
 	}
 
 	private void findDeclsOfDefs(IASTTranslationUnit tu, IBinding declBinding, boolean isTypeDecl) {
 		if(declBinding != null){
 			for(IName name : tu.getDefinitions(declBinding)){
+				
 				if(name instanceof IASTName && name.isDefinition()){
+					
 					IASTName iastName = (IASTName)name;
 					AbstractNode foundDecl;
+					
 					if(isTypeDecl){
 						foundDecl = declarations.get(iastName.getBinding());
 					}else{
 						foundDecl = declarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
 					}
-					removeFoundDecl(foundDecl);
+					
+					removeFromTree(foundDecl);
 				}
 			}
 		}
@@ -126,8 +131,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 	private IBinding getTypeBinding(IASTSimpleDeclaration decl) {
 		ICPPASTElaboratedTypeSpecifier typeDecl = (ICPPASTElaboratedTypeSpecifier)decl.getDeclSpecifier();
-		IBinding declBinding = typeDecl.getName().getBinding();
-		return declBinding;
+		return typeDecl.getName().getBinding();
 	}
 
 	private IBinding getFuncBinding(IASTTranslationUnit tu,IASTDeclarator[] declarators) {
@@ -141,19 +145,17 @@ public class HybridTreeBuilder extends TreeBuilder {
 		return declBinding;
 	}
 
-	private void removeFoundDecl(AbstractNode foundDecl) {
+	private void removeFromTree(AbstractNode foundDecl) {
 		if(foundDecl != null){
 			foundDecl.removeFromParent();
 			foundDecl = null;
 		}
 	}
 
-
-	private void removeAllBindings() {
+	private void deleteBindings() {
 		for (AbstractNode node : declarations.values()) {
 			node.getNodeInfo().clearBindings();
 		}
 		declarations.clear();
 	}
-
 }

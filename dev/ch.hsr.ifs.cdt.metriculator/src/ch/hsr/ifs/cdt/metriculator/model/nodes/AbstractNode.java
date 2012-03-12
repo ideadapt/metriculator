@@ -24,7 +24,7 @@ import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
 public abstract class AbstractNode implements Cloneable {
 
-	private static String emptyString = "";
+	private static String emptyString = ""; //$NON-NLS-1$
 	protected String scopeName;
 	protected AbstractNode parent;
 	private String hybridId;
@@ -115,7 +115,7 @@ public abstract class AbstractNode implements Cloneable {
 	}
 
 	public String getScopeUniqueName() {
-		if(this instanceof ILogicNode){
+		if(this instanceof LogicNode){
 			return new StringBuilder(scopeName).append(nodeInfo.getASTNodeHash() == null ? "" : nodeInfo.getASTNodeHash()).toString();
 		}else{
 			return scopeName;

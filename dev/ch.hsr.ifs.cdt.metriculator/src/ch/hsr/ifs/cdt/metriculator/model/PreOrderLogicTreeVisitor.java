@@ -17,13 +17,12 @@ import java.util.HashMap;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.ILogicNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
-	private HashMap<String, AbstractNode> logicChildren = new HashMap<String, AbstractNode>();
-	private HashMap<AbstractNode, String> members       = new HashMap<AbstractNode, String>();
-
+	private HashMap<String, AbstractNode> logicNodes  = new HashMap<String, AbstractNode>();
+	private HashMap<AbstractNode, String> memberNodes = new HashMap<AbstractNode, String>();
 	private AbstractNode currentNode = null;
 
 	@Override
@@ -32,16 +31,16 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 			rootNode    = n.shallowClone();
 			currentNode = rootNode;
 		}else{
-			if(n instanceof ILogicNode){
+			if(n instanceof LogicNode){
 				AbstractNode copy     = n.shallowClone();
-				AbstractNode existing = logicChildren.get(getLogicalUniqueNameOf(copy));
-
+				AbstractNode existing = logicNodes.get(getLogicalUniqueNameOf(copy));
+				
 				if(existing != null){
 					currentNode = existing;
 					currentNode.addNodeValuesFrom(copy);
 				}else{
 					currentNode = currentNode.add(copy);
-					logicChildren.put(getLogicalUniqueNameOf(copy), copy);
+					logicNodes.put(getLogicalUniqueNameOf(copy), copy);
 					prepareMembers(currentNode);
 				}
 			}
@@ -50,68 +49,59 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	@Override
 	protected void leaveNode(AbstractNode n) {
-		if(n instanceof ILogicNode){
+		if(n instanceof LogicNode){
 			currentNode = currentNode.getParent();
 		}
 	}
 
 	private String getLogicalUniqueNameOf(AbstractNode node){
-		return getLogicalUniqueNameOf(node, "");
+		return getLogicalUniqueNameOf(node, new StringBuilder());
 	}
 
-	// TODO use StringBuilder
-	private String getLogicalUniqueNameOf(AbstractNode node, String logicalNamePrefix){
+	private String getLogicalUniqueNameOf(AbstractNode node, StringBuilder logicalNamePrefix){
 
-		if(node instanceof ILogicNode){
+		if(node instanceof LogicNode){
 			String scopeName = node.getScopeName();
-			if(((ILogicNode)node).isAnonymous()){
+			if(((LogicNode)node).isAnonymous()){
 				scopeName = node.getScopeUniqueName();
 			}
-			logicalNamePrefix = scopeName + (logicalNamePrefix.trim().isEmpty() ? logicalNamePrefix : TreeBuilder.PATH_SEPARATOR + logicalNamePrefix);
+			
+			if(logicalNamePrefix.length() == 0){
+				logicalNamePrefix.append(scopeName);
+			}else{
+				logicalNamePrefix.insert(0, TreeBuilder.PATH_SEPARATOR).insert(0, scopeName);
+			}
 		}
 
 		if(node.getParent() != null){
 			return getLogicalUniqueNameOf(node.getParent(), logicalNamePrefix);
 		}
-		return logicalNamePrefix;
+		return logicalNamePrefix.toString();
 	}
-
+	
 	private void prepareMembers(AbstractNode node) {
 		if(node instanceof FunctionNode || node instanceof CompositeTypeNode){
 			if(node.getNodeInfo().isMember()){
-				members.put(node, node.getNodeInfo().getLogicalOwnerName());
+				memberNodes.put(node, node.getNodeInfo().getLogicalOwnerName());
 			}
 		}
 	}
 
 	public void mergeMembers() {
-		String logicalName;
-		for (AbstractNode node : members.keySet()) {
+		String logicalOwnerName;
+		for (AbstractNode node : memberNodes.keySet()) {
 			node.removeFromParent();
-			logicalName = members.get(node);
-			// TODO: store members with a key that already uses asthashes (i.e. refactor getLogicalOwnerName todo so, as getLogicalUniqueNameOf already does)
-			// this will make addAstHashes obsolete
-			logicalName = addAstHashes(logicalName, node);
-			if(logicChildren.get(logicalName) != null ){
-				logicChildren.get(logicalName).add(node);
-			}
-		}
-	}
+			logicalOwnerName = memberNodes.get(node);
 
-	private String addAstHashes(String logicalName, AbstractNode node) {
-		if(node == null){
-			return logicalName;
-		}
-		if(node instanceof ILogicNode){
-			if(((ILogicNode)node).isAnonymous()){
-				return addAstHashes(node.getNodeInfo().getASTNodeHash() + logicalName, node.getParent());
+			if(logicNodes.get(logicalOwnerName) != null ){
+				logicNodes.get(logicalOwnerName).add(node);
 			}
+			System.out.println("-");
 		}
-		return addAstHashes(logicalName, node.getParent());
 	}
 
 	public void mergeDefinitionsAndDeclarations() {
-		for(AbstractNode def : members.keySet()){
+		for(AbstractNode def : memberNodes.keySet()){
 			if(def.getNodeInfo().isFunctionDefinition()){
 				replaceFuncDeclarationWith(def);
 			}else if(def.getNodeInfo().isCompositeTypeSpecifier()){
@@ -120,9 +110,8 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		}
 	}
 
-
 	private void replaceFuncDeclarationWith(AbstractNode def) {
-		for(AbstractNode decl : members.keySet()){
+		for(AbstractNode decl : memberNodes.keySet()){
 			if(decl.getNodeInfo().isFunctionDeclarator()){
 				removeDeclaration(def, decl);
 			}
@@ -130,7 +119,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	}
 
 	private void replaceTypeDeclarationWith(AbstractNode def) {
-		for(AbstractNode decl : members.keySet()){
+		for(AbstractNode decl : memberNodes.keySet()){
 			if(decl.getNodeInfo().isElaboratedTypeSpecifier()){
 				removeDeclaration(def, decl);
 			}

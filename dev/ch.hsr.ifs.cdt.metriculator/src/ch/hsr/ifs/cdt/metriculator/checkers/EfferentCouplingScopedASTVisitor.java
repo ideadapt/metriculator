@@ -27,14 +27,14 @@ import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.ILogicNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NodeInfo;
 
 public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 
 	String key = AbstractMetric.getKeyFor(EfferentCouplingMetric.class);
-	private HashMap<ILogicNode, HashSet<IBinding>> countedBindingsInNode = new HashMap<ILogicNode, HashSet<IBinding>>();
-	private ILogicNode currType = null;
+	private HashMap<LogicNode, HashSet<IBinding>> countedBindingsInNode = new HashMap<LogicNode, HashSet<IBinding>>();
+	private LogicNode currType = null;
 	
 	private int typeNestingLevel = 0;
 	
@@ -56,10 +56,10 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 				if(isNotElaboratedType(node)){
 					
 					if(!countedBindingsInNode.containsKey(node)){					
-						countedBindingsInNode.put((ILogicNode) node, new HashSet<IBinding>());
+						countedBindingsInNode.put((LogicNode) node, new HashSet<IBinding>());
 					}
 					typeNestingLevel++;
-					currType = (ILogicNode) node;
+					currType = (LogicNode) node;
 				}
 			}
 			
@@ -70,7 +70,7 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 					if(typeNestingLevel <= 0){
 						currType = null;
 					}else{
-						currType = (ILogicNode) node.getParent();
+						currType = (LogicNode) node.getParent();
 					}
 				}
 			}			

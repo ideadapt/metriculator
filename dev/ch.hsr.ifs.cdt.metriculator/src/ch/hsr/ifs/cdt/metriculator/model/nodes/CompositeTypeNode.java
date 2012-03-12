@@ -18,7 +18,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 
-public class CompositeTypeNode extends AbstractNode implements ILogicNode {
+public class CompositeTypeNode extends LogicNode {
 
 	public CompositeTypeNode(ICPPASTCompositeTypeSpecifier astNode) {
 		super(astNode);
@@ -38,7 +38,7 @@ public class CompositeTypeNode extends AbstractNode implements ILogicNode {
 
 	@Override
 	public String toString() {
-		return isAnonymous() ? ILogicNode.ANONYMOUS_LABEL : getScopeName();
+		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class NamespaceNode extends AbstractNode implements ILogicNode {
+public class NamespaceNode extends LogicNode {
 
 	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
 		super(nsNode);
@@ -30,7 +30,7 @@ public class NamespaceNode extends AbstractNode implements ILogicNode {
 	
 	@Override
 	public String toString() {
-		return isAnonymous() ? ILogicNode.ANONYMOUS_LABEL : getScopeName();
+		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();
 	}
 
 	@Override
