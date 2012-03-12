@@ -50,7 +50,7 @@ public class NodeInfo {
 	private int nodeOffSet;
 	private int nodeLength;
 	private int typeKey;
-	protected String astNodeHashCode;
+	protected String astNodeHashCode = "";
 	private int endingLineNumber;
 	private int startingLineNumber;
 	private int nodeOffSetStart;
@@ -125,8 +125,8 @@ public class NodeInfo {
 	}
 
 	public NodeInfo(ICPPASTNamespaceDefinition astNode){
-		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
 		prepareFilePath(astNode);
+		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
 		prepareNodeLocations(astNode);
 	}
 
