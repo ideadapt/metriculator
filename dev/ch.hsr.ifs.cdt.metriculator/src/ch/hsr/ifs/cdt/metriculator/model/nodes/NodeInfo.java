@@ -216,12 +216,17 @@ public class NodeInfo {
 
 	private String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
-		IASTNode node = tu.getDeclarationsInAST(owner)[0].getParent();
-		if(owner.getOwner() == null){
-			if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
-				return owner.getName().toString() + node.hashCode();
-			}else{
-				return owner.getName().toString();
+		IASTNode node = null;
+
+		if(tu.getDeclarationsInAST(owner).length > 0){
+			node = tu.getDeclarationsInAST(owner)[0].getParent();
+
+			if(owner.getOwner() == null){
+				if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
+					return owner.getName().toString() + node.hashCode();
+				}else{
+					return owner.getName().toString();
+				}
 			}
 		}
 
