@@ -96,7 +96,6 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 			if(logicNodes.get(logicalOwnerName) != null ){
 				logicNodes.get(logicalOwnerName).add(node);
 			}
-			System.out.println("-");
 		}
 	}
 
