@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 public abstract class LogicNode extends AbstractNode {
 
 	static String ANONYMOUS_LABEL = "(anonymous)";
+	public int anoId = 0;
 	
 	public LogicNode(IASTNode astNode) {
 		super(astNode);
