@@ -199,13 +199,13 @@ public class NodeInfo {
 		if(indexBinding == null){
 			indexBinding = typeBinding;
 		}
-		prepareOwnership(indexBinding.getOwner());
+		prepareOwnership(indexBinding.getOwner(), tu);
 	}
 
-	private void prepareOwnership(IBinding owner) {
+	private void prepareOwnership(IBinding owner, IASTTranslationUnit tu) {
 		logicalName = indexBinding.toString();
 		if(owner != null){
-			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner());
+			logicalOwnerName = buildLogicalOwnerName(indexBinding.getOwner(), tu);
 			if(owner instanceof ICompositeType){
 				isMember = true;
 				indexBinding = null;
@@ -214,13 +214,18 @@ public class NodeInfo {
 		}
 	}
 
-	private String buildLogicalOwnerName(IBinding owner) {
+	private String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
+		IASTNode node = tu.getDeclarationsInAST(owner)[0].getParent();
 		if(owner.getOwner() == null){
-			return owner.getName().toString();
+			if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
+				return owner.getName().toString() + node.hashCode();
+			}else{
+				return owner.getName().toString();
+			}
 		}
 
-		return buildLogicalOwnerName(owner.getOwner()) + TreeBuilder.PATH_SEPARATOR + owner.getName();
+		return buildLogicalOwnerName(owner.getOwner(), tu) + TreeBuilder.PATH_SEPARATOR + owner.getName() + ((node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()) ? node.hashCode() : "");
 	}
 
 

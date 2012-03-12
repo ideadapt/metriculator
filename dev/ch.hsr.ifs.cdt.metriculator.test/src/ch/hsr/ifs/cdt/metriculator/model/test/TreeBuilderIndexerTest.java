@@ -348,7 +348,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
 		// TODO z.z sind keine kinder in A
-		// assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
 		
 	}
 	
@@ -365,7 +365,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
-		//assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
 	}
 	
 	//	namespace Outer { // at depth 0
@@ -383,6 +383,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, getFirstChildInDepth(root, 1).getChildren().size());
-		//assertEquals(1, getFirstChildInDepth(root, 2).getChildren().size());
+		assertEquals(1, getFirstChildInDepth(root, 2).getChildren().size());
 	}	
 }
