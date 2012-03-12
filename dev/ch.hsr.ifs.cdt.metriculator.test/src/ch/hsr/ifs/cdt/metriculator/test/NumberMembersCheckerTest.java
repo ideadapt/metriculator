@@ -22,6 +22,9 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
+/**
+ * Test for {@see NumberMembersChecker} class, validates the implementation for Number Members per Type.
+ */
 public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	private NumberMembersMetricChecker checker;
 	private WorkspaceNode workspaceNode;

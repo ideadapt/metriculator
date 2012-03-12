@@ -262,6 +262,22 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
+	
+	//	class A;
+	//	class B;
+	//	class A{
+	//	};
+	//	class B{
+	//	};
+	public void testMergOfTypeDefinitionAndDeclarationInSameFile(){
+		loadcode(getAboveComment());
+		runOnProject();
+		
+		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
+		
+		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getNodeInfo().isCompositeTypeSpecifier());
+	}
 
 	//	class MyClass {			
 	//	public:
