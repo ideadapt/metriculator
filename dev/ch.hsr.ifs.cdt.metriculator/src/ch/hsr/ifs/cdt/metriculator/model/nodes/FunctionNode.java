@@ -23,14 +23,12 @@ public class FunctionNode extends LogicNode {
 		super(name);
 	}
 
-	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
-		super(fnNode.getDeclarator().getRawSignature());
-		setAstNode(new NodeInfo(fnNode));
-	}
-
 	public FunctionNode(ICPPASTFunctionDeclarator fnNode) {
-		super(fnNode.getRawSignature());
-		setAstNode(new NodeInfo(fnNode));		
+		super(fnNode.getRawSignature(), new NodeInfo(fnNode));
+	}
+	
+	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
+		super(fnNode.getDeclarator().getRawSignature(), new NodeInfo(fnNode));
 	}
 
 	@Override

@@ -39,6 +39,11 @@ public abstract class AbstractNode implements Cloneable {
 		nodeInfo = new NodeInfo();
 	}
 
+	protected AbstractNode(String filename, NodeInfo nodeInfo) {
+		this(filename);
+		this.nodeInfo = nodeInfo;
+	}
+
 	public Collection<AbstractNode> getChildren() {
 		return Collections.unmodifiableCollection(orderedChildren);
 	}
@@ -179,10 +184,6 @@ public abstract class AbstractNode implements Cloneable {
 		return nodeInfo;
 	}
 	
-	protected void setAstNode(NodeInfo astNode) {
-		this.nodeInfo = astNode;
-	}
-
 	public AbstractNode getRoot() {
 		if(parent == null){
 			return this;

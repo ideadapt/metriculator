@@ -22,13 +22,12 @@ public class FileNode extends AbstractNode {
 
 	String projectRelativePath;
 	
-	public FileNode(IASTTranslationUnit tu, String filename) {
-		super(filename);
-		setAstNode(new NodeInfo(tu));
-	}
-
 	public FileNode(String name) {
 		super(name);
+	}
+	
+	public FileNode(IASTTranslationUnit tu, String filename) {
+		super(filename, new NodeInfo(tu));
 	}
 
 	@Override

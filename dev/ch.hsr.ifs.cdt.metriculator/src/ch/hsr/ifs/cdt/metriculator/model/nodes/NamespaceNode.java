@@ -18,15 +18,14 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class NamespaceNode extends LogicNode {
 
-	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
-		super(nsNode.getName().toString());
-		setAstNode(new NodeInfo(nsNode));
-	}
-
 	public NamespaceNode(String namespace) {
 		super(namespace);
 	}
 	
+	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
+		super(nsNode.getName().toString(), new NodeInfo(nsNode));
+	}
+
 	@Override
 	public String toString() {
 		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();

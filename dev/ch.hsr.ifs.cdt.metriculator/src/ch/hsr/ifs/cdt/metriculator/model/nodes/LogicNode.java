@@ -17,8 +17,12 @@ public abstract class LogicNode extends AbstractNode {
 
 	static String ANONYMOUS_LABEL = "(anonymous)"; //$NON-NLS-1$
 	
-	public LogicNode(String scopeUniqueName) {
+	protected LogicNode(String scopeUniqueName) {
 		super(scopeUniqueName);
+	}
+	
+	protected LogicNode(String scopeUniqueName, NodeInfo nodeInfo){
+		super(scopeUniqueName, nodeInfo);
 	}
 
 	public abstract boolean isAnonymous();
