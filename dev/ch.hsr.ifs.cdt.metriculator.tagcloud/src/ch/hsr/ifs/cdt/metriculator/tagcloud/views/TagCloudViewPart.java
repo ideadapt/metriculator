@@ -38,6 +38,7 @@ import org.eclipse.zest.cloudio.layout.DefaultLayouter;
 import org.eclipse.zest.cloudio.layout.ILayouter;
 
 import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
+import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TypeLabelProvider.Scaling;
 
 /**
  * 
@@ -69,6 +70,7 @@ public class TagCloudViewPart extends ViewPart {
 		layouter = new DefaultLayouter(20, 10);
 		viewer.setLayouter(layouter);
 		labelProvider = new TypeLabelProvider();
+		labelProvider.setScale(Scaling.LINEAR);
 		viewer.setLabelProvider(labelProvider);
 		viewer.setContentProvider(new IStructuredContentProvider() {
 
@@ -146,8 +148,36 @@ public class TagCloudViewPart extends ViewPart {
 				Group buttons = super.addLayoutButtons(parent);
 
 				Label l = new Label(buttons, SWT.NONE);
+				l.setText("Scale");
+				final Combo scale = new Combo(buttons, SWT.DROP_DOWN
+						| SWT.READ_ONLY);
+				scale.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+				scale.setItems(new String[] { "linear", "logarithmic" });
+				scale.select(1);
+				scale.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						switch (scale.getSelectionIndex()) {
+						case 0:
+							labelProvider.setScale(TypeLabelProvider.Scaling.LINEAR);
+							break;
+						case 1:
+							labelProvider.setScale(TypeLabelProvider.Scaling.LOGARITHMIC);
+							break;
+						default:
+							break;
+						}
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+				});
+				l = new Label(buttons, SWT.NONE);
 				l.setText("X Axis Variation");
-				final Combo xAxis = new Combo(buttons, SWT.DROP_DOWN | SWT.READ_ONLY);
+				final Combo xAxis = new Combo(buttons, SWT.DROP_DOWN
+						| SWT.READ_ONLY);
 				xAxis.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 				xAxis.setItems(new String[] { "0", "10", "20", "30", "40",
 						"50", "60", "70", "80", "90", "100" });
@@ -157,7 +187,9 @@ public class TagCloudViewPart extends ViewPart {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						String item = xAxis.getItem(xAxis.getSelectionIndex());
-						layouter.setOption(DefaultLayouter.X_AXIS_VARIATION,Integer.parseInt(item));
+						layouter.setOption(DefaultLayouter.X_AXIS_VARIATION,
+								Integer.parseInt(item));
+
 					}
 
 					@Override
@@ -178,7 +210,8 @@ public class TagCloudViewPart extends ViewPart {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						String item = yAxis.getItem(yAxis.getSelectionIndex());
-						layouter.setOption(DefaultLayouter.Y_AXIS_VARIATION, Integer.parseInt(item));
+						layouter.setOption(DefaultLayouter.Y_AXIS_VARIATION,
+								Integer.parseInt(item));
 					}
 
 					@Override
@@ -193,10 +226,12 @@ public class TagCloudViewPart extends ViewPart {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(viewer.getControl().getShell());
+						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(
+								viewer.getControl().getShell());
 						dialog.setBlockOnOpen(false);
 						dialog.open();
-						dialog.getProgressMonitor().beginTask("Layouting tag cloud...", 100);
+						dialog.getProgressMonitor().beginTask(
+								"Layouting tag cloud...", 100);
 						viewer.reset(dialog.getProgressMonitor(), false);
 						dialog.close();
 					}
@@ -213,11 +248,14 @@ public class TagCloudViewPart extends ViewPart {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						ProgressMonitorDialog dialog = new ProgressMonitorDialog(viewer.getControl().getShell());
+						ProgressMonitorDialog dialog = new ProgressMonitorDialog(
+								viewer.getControl().getShell());
 						dialog.setBlockOnOpen(false);
 						dialog.open();
-						dialog.getProgressMonitor().beginTask("Layouting tag cloud...", 200);
-						viewer.setInput(viewer.getInput(), dialog.getProgressMonitor());
+						dialog.getProgressMonitor().beginTask(
+								"Layouting tag cloud...", 200);
+						viewer.setInput(viewer.getInput(),
+								dialog.getProgressMonitor());
 						viewer.reset(dialog.getProgressMonitor(), false);
 						dialog.close();
 					}

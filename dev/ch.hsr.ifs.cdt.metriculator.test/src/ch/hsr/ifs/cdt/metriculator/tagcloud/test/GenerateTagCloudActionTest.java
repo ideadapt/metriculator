@@ -67,7 +67,7 @@ public class GenerateTagCloudActionTest extends TestCase {
 			nodes.add(node);
 						
 			randomName = repeatString("123", i%10+1);
-			randomValue = random.nextInt(10)+1;
+			randomValue = random.nextInt(100)+1;
 		}
 		try{
 			action.generateTagCloud(nodes, metric);
