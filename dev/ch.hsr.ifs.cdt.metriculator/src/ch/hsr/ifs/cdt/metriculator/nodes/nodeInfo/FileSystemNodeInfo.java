@@ -13,7 +13,8 @@ public class FileSystemNodeInfo extends AbstractNodeInfo {
 			isHeaderUnit = astNode.isHeaderUnit();
 		}
 	}
-	
+
+	@Override
 	public boolean isHeaderUnit() {
 		return isHeaderUnit;
 	}

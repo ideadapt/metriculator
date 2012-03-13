@@ -18,6 +18,10 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
 
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
@@ -101,9 +105,9 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	public void mergeDefinitionsAndDeclarations() {
 		for(LogicNode def : memberNodes.keySet()){
-			if(def.getNodeInfo().isFunctionDefinition()){
+			if(def.getNodeInfo() instanceof FuncDefNodeInfo){
 				replaceFuncDeclarationWith(def);
-			}else if(def.getNodeInfo().isCompositeTypeSpecifier()){
+			}else if(def.getNodeInfo() instanceof TypeDefNodeInfo){
 				replaceTypeDeclarationWith(def);
 			}
 		}
@@ -111,7 +115,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	private void replaceFuncDeclarationWith(LogicNode def) {
 		for(LogicNode decl : memberNodes.keySet()){
-			if(decl.getNodeInfo().isFunctionDeclarator()){
+			if(decl.getNodeInfo() instanceof FuncDeclNodeInfo){
 				removeDeclaration(def, decl);
 			}
 		}
@@ -119,7 +123,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	private void replaceTypeDeclarationWith(LogicNode def) {
 		for(LogicNode decl : memberNodes.keySet()){
-			if(decl.getNodeInfo().isElaboratedTypeSpecifier()){
+			if(decl.getNodeInfo() instanceof TypeDeclNodeInfo){
 				removeDeclaration(def, decl);
 			}
 		}

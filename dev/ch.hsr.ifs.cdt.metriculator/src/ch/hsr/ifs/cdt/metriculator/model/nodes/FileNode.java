@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FileSystemNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FileNode extends AbstractNode {
@@ -27,7 +28,7 @@ public class FileNode extends AbstractNode {
 	}
 	
 	public FileNode(IASTTranslationUnit tu, String filename) {
-		super(filename, new NodeInfo(tu));
+		super(filename, new FileSystemNodeInfo(tu));
 	}
 
 	@Override

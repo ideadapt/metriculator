@@ -19,6 +19,8 @@ import java.util.HashMap;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.AbstractNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.NullNodeInfo;
 
 public abstract class AbstractNode implements Cloneable {
 
@@ -26,7 +28,7 @@ public abstract class AbstractNode implements Cloneable {
 	protected String scopeName;
 	protected AbstractNode parent;
 	private String hybridId;
-	private NodeInfo nodeInfo;
+	private AbstractNodeInfo nodeInfo;
 
 	public String cachedPath;
 
@@ -36,10 +38,10 @@ public abstract class AbstractNode implements Cloneable {
 	
 	protected AbstractNode(String scopeUniqueName) {
 		setScopeName(scopeUniqueName);
-		nodeInfo = new NodeInfo();
+		nodeInfo = new NullNodeInfo();
 	}
 
-	protected AbstractNode(String filename, NodeInfo nodeInfo) {
+	protected AbstractNode(String filename, AbstractNodeInfo nodeInfo) {
 		this(filename);
 		this.nodeInfo = nodeInfo;
 	}
@@ -115,7 +117,7 @@ public abstract class AbstractNode implements Cloneable {
 
 	public String getScopeUniqueName() {
 		if(this instanceof LogicNode){
-			return new StringBuilder(scopeName).append(nodeInfo.getASTNodeHash() == null ? "" : nodeInfo.getASTNodeHash()).toString();
+			return new StringBuilder(scopeName).append(nodeInfo.getAstNodeHashCode()).toString();
 		}else{
 			return scopeName;
 		}
@@ -180,7 +182,7 @@ public abstract class AbstractNode implements Cloneable {
 		return getScopeName();
 	}
 
-	public NodeInfo getNodeInfo() {
+	public AbstractNodeInfo getNodeInfo() {
 		return nodeInfo;
 	}
 	

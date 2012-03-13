@@ -9,11 +9,12 @@ import org.eclipse.cdt.core.dom.ast.IASTMacroExpansionLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.core.resources.IFile;
 
 
 public abstract class AbstractNodeInfo {
-	
+
 	private String filePath;
 	private int nodeOffSet;
 	private int nodeLength;
@@ -23,12 +24,19 @@ public abstract class AbstractNodeInfo {
 	private int nodeOffSetStart;
 	private int nodeOffsetEnd;
 	private boolean isEclosedInMacroExpansion;
-	
+
 	protected AbstractNodeInfo(IASTNode astNode){
-		prepareHashCode(astNode);
-		prepareFilePath(astNode);
-		prepareNodeLocations(astNode);
-		prepareProblemLocation(astNode);
+		if(astNode != null){
+			prepareHashCode(astNode);
+			prepareFilePath(astNode);
+			prepareNodeLocations(astNode);
+			prepareProblemLocation(astNode);
+		}
+	}
+
+	protected AbstractNodeInfo() {
+		filePath = "";
+		astNodeHashCode = "";
 	}
 
 	public String getFilePath() {
@@ -42,15 +50,19 @@ public abstract class AbstractNodeInfo {
 	public int getNodeLength() {
 		return nodeLength;
 	}
-	
+
+	public String getAstNodeHashCode(){
+		return "";
+	}
+
 	protected void prepareHashCode(IASTNode astNode) {
 		astNodeHashCode = "";
 	}
-	
-	protected void prepareFilePath(IASTNode node) {
-		filePath = node.getTranslationUnit().getFilePath();
+
+	protected void prepareFilePath(IASTNode astNode) {
+		filePath = astNode.getTranslationUnit().getFilePath();
 	}
-	
+
 	protected void prepareNodeLocations(IASTNode astNode) {
 		nodeOffSet = astNode.getNodeLocations()[0].getNodeOffset();
 		nodeLength = astNode.getNodeLocations()[0].getNodeLength();
@@ -66,32 +78,64 @@ public abstract class AbstractNodeInfo {
 
 	protected void prepareProblemLocation(IASTNode astNode) {
 		IASTFileLocation astLocation       = astNode.getFileLocation();
-	
+
 		startingLineNumber = astLocation.getStartingLineNumber();
-	
+
 		if (isEnclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
 			isEclosedInMacroExpansion = true;
 			IASTImageLocation imageLocation = ((IASTName) astNode).getImageLocation();
-	
+
 			if (imageLocation != null) {
 				nodeOffSetStart = imageLocation.getNodeOffset();
 				nodeOffsetEnd   = nodeOffSetStart + imageLocation.getNodeLength();
 				return;
 			}
 		}
-	
+
 		endingLineNumber = astLocation.getEndingLineNumber();
 		if (startingLineNumber == endingLineNumber) {
 			nodeOffSetStart = astLocation.getNodeOffset();
 			nodeOffsetEnd = nodeOffSetStart + astLocation.getNodeLength();
 			return;
 		}
-	
+
 	}
-	
+
 	private static boolean isEnclosedInMacroExpansion(IASTNode node) {
 		IASTNodeLocation[] nodeLocations = node.getNodeLocations();
 		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
+	}
+
+	public int getTypeKey() {
+		return 0;
+	}
+
+	public boolean isHeaderUnit() {
+		return false;
+	}
+
+	public IBinding getBinding() {
+		return null;
+	}
+	
+	public IBinding getIndexBinding() {
+		return null;
+	}
+
+	public void clearBindings() {
+
+	}
+
+	public boolean isMember() {
+		return false;
+	}
+
+	public String getLogicalOwnerName() {
+		return null;
+	}
+
+	public String getLogicalName() {
+		return null;
 	}
 
 }

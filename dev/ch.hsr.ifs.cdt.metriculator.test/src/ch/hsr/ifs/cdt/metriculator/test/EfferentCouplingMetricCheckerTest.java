@@ -56,14 +56,16 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 
 	// class X;
 	public void testClassDeclCountsZero() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(0, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
 	
 	// class X {}
 	public void testClassDefCountsZero() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(0, workspaceNode.getValueOf(metric).aggregatedValue);
 	}	
@@ -73,7 +75,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	//	Z a;
 	// }	
 	public void testClassRefCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -83,7 +86,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	//	Z a;
 	// }	
 	public void testClassInitCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}	
@@ -95,7 +99,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	//	}
 	// }	
 	public void testClassInitInFunctionCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}	
@@ -108,7 +113,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	//	}
 	// }	
 	public void testNestedClassHasSeparateCounting() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		// class Z
@@ -143,7 +149,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	// 	class Z;
 	// }	
 	public void testNestedClassForwardDeclCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 		
@@ -159,7 +166,8 @@ public class EfferentCouplingMetricCheckerTest extends MetriculatorCheckerTestCa
 	//  class Z;
 	// }	
 	public void testScopingWorksOnNestedTypes() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 

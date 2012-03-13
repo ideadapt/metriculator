@@ -11,20 +11,22 @@ public class TypeDeclNodeInfo extends MemberNodeInfo {
 
 	private int typeKey;
 	
-	protected TypeDeclNodeInfo(ICPPASTElaboratedTypeSpecifier astNode) {
+	public TypeDeclNodeInfo(ICPPASTElaboratedTypeSpecifier astNode) {
 		super(astNode);
 		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();
 		typeKey = astNode.getKind();
 	}
 	
+	@Override
 	public int getTypeKey() {
 		return typeKey;
 	}
 
 	@Override
-	protected void prepareBinding(IASTNode astNode) {
+	protected boolean prepareBinding(IASTNode astNode) {
 		IASTName name = ((ICPPASTElaboratedTypeSpecifier) astNode).getName();
 		binding  = name.resolveBinding();
+		return binding != null;
 	}
 
 }

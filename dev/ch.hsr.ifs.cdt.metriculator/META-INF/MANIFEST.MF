@@ -19,4 +19,5 @@ Export-Package: ch.hsr.ifs.cdt.metriculator,
  ch.hsr.ifs.cdt.metriculator.checkers,
  ch.hsr.ifs.cdt.metriculator.model,
  ch.hsr.ifs.cdt.metriculator.model.nodes,
+ ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo,
  ch.hsr.ifs.cdt.metriculator.views

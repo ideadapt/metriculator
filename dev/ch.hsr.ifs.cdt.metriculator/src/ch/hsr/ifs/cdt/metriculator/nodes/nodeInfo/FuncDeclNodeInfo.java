@@ -7,17 +7,18 @@ import org.eclipse.cdt.core.index.IIndex;
 
 public class FuncDeclNodeInfo extends MemberNodeInfo {
 
-	protected FuncDeclNodeInfo(ICPPASTFunctionDeclarator astNode) {
+	public FuncDeclNodeInfo(ICPPASTFunctionDeclarator astNode) {
 		super(astNode);
 		isFriend = astNode.getRawSignature().contains("friend");
 	}
 
 	@Override
-	void prepareBinding(IASTNode astNode) {
+	protected boolean prepareBinding(IASTNode astNode) {
 		IASTName name = ((ICPPASTFunctionDeclarator) astNode).getName();
 		binding  = name.resolveBinding();
 		IIndex index = astNode.getTranslationUnit().getIndex();
-		binding = index.adaptBinding(binding);
+		indexBinding = index.adaptBinding(binding);
+		return binding != null || indexBinding != null;
 	}
 
 }

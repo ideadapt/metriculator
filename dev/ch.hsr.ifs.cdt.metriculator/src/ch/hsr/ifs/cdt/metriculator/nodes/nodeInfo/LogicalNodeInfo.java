@@ -9,11 +9,21 @@ public abstract class LogicalNodeInfo extends AbstractNodeInfo {
 	protected LogicalNodeInfo(IASTNode astNode) {
 		super(astNode);
 		isFriend = false;
+		prepareHashCode(astNode);
 	}
 	
 	public boolean isFriend() {
 		return isFriend;
 	}
 	
+	@Override
+	protected void prepareHashCode(IASTNode astNode) {
+		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
+	}
+
+	@Override
+	public String getAstNodeHashCode() {
+		return astNodeHashCode;
+	}
 
 }

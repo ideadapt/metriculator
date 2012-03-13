@@ -25,6 +25,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
 
 public class HybridTreeBuilder extends TreeBuilder {
 
@@ -72,11 +74,11 @@ public class HybridTreeBuilder extends TreeBuilder {
 	}
 
 	private void prepareDeclBinding(AbstractNode child) {
-		if(child.getNodeInfo().isFunctionDeclarator()){
-			declarations.put(child.getNodeInfo().getBinding(), child);
+		if(child.getNodeInfo() instanceof FuncDeclNodeInfo){
+			declarations.put(child.getNodeInfo().getIndexBinding(), child);
 			
-		}else if(child.getNodeInfo().isElaboratedTypeSpecifier()){
-			declarations.put(child.getNodeInfo().getTypeBinding(), child);
+		}else if(child.getNodeInfo() instanceof TypeDeclNodeInfo){
+			declarations.put(child.getNodeInfo().getBinding(), child);
 		}
 	}
 

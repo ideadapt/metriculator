@@ -10,20 +10,22 @@ public class TypeDefNodeInfo extends MemberNodeInfo {
 
 	private int typeKey;
 
-	protected TypeDefNodeInfo(ICPPASTCompositeTypeSpecifier astNode) {
+	public TypeDefNodeInfo(ICPPASTCompositeTypeSpecifier astNode) {
 		super(astNode);
 		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();
 		typeKey = astNode.getKey();
 	}
 	
+	@Override
 	public int getTypeKey() {
 		return typeKey;
 	}
 
 	@Override
-	protected void prepareBinding(IASTNode astNode) {
+	protected boolean prepareBinding(IASTNode astNode) {
 		IASTName name = ((ICPPASTCompositeTypeSpecifier) astNode).getName();
 		binding  = name.resolveBinding();
+		return binding != null;
 	}
 
 

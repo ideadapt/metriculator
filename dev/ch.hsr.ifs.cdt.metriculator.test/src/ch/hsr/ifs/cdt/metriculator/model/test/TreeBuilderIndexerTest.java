@@ -22,6 +22,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.test.MetriculatorCheckerTestCase;
 
 public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
@@ -118,7 +120,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -142,7 +145,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -167,7 +171,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition2(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -192,7 +197,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition3(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -216,7 +222,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	}	
 	public void testMergOfMemberFunctionsInNamespace(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -239,7 +246,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+		assertTrue(root.getChildren().iterator().next().getNodeInfo() instanceof FuncDefNodeInfo);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
 
@@ -259,7 +266,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+		assertTrue(root.getChildren().iterator().next().getNodeInfo() instanceof FuncDefNodeInfo);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
 	
@@ -276,7 +283,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getNodeInfo().isCompositeTypeSpecifier());
+		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getNodeInfo() instanceof TypeDefNodeInfo);
 	}
 
 	//	class MyClass {			
@@ -293,8 +300,9 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	struct MyClass::InnerStruct{
 	//	};
 	public void testMergeOfNestedTypeDeclarationAndDefition(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
@@ -313,7 +321,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	}
 	public void testMergeOfFunctionsInNamespaces(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -335,7 +344,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	}
 	public void testTwoAnonymousNamespaces(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -351,7 +361,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	}
 	//	void A::fx(){}
 	public void testAnonymousNamespaceNoMemberMerging(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
 		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
@@ -375,7 +386,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		void A::fx(){}
 	//	}
 	public void testAnonymousNamespaceMemberMerging(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
@@ -393,7 +405,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	}
 	public void testNestedAnonymousNamespaceMemberMerging(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 

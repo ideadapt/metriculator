@@ -14,13 +14,14 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FileSystemNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 
 public class FolderNode extends AbstractNode {
 
 	public FolderNode(IASTTranslationUnit tu, String scopeUniqueName) {
-		super(scopeUniqueName, new NodeInfo(tu));
+		super(scopeUniqueName, new FileSystemNodeInfo(tu));
 	}
 
 	@Override

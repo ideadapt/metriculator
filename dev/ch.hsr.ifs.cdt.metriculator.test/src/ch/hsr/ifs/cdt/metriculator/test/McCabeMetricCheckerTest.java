@@ -63,7 +63,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//     return 0;
 	//   }
 	public void testOneIf(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
@@ -80,7 +81,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//     return 0;
 	//   }
 	public void testTwoIfs(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -95,7 +97,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//     return 0;
 	//   }
 	public void testTwoNestedIfs(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		
@@ -106,7 +109,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// while(true); 
 	// }
 	public void testOneWhile(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -117,7 +121,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }
 	// }
 	public void testOneFor(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -132,7 +137,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	}
 	public void testOneCase(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
@@ -143,7 +149,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	   }
 	//   }
 	public void testOneCatch(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
@@ -165,7 +172,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 1;
 	//	}
 	public void testTwoFunctions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -173,7 +181,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	#if a<0
 	//	#endif
 	public void testPreprocessorIfStatement(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
@@ -183,7 +192,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	#if b<0
 	//	#endif
 	public void testTwoPreprocessorIfStatements(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
@@ -221,7 +231,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		return i == 0 ? -1 : 1;
 	//	}
 	public void testConditionalExpression(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -233,7 +244,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 0;
 	//	}
 	public void testLogicalOrExpression(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -246,7 +258,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	return 0;
 	//	}
 	public void testLogicalAndExpression(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -259,7 +272,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 1;
 	//	}
 	public void testMultipleExpressions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(5, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -269,7 +283,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 //      return this->value && right.value;
 //    }
 	public void testIgnoreOverloadedExpression(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -294,7 +309,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	}
 	//}
 	public void testTwoFunctionsInNamespace(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -318,7 +334,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testClassWithMemberfunctions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		workspaceNode = (WorkspaceNode) MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 

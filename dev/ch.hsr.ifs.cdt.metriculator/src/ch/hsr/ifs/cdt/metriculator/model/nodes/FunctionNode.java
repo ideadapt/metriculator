@@ -15,6 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FunctionNode extends LogicNode {
@@ -24,11 +26,11 @@ public class FunctionNode extends LogicNode {
 	}
 
 	public FunctionNode(ICPPASTFunctionDeclarator fnNode) {
-		super(fnNode.getRawSignature(), new NodeInfo(fnNode));
+		super(fnNode.getRawSignature(), new FuncDeclNodeInfo(fnNode));
 	}
 	
 	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
-		super(fnNode.getDeclarator().getRawSignature(), new NodeInfo(fnNode));
+		super(fnNode.getDeclarator().getRawSignature(), new FuncDefNodeInfo(fnNode));
 	}
 
 	@Override

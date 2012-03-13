@@ -58,7 +58,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return i;
 	//	}
 	public void testOneParameter(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -67,7 +68,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return i + j;
 	//	}
 	public void testTwoParameters(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -80,8 +82,9 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 0;
 	//	}
 	public void testTwoFunctionsWithParameters(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		assertEquals(5, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
 
@@ -97,7 +100,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testFunctionDefinitionOverwritesDeclaration(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		workspaceNode = (WorkspaceNode) MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 

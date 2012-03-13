@@ -15,6 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 
@@ -25,11 +27,11 @@ public class CompositeTypeNode extends LogicNode {
 	}
 	
 	public CompositeTypeNode(ICPPASTElaboratedTypeSpecifier astNode) {
-		super(astNode.getName().toString(), new NodeInfo(astNode));
+		super(astNode.getName().toString(), new TypeDeclNodeInfo(astNode));
 	}
 	
 	public CompositeTypeNode(ICPPASTCompositeTypeSpecifier astNode) {
-		super(astNode.getName().toString(), new NodeInfo(astNode));
+		super(astNode.getName().toString(), new TypeDefNodeInfo(astNode));
 	}
 
 	@Override

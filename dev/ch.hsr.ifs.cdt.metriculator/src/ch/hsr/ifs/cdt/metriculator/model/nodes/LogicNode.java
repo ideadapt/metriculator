@@ -12,6 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.LogicalNodeInfo;
+
 
 public abstract class LogicNode extends AbstractNode {
 
@@ -21,7 +23,7 @@ public abstract class LogicNode extends AbstractNode {
 		super(scopeUniqueName);
 	}
 	
-	protected LogicNode(String scopeUniqueName, NodeInfo nodeInfo){
+	protected LogicNode(String scopeUniqueName, LogicalNodeInfo nodeInfo){
 		super(scopeUniqueName, nodeInfo);
 	}
 
