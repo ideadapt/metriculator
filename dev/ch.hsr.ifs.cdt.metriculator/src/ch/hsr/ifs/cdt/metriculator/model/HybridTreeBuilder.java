@@ -77,7 +77,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 	private void prepareDeclBinding(AbstractNode child) {
 		if(child instanceof FunctionDeclNode){
 			declarations.put(((MemberNode) child).getIndexBinding(), (MemberNode) child);
-			
+
 		}else if(child instanceof TypeDeclNode){
 			declarations.put(((MemberNode) child).getBinding(), (MemberNode) child);
 		}

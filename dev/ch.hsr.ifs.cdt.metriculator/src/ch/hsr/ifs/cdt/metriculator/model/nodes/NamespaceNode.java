@@ -27,11 +27,6 @@ public class NamespaceNode extends LogicNode {
 	}
 
 	@Override
-	public String toString() {
-		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();
-	}
-
-	@Override
 	public String getIconPath() {
 		return Icon.Size16.NAMESPACE;
 	}

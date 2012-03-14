@@ -81,7 +81,7 @@ public abstract class MemberNode extends LogicNode {
 			node = declarationsInAST[0].getParent();
 			
 			if(owner.getOwner() == null){
-				if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
+				if(isAnonymousNamespace(node)){
 					return owner.getName().toString() + node.hashCode();
 				}else{
 					return owner.getName().toString();
@@ -89,7 +89,11 @@ public abstract class MemberNode extends LogicNode {
 			}
 		}
 
-		return buildLogicalOwnerName(owner.getOwner(), tu) + TreeBuilder.PATH_SEPARATOR + owner.getName() + ((node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()) ? node.hashCode() : "");
+		return buildLogicalOwnerName(owner.getOwner(), tu) + TreeBuilder.PATH_SEPARATOR + owner.getName() + (isAnonymousNamespace(node) ? node.hashCode() : "");
+	}
+
+	private boolean isAnonymousNamespace(IASTNode node) {
+		return node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty();
 	}
 
 	public static IBinding getBindingFor(IASTName name, IASTTranslationUnit tu) {

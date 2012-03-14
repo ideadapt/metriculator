@@ -15,7 +15,6 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
-import org.eclipse.cdt.core.index.IIndex;
 
 public class FunctionDeclNode extends FunctionNode {
 
@@ -24,11 +23,8 @@ public class FunctionDeclNode extends FunctionNode {
 	}
 
 	@Override
-	boolean prepareBinding(IASTNode astNode) {
-		IASTName name = ((ICPPASTFunctionDeclarator) astNode).getName();
-		binding  = name.resolveBinding();
-		IIndex index = astNode.getTranslationUnit().getIndex();
-		indexBinding = index.adaptBinding(binding);
-		return binding != null || indexBinding != null;
+	protected IASTName getASTName(IASTNode astNode) {
+		return ((ICPPASTFunctionDeclarator)astNode).getName();
 	}
+
 }
