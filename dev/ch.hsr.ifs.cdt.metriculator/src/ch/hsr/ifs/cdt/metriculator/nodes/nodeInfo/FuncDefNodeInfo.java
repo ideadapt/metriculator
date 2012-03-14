@@ -9,7 +9,6 @@ public class FuncDefNodeInfo extends MemberNodeInfo {
 
 	public FuncDefNodeInfo(ICPPASTFunctionDefinition astNode) {
 		super(astNode);
-		isFriend = astNode.getDeclSpecifier().getRawSignature().contains("friend");
 	}
 
 	@Override
@@ -19,6 +18,11 @@ public class FuncDefNodeInfo extends MemberNodeInfo {
 		IIndex index = astNode.getTranslationUnit().getIndex();
 		indexBinding = index.adaptBinding(binding);
 		return binding != null || indexBinding != null;
+	}
+
+	@Override
+	void prepareIsFriend(IASTNode astNode) {
+		isFriend = astNode.getRawSignature().contains("friend");	
 	}
 
 }

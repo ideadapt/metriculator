@@ -18,12 +18,12 @@ public abstract class AbstractNodeInfo {
 	private String filePath;
 	private int nodeOffSet;
 	private int nodeLength;
-	protected String astNodeHashCode;
 	private int endingLineNumber;
 	private int startingLineNumber;
 	private int nodeOffSetStart;
 	private int nodeOffsetEnd;
 	private boolean isEclosedInMacroExpansion;
+	protected String astNodeHashCode;
 
 	protected AbstractNodeInfo(IASTNode astNode){
 		if(astNode != null){
@@ -52,7 +52,48 @@ public abstract class AbstractNodeInfo {
 	}
 
 	public String getAstNodeHashCode(){
-		return "";
+		return astNodeHashCode;
+	}
+	
+	
+	//TODO: move to typesnode
+	public int getTypeKey() {
+		return 0;
+	}
+
+	//TODO: move to filenode
+	public boolean isHeaderUnit() {
+		return false;
+	}
+
+	//TODO: move to MemberNode
+	public IBinding getBinding() {
+		return null;
+	}
+	
+	//TODO: move to MemberNode
+	public IBinding getIndexBinding() {
+		return null;
+	}
+
+	//TODO: move to MemberNode
+	public void clearBindings() {
+
+	}
+
+	//TODO: move to MemberNode
+	public boolean isMember() {
+		return false;
+	}
+
+	//TODO: move to MemberNode
+	public String getLogicalOwnerName() {
+		return null;
+	}
+
+	//TODO: move to MemberNode
+	public String getLogicalName() {
+		return null;
 	}
 
 	protected void prepareHashCode(IASTNode astNode) {
@@ -106,36 +147,6 @@ public abstract class AbstractNodeInfo {
 		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
 	}
 
-	public int getTypeKey() {
-		return 0;
-	}
 
-	public boolean isHeaderUnit() {
-		return false;
-	}
-
-	public IBinding getBinding() {
-		return null;
-	}
-	
-	public IBinding getIndexBinding() {
-		return null;
-	}
-
-	public void clearBindings() {
-
-	}
-
-	public boolean isMember() {
-		return false;
-	}
-
-	public String getLogicalOwnerName() {
-		return null;
-	}
-
-	public String getLogicalName() {
-		return null;
-	}
 
 }

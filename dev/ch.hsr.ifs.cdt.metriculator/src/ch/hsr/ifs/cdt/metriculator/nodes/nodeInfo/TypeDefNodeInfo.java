@@ -12,7 +12,6 @@ public class TypeDefNodeInfo extends MemberNodeInfo {
 
 	public TypeDefNodeInfo(ICPPASTCompositeTypeSpecifier astNode) {
 		super(astNode);
-		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();
 		typeKey = astNode.getKey();
 	}
 	
@@ -28,5 +27,9 @@ public class TypeDefNodeInfo extends MemberNodeInfo {
 		return binding != null;
 	}
 
+	@Override
+	void prepareIsFriend(IASTNode astNode) {
+		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();	
+	}
 
 }

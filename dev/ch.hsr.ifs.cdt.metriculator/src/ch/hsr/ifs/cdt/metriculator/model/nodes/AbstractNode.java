@@ -182,6 +182,8 @@ public abstract class AbstractNode implements Cloneable {
 		return getScopeName();
 	}
 
+	
+	//TODO: needless
 	public AbstractNodeInfo getNodeInfo() {
 		return nodeInfo;
 	}

@@ -55,8 +55,4 @@ public class CompositeTypeNode extends LogicNode {
 		}
 	}
 
-	@Override
-	public boolean isAnonymous() {
-		return getScopeName().trim().isEmpty();
-	}
 }

@@ -43,8 +43,4 @@ public class FunctionNode extends LogicNode {
 		return Icon.Size16.METHOD_PUBLIC;
 	}
 
-	@Override
-	public boolean isAnonymous() {
-		return getScopeName().trim().isEmpty();
-	}
 }

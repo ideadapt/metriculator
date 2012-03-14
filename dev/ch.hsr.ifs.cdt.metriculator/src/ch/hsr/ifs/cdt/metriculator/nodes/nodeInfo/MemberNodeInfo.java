@@ -24,7 +24,10 @@ public abstract class MemberNodeInfo extends LogicalNodeInfo {
 		if(prepareBinding(astNode)){
 			prepareOwnership(binding.getOwner(), astNode.getTranslationUnit());
 		}
+		prepareIsFriend(astNode);
 	}
+
+	abstract void prepareIsFriend(IASTNode astNode);
 
 	@Override
 	public boolean isMember() {
@@ -54,6 +57,7 @@ public abstract class MemberNodeInfo extends LogicalNodeInfo {
 	@Override
 	public void clearBindings() {
 		binding = null;
+		indexBinding = null;
 	}
 
 	abstract boolean prepareBinding(IASTNode astNode);
@@ -96,7 +100,5 @@ public abstract class MemberNodeInfo extends LogicalNodeInfo {
 
 		return indexBinding == null ? typeBinding : indexBinding;
 	}
-	
-	
 
 }

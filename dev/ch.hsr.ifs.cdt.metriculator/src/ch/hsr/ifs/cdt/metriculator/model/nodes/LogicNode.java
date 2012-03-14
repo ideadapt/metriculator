@@ -27,5 +27,7 @@ public abstract class LogicNode extends AbstractNode {
 		super(scopeUniqueName, nodeInfo);
 	}
 
-	public abstract boolean isAnonymous();
+	public boolean isAnonymous(){
+		return false;
+	}
 }
