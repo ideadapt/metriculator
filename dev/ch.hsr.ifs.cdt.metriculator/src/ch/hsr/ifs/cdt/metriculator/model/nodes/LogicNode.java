@@ -12,22 +12,34 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.LogicalNodeInfo;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 
 public abstract class LogicNode extends AbstractNode {
 
 	public final static String ANONYMOUS_LABEL = "(anonymous)"; //$NON-NLS-1$
+	protected boolean isFriend = false;
 	
 	protected LogicNode(String scopeUniqueName) {
 		super(scopeUniqueName);
 	}
 	
-	protected LogicNode(String scopeUniqueName, LogicalNodeInfo nodeInfo){
-		super(scopeUniqueName, nodeInfo);
+	protected LogicNode(String scopeUniqueName, IASTNode astNode) {
+		super(scopeUniqueName, astNode);
+		prepareHashCode(astNode);
 	}
 
 	public boolean isAnonymous(){
 		return false;
+	}
+	
+	@Override
+	protected void prepareHashCode(IASTNode astNode) {
+		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
+	}
+
+	@Override
+	public String getAstNodeHashCode() {
+		return astNodeHashCode;
 	}
 }

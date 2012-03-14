@@ -61,7 +61,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
@@ -483,11 +483,11 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 	private void openSelectedNode(ISelection selection) {
 		AbstractNode node             = getFirstNodeFrom(selection);
-		boolean selectionSupportsOpen = node instanceof NamespaceNode || node instanceof FunctionNode || node instanceof CompositeTypeNode || node instanceof FileNode;
+		boolean selectionSupportsOpen = node instanceof NamespaceNode || node instanceof FunctionNode || node instanceof TypeDefNode || node instanceof FileNode;
 
 		if (selectionSupportsOpen) {
 
-			String filepath    = node.getNodeInfo().getFilePath();
+			String filepath    = node.getFilePath();
 			IEditorPart editor = null;
 
 			try {
@@ -496,8 +496,8 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 				if (editor instanceof ITextEditor && !(node instanceof FileNode)) {
 					ITextEditor textEditor = (ITextEditor) editor;
 					textEditor.selectAndReveal(
-							node.getNodeInfo().getNodeOffset(),
-							node.getNodeInfo().getNodeLength());
+							node.getNodeOffset(),
+							node.getNodeLength());
 				}
 			} catch (PartInitException e) {
 				e.printStackTrace();

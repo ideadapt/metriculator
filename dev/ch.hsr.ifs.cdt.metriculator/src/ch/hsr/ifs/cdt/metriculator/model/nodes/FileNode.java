@@ -16,19 +16,26 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FileSystemNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FileNode extends AbstractNode {
 
 	String projectRelativePath;
+	boolean isHeaderUnit = false;
 	
 	public FileNode(String name) {
 		super(name);
 	}
 	
 	public FileNode(IASTTranslationUnit tu, String filename) {
-		super(filename, new FileSystemNodeInfo(tu));
+		super(filename, tu);
+		if(tu != null){
+			isHeaderUnit = tu.isHeaderUnit();
+		}
+	}
+	
+	public boolean isHeaderUnit() {
+		return false;
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class FileNode extends AbstractNode {
 	@Override
 	public String getIconPath() {
 		
-		if(getNodeInfo().isHeaderUnit()){
+		if(isHeaderUnit()){
 			return Icon.Size16.H_FILE;
 		}
 		

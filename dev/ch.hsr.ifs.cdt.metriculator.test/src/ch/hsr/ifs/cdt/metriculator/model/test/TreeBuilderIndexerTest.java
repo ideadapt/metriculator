@@ -21,6 +21,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
@@ -246,7 +248,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo() instanceof FuncDefNodeInfo);
+		assertTrue(root.getChildren().iterator().next() instanceof FunctionDefNode);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
 
@@ -266,7 +268,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo() instanceof FuncDefNodeInfo);
+		assertTrue(root.getChildren().iterator().next() instanceof FunctionDefNode);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
 	
@@ -283,7 +285,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getNodeInfo() instanceof TypeDefNodeInfo);
+		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next() instanceof TypeDefNode);
 	}
 
 	//	class MyClass {			

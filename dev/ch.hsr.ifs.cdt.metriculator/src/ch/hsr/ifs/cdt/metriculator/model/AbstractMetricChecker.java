@@ -136,7 +136,7 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 		reportedProblems.put(abstractNode.getHybridId(), reportedProblems.get(abstractNode.getHybridId()));
 		
 		if(getShouldReportProblems()){
-			IProblemLocation loc = abstractNode.getNodeInfo().createAndGetProblemLocation(getFile());
+			IProblemLocation loc = abstractNode.createAndGetProblemLocation(getFile());
 	
 			if (loc != null){
 				super.reportProblem(problemId, loc, messageParameters);

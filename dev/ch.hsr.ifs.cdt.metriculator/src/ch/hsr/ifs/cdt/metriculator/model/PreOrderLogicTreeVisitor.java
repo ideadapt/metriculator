@@ -15,9 +15,13 @@ package ch.hsr.ifs.cdt.metriculator.model;
 import java.util.HashMap;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
@@ -26,7 +30,7 @@ import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 
 	private HashMap<String, AbstractNode> logicNodes  = new HashMap<String, AbstractNode>();
-	private HashMap<LogicNode, String> memberNodes = new HashMap<LogicNode, String>();
+	private HashMap<MemberNode, String> memberNodes = new HashMap<MemberNode, String>();
 	private AbstractNode currentNode = null;
 
 	@Override
@@ -84,9 +88,9 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	}
 	
 	private void prepareMembers(LogicNode node) {
-		if(node instanceof FunctionNode || node instanceof CompositeTypeNode){
-			if(node.getNodeInfo().isMember()){
-				memberNodes.put(node, node.getNodeInfo().getLogicalOwnerName());
+		if(node instanceof MemberNode){
+			if(((MemberNode) node).isMember()){
+				memberNodes.put((MemberNode) node, ((MemberNode) node).getLogicalOwnerName());
 			}
 		}
 	}
@@ -104,34 +108,34 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	}
 
 	public void mergeDefinitionsAndDeclarations() {
-		for(LogicNode def : memberNodes.keySet()){
-			if(def.getNodeInfo() instanceof FuncDefNodeInfo){
+		for(MemberNode def : memberNodes.keySet()){
+			if(def instanceof FunctionDefNode){
 				replaceFuncDeclarationWith(def);
-			}else if(def.getNodeInfo() instanceof TypeDefNodeInfo){
+			}else if(def instanceof TypeDefNode){
 				replaceTypeDeclarationWith(def);
 			}
 		}
 	}
 
-	private void replaceFuncDeclarationWith(LogicNode def) {
-		for(LogicNode decl : memberNodes.keySet()){
-			if(decl.getNodeInfo() instanceof FuncDeclNodeInfo){
+	private void replaceFuncDeclarationWith(MemberNode def) {
+		for(MemberNode decl : memberNodes.keySet()){
+			if(decl instanceof FunctionDeclNode){
 				removeDeclaration(def, decl);
 			}
 		}
 	}
 
-	private void replaceTypeDeclarationWith(LogicNode def) {
-		for(LogicNode decl : memberNodes.keySet()){
-			if(decl.getNodeInfo() instanceof TypeDeclNodeInfo){
+	private void replaceTypeDeclarationWith(MemberNode def) {
+		for(MemberNode decl : memberNodes.keySet()){
+			if(decl instanceof TypeDeclNode){
 				removeDeclaration(def, decl);
 			}
 		}
 	}
 	
-	private void removeDeclaration(LogicNode def, LogicNode decl) {
-		if(def.getNodeInfo().getLogicalOwnerName().equals(decl.getNodeInfo().getLogicalOwnerName())){
-			if(def.getNodeInfo().getLogicalName().equals(decl.getNodeInfo().getLogicalName())){
+	private void removeDeclaration(MemberNode def, MemberNode decl) {
+		if(def.getLogicalOwnerName().equals(decl.getLogicalOwnerName())){
+			if(def.getLogicalName().equals(decl.getLogicalName())){
 				decl.removeFromParent();
 				decl = null;
 			}

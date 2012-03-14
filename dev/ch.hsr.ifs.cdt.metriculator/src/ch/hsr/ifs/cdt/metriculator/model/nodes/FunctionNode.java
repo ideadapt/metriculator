@@ -12,35 +12,27 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class FunctionNode extends LogicNode {
+public abstract class FunctionNode extends MemberNode {
 
-	public FunctionNode(String name) {
-		super(name);
-	}
-
-	public FunctionNode(ICPPASTFunctionDeclarator fnNode) {
-		super(fnNode.getRawSignature(), new FuncDeclNodeInfo(fnNode));
+	public FunctionNode(String scopeUniqueName) {
+		super(scopeUniqueName);
 	}
 	
-	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
-		super(fnNode.getDeclarator().getRawSignature(), new FuncDefNodeInfo(fnNode));
+	protected FunctionNode(String scopeUniqueName, IASTNode astNode) {
+		super(scopeUniqueName, astNode);
 	}
 
 	@Override
-	public String toString() {
-		return getScopeName();
+	void prepareIsFriend(IASTNode astNode) {
+		isFriend = astNode.getRawSignature().contains("friend");
 	}
 
 	@Override
 	public String getIconPath() {
 		return Icon.Size16.METHOD_PUBLIC;
 	}
-
 }

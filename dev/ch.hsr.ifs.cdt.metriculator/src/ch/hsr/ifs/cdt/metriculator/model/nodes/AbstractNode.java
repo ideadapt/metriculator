@@ -17,10 +17,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
+import org.eclipse.cdt.codan.core.CodanRuntime;
+import org.eclipse.cdt.codan.core.model.IProblemLocation;
+import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTImageLocation;
+import org.eclipse.cdt.core.dom.ast.IASTMacroExpansionLocation;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.core.resources.IFile;
+
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.AbstractNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.NullNodeInfo;
 
 public abstract class AbstractNode implements Cloneable {
 
@@ -38,12 +49,14 @@ public abstract class AbstractNode implements Cloneable {
 	
 	protected AbstractNode(String scopeUniqueName) {
 		setScopeName(scopeUniqueName);
-		nodeInfo = new NullNodeInfo();
 	}
 
-	protected AbstractNode(String filename, AbstractNodeInfo nodeInfo) {
-		this(filename);
-		this.nodeInfo = nodeInfo;
+	protected AbstractNode(String scopeUniqueName, IASTNode astNode) {
+		this(scopeUniqueName);
+		prepareHashCode(astNode);
+		prepareFilePath(astNode);
+		prepareNodeLocations(astNode);
+		prepareProblemLocation(astNode);
 	}
 
 	public Collection<AbstractNode> getChildren() {
@@ -184,9 +197,9 @@ public abstract class AbstractNode implements Cloneable {
 
 	
 	//TODO: needless
-	public AbstractNodeInfo getNodeInfo() {
-		return nodeInfo;
-	}
+//	public AbstractNodeInfo getNodeInfo() {
+//		return nodeInfo;
+//	}
 	
 	public AbstractNode getRoot() {
 		if(parent == null){
@@ -248,4 +261,142 @@ public abstract class AbstractNode implements Cloneable {
 	}
 	
 	public abstract String getIconPath();
+	
+	
+	
+
+	private String filePath = "";
+	private int nodeOffSet;
+	private int nodeLength;
+	private int endingLineNumber;
+	private int startingLineNumber;
+	private int nodeOffSetStart;
+	private int nodeOffsetEnd;
+	private boolean isEclosedInMacroExpansion;
+	protected String astNodeHashCode = "";
+
+//	protected AbstractNodeInfo(IASTNode astNode){
+//		if(astNode != null){
+//			prepareHashCode(astNode);
+//			prepareFilePath(astNode);
+//			prepareNodeLocations(astNode);
+//			prepareProblemLocation(astNode);
+//		}
+//	}
+
+//	protected AbstractNode() {
+//		filePath = "";
+//		astNodeHashCode = "";
+//	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public int getNodeOffset() {
+		return nodeOffSet;
+	}
+
+	public int getNodeLength() {
+		return nodeLength;
+	}
+
+	public String getAstNodeHashCode(){
+		return astNodeHashCode;
+	}
+	
+	
+//	//TODO: move to typesnode
+//	public int getTypeKey() {
+//		return 0;
+//	}
+
+//	//TODO: move to filenode
+//	public boolean isHeaderUnit() {
+//		return false;
+//	}
+
+//	//TODO: move to MemberNode
+//	public IBinding getBinding() {
+//		return binding;
+//	}
+	
+//	//TODO: move to MemberNode
+//	public IBinding getIndexBinding() {
+//		return null;
+//	}
+
+//	//TODO: move to MemberNode
+//	public void clearBindings() {
+//
+//	}
+
+//	//TODO: move to MemberNode
+//	public boolean isMember() {
+//		return false;
+//	}
+
+//	//TODO: move to MemberNode
+//	public String getLogicalOwnerName() {
+//		return null;
+//	}
+//
+//	//TODO: move to MemberNode
+//	public String getLogicalName() {
+//		return null;
+//	}
+
+	protected void prepareHashCode(IASTNode astNode) {
+		astNodeHashCode = "";
+	}
+
+	protected void prepareFilePath(IASTNode astNode) {
+		filePath = astNode.getTranslationUnit().getFilePath();
+	}
+
+	protected void prepareNodeLocations(IASTNode astNode) {
+		nodeOffSet = astNode.getNodeLocations()[0].getNodeOffset();
+		nodeLength = astNode.getNodeLocations()[0].getNodeLength();
+	}
+
+	public IProblemLocation createAndGetProblemLocation(IFile file) {
+		IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
+		if(isEclosedInMacroExpansion || startingLineNumber == endingLineNumber){
+			return locFactory.createProblemLocation(file, nodeOffSetStart, nodeOffsetEnd, startingLineNumber);
+		}
+		return locFactory.createProblemLocation(file, startingLineNumber);
+	}
+
+	protected void prepareProblemLocation(IASTNode astNode) {
+		IASTFileLocation astLocation       = astNode.getFileLocation();
+
+		startingLineNumber = astLocation.getStartingLineNumber();
+
+		if (isEnclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
+			isEclosedInMacroExpansion = true;
+			IASTImageLocation imageLocation = ((IASTName) astNode).getImageLocation();
+
+			if (imageLocation != null) {
+				nodeOffSetStart = imageLocation.getNodeOffset();
+				nodeOffsetEnd   = nodeOffSetStart + imageLocation.getNodeLength();
+				return;
+			}
+		}
+
+		endingLineNumber = astLocation.getEndingLineNumber();
+		if (startingLineNumber == endingLineNumber) {
+			nodeOffSetStart = astLocation.getNodeOffset();
+			nodeOffsetEnd = nodeOffSetStart + astLocation.getNodeLength();
+			return;
+		}
+
+	}
+
+	private static boolean isEnclosedInMacroExpansion(IASTNode node) {
+		IASTNodeLocation[] nodeLocations = node.getNodeLocations();
+		return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
+	}
+
+
+	
 }

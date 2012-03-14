@@ -26,7 +26,8 @@ import ch.hsr.ifs.cdt.metriculator.model.IScopeListener;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.MemberNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
@@ -49,7 +50,7 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 		this.add(new IScopeListener() {
 
 			private boolean isNotElaboratedType(AbstractNode node) {
-				return node instanceof CompositeTypeNode && !(node.getNodeInfo() instanceof TypeDeclNodeInfo);
+				return node instanceof TypeDefNode && !(node instanceof TypeDeclNode);
 			}
 
 			@Override

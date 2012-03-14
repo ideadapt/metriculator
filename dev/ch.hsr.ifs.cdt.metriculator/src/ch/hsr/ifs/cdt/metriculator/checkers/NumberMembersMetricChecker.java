@@ -18,7 +18,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.resources.MetricLabels;
 
 public class NumberMembersMetricChecker extends AbstractMetricChecker{
@@ -49,7 +49,7 @@ public class NumberMembersMetricChecker extends AbstractMetricChecker{
 	}
 	
 	protected void reportProblemsFor(AbstractNode node){
-		if(node instanceof CompositeTypeNode){
+		if(node instanceof TypeDefNode){
 			Integer maxNbMembersPerType = getPreferenceAsInteger(NBMEMBERS_PROBLEM_ID, PREF_NBMEMBERS_MAXIMUM_PER_TYPE, getFile());
 			if(node.getValueOf(metric).aggregatedValue > maxNbMembersPerType){
 				reportProblem(NBMEMBERS_PROBLEM_ID, node, maxNbMembersPerType);

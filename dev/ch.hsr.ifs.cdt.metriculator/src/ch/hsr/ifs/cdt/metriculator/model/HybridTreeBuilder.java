@@ -24,14 +24,18 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.MemberNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
 
 public class HybridTreeBuilder extends TreeBuilder {
 
 	private HashMap<String,AbstractNode> descendants     = new HashMap<String,AbstractNode>();
-	private HashMap<IBinding, AbstractNode> declarations = new HashMap<IBinding, AbstractNode>();
+	private HashMap<IBinding, MemberNode> declarations = new HashMap<IBinding, MemberNode>();
 
 	public HybridTreeBuilder(String workspace){
 		root = new WorkspaceNode(workspace);
@@ -74,11 +78,11 @@ public class HybridTreeBuilder extends TreeBuilder {
 	}
 
 	private void prepareDeclBinding(AbstractNode child) {
-		if(child.getNodeInfo() instanceof FuncDeclNodeInfo){
-			declarations.put(child.getNodeInfo().getIndexBinding(), child);
+		if(child instanceof FunctionDeclNode){
+			declarations.put(((MemberNode) child).getIndexBinding(), (MemberNode) child);
 			
-		}else if(child.getNodeInfo() instanceof TypeDeclNodeInfo){
-			declarations.put(child.getNodeInfo().getBinding(), child);
+		}else if(child instanceof TypeDeclNode){
+			declarations.put(((MemberNode) child).getBinding(), (MemberNode) child);
 		}
 	}
 
@@ -155,8 +159,8 @@ public class HybridTreeBuilder extends TreeBuilder {
 	}
 
 	private void deleteBindings() {
-		for (AbstractNode node : declarations.values()) {
-			node.getNodeInfo().clearBindings();
+		for (MemberNode node : declarations.values()) {
+			node.clearBindings();
 		}
 		declarations.clear();
 	}

@@ -27,10 +27,10 @@ import ch.hsr.ifs.cdt.metriculator.model.LogicTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
@@ -341,16 +341,16 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 		AbstractNode ns2  = new NamespaceNode("ns2");
 		ns2.setNodeValue(slocKey, 1);
 
-		AbstractNode t1 = new CompositeTypeNode("type1");
+		AbstractNode t1 = new TypeDefNode("type1");
 		t1.setNodeValue(slocKey, 1);
 
-		AbstractNode fn1 = new FunctionNode("mfunc1");
+		AbstractNode fn1 = new FunctionDefNode("mfunc1");
 		fn1.setNodeValue(slocKey, 5);
-		AbstractNode fn2 = new FunctionNode("mfunc2");
+		AbstractNode fn2 = new FunctionDefNode("mfunc2");
 		fn2.setNodeValue(slocKey, 50);
-		AbstractNode fn3 = new FunctionNode("func3");
+		AbstractNode fn3 = new FunctionDefNode("func3");
 		fn3.setNodeValue(slocKey, 20);
-		AbstractNode fn4 = new FunctionNode("func4");
+		AbstractNode fn4 = new FunctionDefNode("func4");
 		fn4.setNodeValue(slocKey, 100);
 		
 		b.addChild(root, p);

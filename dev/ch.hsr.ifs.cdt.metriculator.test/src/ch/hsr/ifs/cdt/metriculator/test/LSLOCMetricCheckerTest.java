@@ -22,7 +22,7 @@ import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
@@ -470,13 +470,13 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -499,13 +499,13 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -526,13 +526,13 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -553,13 +553,13 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -580,13 +580,13 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -776,7 +776,7 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 	}
 	

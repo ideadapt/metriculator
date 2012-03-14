@@ -28,7 +28,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLambdaExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
@@ -70,7 +73,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 	@Override
 	public int visit(IASTDeclaration declaration) {
 		if(declaration instanceof ICPPASTFunctionDefinition){
-			scopeNode = builder.addChild(scopeNode, new FunctionNode(((ICPPASTFunctionDefinition)declaration)));
+			scopeNode = builder.addChild(scopeNode, new FunctionDefNode(((ICPPASTFunctionDefinition)declaration)));
 		}
 		return super.visit(declaration);
 
@@ -98,7 +101,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 			}
 			
 			if(!(scopeNode instanceof FunctionNode)){
-				scopeNode = builder.addChild(scopeNode, new FunctionNode(((ICPPASTFunctionDeclarator)declarator)));
+				scopeNode = builder.addChild(scopeNode, new FunctionDeclNode(((ICPPASTFunctionDeclarator)declarator)));
 				if(!(scopeNode instanceof FunctionNode)){
 					return PROCESS_SKIP;
 				}
@@ -112,8 +115,8 @@ public class ScopedASTVisitor extends ASTVisitor {
 	@Override
 	public int leave(IASTDeclarator declarator) {
 		if(declarator instanceof ICPPASTFunctionDeclarator){
-			if((scopeNode.getNodeInfo() instanceof FuncDeclNodeInfo 
-					|| scopeNode.getNodeInfo() instanceof FuncDefNodeInfo) 
+			if((scopeNode instanceof FunctionDeclNode
+					|| scopeNode instanceof FunctionDefNode) 
 					&& !(declarator.getParent() instanceof ICPPASTFunctionDefinition) 
 					&& !(declarator.getParent() instanceof ICPPASTLambdaExpression)){
 				
@@ -134,14 +137,14 @@ public class ScopedASTVisitor extends ASTVisitor {
 
 		String oldScope = scopeNode.getScopeName();
 		if(declSpec instanceof ICPPASTCompositeTypeSpecifier){
-			scopeNode = builder.addChild(scopeNode, new CompositeTypeNode(((ICPPASTCompositeTypeSpecifier)declSpec)));
+			scopeNode = builder.addChild(scopeNode, new TypeDefNode(((ICPPASTCompositeTypeSpecifier)declSpec)));
 			if(oldScope.equals(scopeNode.getScopeName())){
 				return PROCESS_SKIP;
 			}
 			scopeChanged = true;
 		}
 		if(declSpec instanceof ICPPASTElaboratedTypeSpecifier){
-			scopeNode = builder.addChild(scopeNode, new CompositeTypeNode(((ICPPASTElaboratedTypeSpecifier)declSpec)));
+			scopeNode = builder.addChild(scopeNode, new TypeDeclNode(((ICPPASTElaboratedTypeSpecifier)declSpec)));
 			if(oldScope.equals(scopeNode.getScopeName())){
 				return PROCESS_SKIP;
 			}
@@ -150,7 +153,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 		
 		if(scopeChanged){
 			for(IScopeListener listener : listeners){
-				listener.visiting((CompositeTypeNode) scopeNode);
+				listener.visiting((TypeDefNode) scopeNode);
 			}
 		}
 
@@ -160,7 +163,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 	public int leave(IASTDeclSpecifier declSpec) {
 		if(declSpec instanceof ICPPASTCompositeTypeSpecifier){
 			for(IScopeListener listener : listeners){
-				listener.leaving((CompositeTypeNode) scopeNode);
+				listener.leaving((TypeDefNode) scopeNode);
 			}
 			scopeNode = scopeNode.getParent();
 		}

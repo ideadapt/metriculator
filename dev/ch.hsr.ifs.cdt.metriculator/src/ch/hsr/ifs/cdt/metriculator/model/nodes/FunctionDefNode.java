@@ -12,32 +12,35 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.index.IIndex;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class NamespaceNode extends LogicNode {
+public class FunctionDefNode extends FunctionNode {
 
-	public NamespaceNode(String namespace) {
-		super(namespace);
+	public FunctionDefNode(ICPPASTFunctionDefinition fnNode) {
+		super(fnNode.getDeclarator().getRawSignature(), fnNode);
 	}
 	
-	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
-		super(nsNode.getName().toString(), nsNode);
-	}
-
-	@Override
-	public String toString() {
-		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();
+	public FunctionDefNode(String scopeUniqueName) {
+		super(scopeUniqueName);
 	}
 
 	@Override
 	public String getIconPath() {
-		return Icon.Size16.NAMESPACE;
+		return Icon.Size16.METHOD_PUBLIC;
 	}
 
+
 	@Override
-	public boolean isAnonymous() {
-		return getScopeName().trim().isEmpty();
+	boolean prepareBinding(IASTNode astNode) {
+		IASTName name = ((ICPPASTFunctionDefinition)astNode).getDeclarator().getName();
+		binding  = name.resolveBinding();
+		IIndex index = astNode.getTranslationUnit().getIndex();
+		indexBinding = index.adaptBinding(binding);
+		return binding != null || indexBinding != null;
 	}
 }

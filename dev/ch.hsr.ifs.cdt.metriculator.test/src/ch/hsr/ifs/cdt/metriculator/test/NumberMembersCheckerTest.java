@@ -15,8 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.test;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
-import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetric;
+import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;

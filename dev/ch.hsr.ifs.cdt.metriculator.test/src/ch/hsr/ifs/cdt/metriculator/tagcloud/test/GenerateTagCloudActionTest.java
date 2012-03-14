@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudAction;
 
 /**
@@ -62,7 +62,7 @@ public class GenerateTagCloudActionTest extends TestCase {
 						
 			System.out.println(randomName + ", " +  randomValue);
 			
-			AbstractNode node = new FunctionNode(randomName);
+			AbstractNode node = new FunctionDefNode(randomName);
 			node.setNodeValue(metric.getKey(), randomValue);
 			nodes.add(node);
 						

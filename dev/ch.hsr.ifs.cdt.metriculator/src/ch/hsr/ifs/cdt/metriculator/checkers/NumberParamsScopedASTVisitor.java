@@ -20,7 +20,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 
 public class NumberParamsScopedASTVisitor extends ScopedASTVisitor {
 
@@ -34,7 +34,7 @@ public class NumberParamsScopedASTVisitor extends ScopedASTVisitor {
 	@Override
 	public int visit(IASTParameterDeclaration parameterDeclaration) {
 		if(parameterDeclaration.getParent() instanceof ICPPASTFunctionDeclarator){
-			if(scopeNode.getNodeInfo() instanceof FuncDefNodeInfo){
+			if(scopeNode instanceof FunctionDefNode){
 				if(parameterDeclaration.getParent().getParent() instanceof ICPPASTFunctionDefinition){
 					count();
 				}

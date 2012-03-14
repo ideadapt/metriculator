@@ -12,26 +12,28 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 
-public class CompositeTypeNode extends LogicNode {
+public class TypeDeclNode extends TypeNode {
 
-	public CompositeTypeNode(String name) {
-		super(name);
+	public TypeDeclNode(String scopeUniqueName) {
+		super(scopeUniqueName);
 	}
-	
-	public CompositeTypeNode(ICPPASTElaboratedTypeSpecifier astNode) {
-		super(astNode.getName().toString(), new TypeDeclNodeInfo(astNode));
-	}
-	
-	public CompositeTypeNode(ICPPASTCompositeTypeSpecifier astNode) {
-		super(astNode.getName().toString(), new TypeDefNodeInfo(astNode));
+
+//	public CompositeTypeNode(ICPPASTElaboratedTypeSpecifier astNode) {
+//		super(astNode.getName().toString(), astNode);
+//	}
+//	
+	public TypeDeclNode(ICPPASTElaboratedTypeSpecifier astNode) {
+		super(astNode.getName().toString(), astNode);
+		typeKey = astNode.getKind();
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class CompositeTypeNode extends LogicNode {
 
 	@Override
 	public String getIconPath() {
-		int key = getNodeInfo().getTypeKey();
+		int key = typeKey;// getNodeInfo().getTypeKey();
 
 		switch(key){
 			case ICPPASTCompositeTypeSpecifier.k_struct:
@@ -53,6 +55,18 @@ public class CompositeTypeNode extends LogicNode {
 			default:
 				return Icon.Size16.CLASS;
 		}
+	}
+
+	@Override
+	void prepareIsFriend(IASTNode astNode) {
+		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();	
+	}
+
+	@Override
+	boolean prepareBinding(IASTNode astNode) {
+		IASTName name = ((ICPPASTElaboratedTypeSpecifier) astNode).getName();
+		binding  = name.resolveBinding();
+		return binding != null;
 	}
 
 }
