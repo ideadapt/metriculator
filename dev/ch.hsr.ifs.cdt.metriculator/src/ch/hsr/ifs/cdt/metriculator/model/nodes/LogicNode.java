@@ -17,8 +17,10 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 public abstract class LogicNode extends AbstractNode {
 
+	protected boolean isFriend       = false;
+	protected String astNodeHashCode = "";
+	
 	public final static String ANONYMOUS_LABEL = "(anonymous)"; //$NON-NLS-1$
-	protected boolean isFriend = false;
 	
 	protected LogicNode(String scopeUniqueName) {
 		super(scopeUniqueName);
@@ -26,7 +28,7 @@ public abstract class LogicNode extends AbstractNode {
 	
 	protected LogicNode(String scopeUniqueName, IASTNode astNode) {
 		super(scopeUniqueName, astNode);
-		prepareHashCode(astNode);
+		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
 	}
 
 	public boolean isAnonymous(){
@@ -34,12 +36,12 @@ public abstract class LogicNode extends AbstractNode {
 	}
 	
 	@Override
-	protected void prepareHashCode(IASTNode astNode) {
-		astNodeHashCode = Integer.valueOf(astNode.hashCode()).toString();
+	public String toString() {
+		return isAnonymous() ? LogicNode.ANONYMOUS_LABEL : getScopeName();
 	}
-
+	
 	@Override
-	public String getAstNodeHashCode() {
-		return astNodeHashCode;
+	public String getScopeUniqueName() {
+		return new StringBuilder(scopeName).append(astNodeHashCode).toString();
 	}
 }

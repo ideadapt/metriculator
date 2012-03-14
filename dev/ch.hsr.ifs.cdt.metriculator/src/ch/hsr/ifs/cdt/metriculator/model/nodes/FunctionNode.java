@@ -18,6 +18,8 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public abstract class FunctionNode extends MemberNode {
 
+	private static final String KEYWORD_FRIEND = "friend";
+
 	public FunctionNode(String scopeUniqueName) {
 		super(scopeUniqueName);
 	}
@@ -28,7 +30,7 @@ public abstract class FunctionNode extends MemberNode {
 
 	@Override
 	void prepareIsFriend(IASTNode astNode) {
-		isFriend = astNode.getRawSignature().contains("friend");
+		isFriend = astNode.getRawSignature().contains(KEYWORD_FRIEND);
 	}
 
 	@Override

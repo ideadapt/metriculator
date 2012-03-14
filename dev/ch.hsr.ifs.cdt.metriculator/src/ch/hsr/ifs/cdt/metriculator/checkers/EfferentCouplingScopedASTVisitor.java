@@ -26,11 +26,10 @@ import ch.hsr.ifs.cdt.metriculator.model.IScopeListener;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.MemberNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
 
 public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 
@@ -94,7 +93,7 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 			}
 
 			if(name != null){
-				IBinding specBinding = MemberNodeInfo.getBindingFor(name, declSpec.getTranslationUnit());
+				IBinding specBinding = MemberNode.getBindingFor(name, declSpec.getTranslationUnit());
 
 				if(countedBindingsInNode.get(currType) != null && !countedBindingsInNode.get(currType).contains(specBinding)){
 					count();

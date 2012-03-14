@@ -24,13 +24,10 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.MemberNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
 
 public class HybridTreeBuilder extends TreeBuilder {
 

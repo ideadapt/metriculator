@@ -12,10 +12,9 @@ import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
 public abstract class MemberNode extends LogicNode {
 
-	protected int typeKey;
-	protected boolean isMember = false;
-	protected String logicalName = "";
-	protected String logicalOwnerName = "";
+	protected boolean isMember         	= false;
+	protected String logicalName       	= "";
+	protected String logicalOwnerName 	= "";
 	protected IBinding binding;
 	protected IBinding indexBinding;
 	
@@ -25,7 +24,7 @@ public abstract class MemberNode extends LogicNode {
 	
 	protected MemberNode(String scopeUniqueName, IASTNode astNode) {
 		super(scopeUniqueName, astNode);
-		isMember = false;
+
 		if(prepareBinding(astNode)){
 			prepareOwnership(binding.getOwner(), astNode.getTranslationUnit());
 		}
@@ -35,10 +34,6 @@ public abstract class MemberNode extends LogicNode {
 	abstract void prepareIsFriend(IASTNode astNode);
 
 	abstract boolean prepareBinding(IASTNode astNode);
-	
-	public int getTypeKey() {
-		return typeKey;
-	}
 	
 	public IBinding getBinding() {
 		return binding;
@@ -76,12 +71,15 @@ public abstract class MemberNode extends LogicNode {
 		}
 	}
 
+	// TODO introduce StringBuilder
 	protected String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
 		IASTNode node = null;
-
-		if(tu.getDeclarationsInAST(owner).length > 0){
-			node = tu.getDeclarationsInAST(owner)[0].getParent();
+		IASTName[] declarationsInAST = tu.getDeclarationsInAST(owner);
+		
+		if(declarationsInAST.length > 0){
+			node = declarationsInAST[0].getParent();
+			
 			if(owner.getOwner() == null){
 				if(node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty()){
 					return owner.getName().toString() + node.hashCode();

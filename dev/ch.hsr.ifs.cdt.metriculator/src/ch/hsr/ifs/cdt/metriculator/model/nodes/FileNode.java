@@ -20,8 +20,8 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FileNode extends AbstractNode {
 
-	String projectRelativePath;
-	boolean isHeaderUnit = false;
+	private String projectRelativePath;
+	private boolean isHeaderUnit = false;
 	
 	public FileNode(String name) {
 		super(name);
@@ -35,7 +35,7 @@ public class FileNode extends AbstractNode {
 	}
 	
 	public boolean isHeaderUnit() {
-		return false;
+		return isHeaderUnit;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class FileNode extends AbstractNode {
 
 		if(parent instanceof ProjectNode && ((ProjectNode)parent).getProject() != null){
 			
-			// in test mode getlocation returns null => only shorten paths if not in test mode
+			// in test mode getLocation returns null => only shorten paths if not in test mode
 			if(((ProjectNode)parent).getProject().getLocation() != null && projectRelativePath == null){
 				projectRelativePath = PathUtil.getProjectRelativePath(
 						new Path(getScopeUniqueName()), 

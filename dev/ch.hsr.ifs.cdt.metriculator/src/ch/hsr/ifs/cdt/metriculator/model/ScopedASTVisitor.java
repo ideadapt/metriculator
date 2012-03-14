@@ -28,14 +28,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLambdaExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 
 public class ScopedASTVisitor extends ASTVisitor {
 
@@ -153,7 +151,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 		
 		if(scopeChanged){
 			for(IScopeListener listener : listeners){
-				listener.visiting((TypeDefNode) scopeNode);
+				listener.visiting(scopeNode);
 			}
 		}
 

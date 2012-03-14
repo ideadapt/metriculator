@@ -61,6 +61,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
@@ -483,7 +484,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 	private void openSelectedNode(ISelection selection) {
 		AbstractNode node             = getFirstNodeFrom(selection);
-		boolean selectionSupportsOpen = node instanceof NamespaceNode || node instanceof FunctionNode || node instanceof TypeDefNode || node instanceof FileNode;
+		boolean selectionSupportsOpen = node instanceof LogicNode || node instanceof FileNode;
 
 		if (selectionSupportsOpen) {
 

@@ -17,17 +17,10 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.index.IIndex;
 
-import ch.hsr.ifs.cdt.metriculator.resources.Icon;
-
 public class FunctionDeclNode extends FunctionNode {
 
 	public FunctionDeclNode(ICPPASTFunctionDeclarator fnNode) {
 		super(fnNode.getRawSignature(), fnNode);
-	}
-	
-	@Override
-	public String getIconPath() {
-		return Icon.Size16.METHOD_PUBLIC;
 	}
 
 	@Override

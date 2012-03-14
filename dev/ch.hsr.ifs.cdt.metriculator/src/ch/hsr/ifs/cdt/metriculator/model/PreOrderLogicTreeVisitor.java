@@ -16,16 +16,11 @@ import java.util.HashMap;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.FuncDefNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDeclNodeInfo;
-import ch.hsr.ifs.cdt.metriculator.nodes.nodeInfo.TypeDefNodeInfo;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 
 public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 

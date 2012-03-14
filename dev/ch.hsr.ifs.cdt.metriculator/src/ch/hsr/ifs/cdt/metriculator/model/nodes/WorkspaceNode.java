@@ -12,11 +12,12 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import java.util.List;
+import java.util.Collection;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class WorkspaceNode extends AbstractNode {
+	
 	public WorkspaceNode(String name) {
 		super(name);
 		setHybridId(name);
@@ -27,7 +28,7 @@ public class WorkspaceNode extends AbstractNode {
 		return Icon.Size16.WORKSPACE;
 	}
 
-	public void add(List<AbstractNode> all) {
+	public void add(Collection<AbstractNode> all) {
 		for(AbstractNode child : all){
 			add(child);
 		}

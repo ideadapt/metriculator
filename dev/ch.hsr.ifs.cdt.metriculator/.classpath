@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry excluding="ch/hsr/ifs/cdt/metriculator/model/nodes/NodeInfo.java" kind="src" path="src"/>
+	<classpathentry excluding="ch/hsr/ifs/cdt/metriculator/model/nodes/NodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/AbstractNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/FileSystemNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/FuncDeclNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/FuncDefNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/LogicalNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/MemberNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/NamespaceNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/NullNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/TypeDeclNodeInfo.java|ch/hsr/ifs/cdt/metriculator/nodes/nodeInfo/TypeDefNodeInfo.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
