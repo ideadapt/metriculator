@@ -14,7 +14,6 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
 
@@ -26,14 +25,7 @@ public class TypeDeclNode extends TypeNode {
 	}
 
 	@Override
-	void prepareIsFriend(IASTNode astNode) {
-		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();	
-	}
-
-	@Override
-	boolean prepareBinding(IASTNode astNode) {
-		IASTName name = ((ICPPASTElaboratedTypeSpecifier) astNode).getName();
-		binding  = name.resolveBinding();
-		return binding != null;
+	protected IASTName getASTName(IASTNode astNode) {
+		return ((ICPPASTElaboratedTypeSpecifier)astNode).getName();
 	}
 }
