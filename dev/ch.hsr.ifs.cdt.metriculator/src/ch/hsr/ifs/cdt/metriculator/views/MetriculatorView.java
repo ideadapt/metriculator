@@ -25,8 +25,6 @@ import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -235,6 +233,10 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			}
 			actionItem.toggleVisibility();
 		}
+		
+		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
+		column.setMoveable(false);
+		column.setWidth(0);
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
@@ -250,7 +252,11 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 				metricsTableColumnActions.put(metric, actionItem);
 			}
 			actionItem.toggleVisibility();
-		}		
+		}	
+		
+		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
+		column.setMoveable(false);
+		column.setWidth(0);
 	}	
 	
 	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
@@ -588,9 +594,12 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 					}else{
 						metric = MetricColumn.getMetric(tableViewer.getTable().getColumn(cell.getColumnIndex()));
 					}
-					applyProblemsOf(metric, cell);
-					int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
-					cell.setText(NumberFormat.getInstance().format(metricValue));
+					
+					if(metric != null){
+						applyProblemsOf(metric, cell);
+						int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
+						cell.setText(NumberFormat.getInstance().format(metricValue));
+					}
 					break;
 			}
 		}
