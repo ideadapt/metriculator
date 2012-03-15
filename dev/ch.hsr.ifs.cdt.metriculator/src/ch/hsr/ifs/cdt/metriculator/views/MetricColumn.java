@@ -29,8 +29,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
  * */
 public final class MetricColumn {
 
-	static final String DATAKEY_IS_FILLER 	  = "isFiller";
 	static final int DEFAULT_WIDTH            = 100;
+	static final String DATAKEY_IS_FILLER 	  = "isFiller";
 	static final String DATAKEY_COLUMNMETRIC  = "metric";
 	
 	public static void showColumn(TreeColumn column) {
@@ -87,6 +87,10 @@ public final class MetricColumn {
 
 	public static void createFillerColumnOnce(Tree tree) {
 		
+		if(isWindows()){
+			return;
+		}
+		
 		if(hasFillerColumn(tree.getColumns())){
 			return;
 		}
@@ -97,9 +101,17 @@ public final class MetricColumn {
 		column.setWidth(10);
 		column.setData(DATAKEY_IS_FILLER, true);
 	}
-
+	
+	private static boolean isWindows() {
+		return (System.getProperty("os.name", "unknown").toLowerCase().indexOf("windows") >= 0);
+	}
+	
 	public static void createFillerColumnOnce(Table table) {
 
+		if(isWindows()){
+			return;
+		}
+		
 		if(hasFillerColumn(table.getColumns())){
 			return;
 		}

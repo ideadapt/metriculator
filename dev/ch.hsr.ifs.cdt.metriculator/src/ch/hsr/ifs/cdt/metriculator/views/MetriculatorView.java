@@ -369,7 +369,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFile() {
-		actionFilterFile = new Action("Only show file nodes", IAction.AS_CHECK_BOX)
+		actionFilterFile = new Action("File Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -384,7 +384,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterNamespace() {
-		actionFilterNamespace = new Action("Only show namespace nodes", IAction.AS_CHECK_BOX)
+		actionFilterNamespace = new Action("Namespace Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -399,7 +399,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionExpandAll() {
-		actionExpandAll = new Action("Expand all nodes")
+		actionExpandAll = new Action("Expand All Nodes")
 		{
 			public void run() {
 				treeViewer.expandAll();
@@ -420,7 +420,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionHybridView() {
-		actionHybridView = new Action("Change to hybrid view mode (files, folders and source code nodes)", IAction.AS_RADIO_BUTTON) 
+		actionHybridView = new Action("Hybrid View Mode (Files, Folders and Source Code Nodes)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -435,7 +435,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 	
 	private void createActionLogicalView() {
-		actionLogicalView = new Action("Change to logical view mode (source code nodes only)", IAction.AS_RADIO_BUTTON) 
+		actionLogicalView = new Action("Logical View Mode (Source Code Nodes Only)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -450,7 +450,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterComposite() {
-		actionFilterComposite = new Action("Only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
+		actionFilterComposite = new Action("Composite Nodes (Class / Structs / Union)", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -465,7 +465,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFunction() {
-		actionFilterFunction = new Action("Only show function nodes", IAction.AS_CHECK_BOX)
+		actionFilterFunction = new Action("Function Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
