@@ -191,6 +191,15 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
+		// make scope column sortable and set initial sorter
+		TableColumnViewerSorter scopeSorter = new TableColumnViewerSorter(tableViewer, colNodes) {
+			protected int doCompare(Viewer viewer, Object e1, Object e2) {
+				AbstractNode p1 = (AbstractNode) e1;
+				AbstractNode p2 = (AbstractNode) e2;
+				return p1.toString().compareToIgnoreCase(p2.toString());
+			}
+		};
+		scopeSorter.setSorter(scopeSorter, INITIAL_SORT_ORDER);		
 	}
 
 	private void createTreeLabelColumn() {
@@ -200,7 +209,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
-		// set inital sorter
+		// make scope column sortable and set initial sorter
 		TreeColumnViewerSorter scopeSorter = new TreeColumnViewerSorter(treeViewer, colNodes) {
 			protected int doCompare(Viewer viewer, Object e1, Object e2) {
 				AbstractNode p1 = (AbstractNode) e1;
@@ -237,7 +246,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
 		column.setMoveable(false);
 		column.setResizable(true);
-		//column.setWidth(0);
+		column.setWidth(10);
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
@@ -258,7 +267,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
 		column.setMoveable(false);
 		column.setResizable(true);
-		//column.setWidth(0);
+		column.setWidth(10);
 	}	
 	
 	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
