@@ -7,7 +7,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public interface ITagCloudDataProvider {
 
-	public abstract AbstractMetric getMetric();
+	public abstract AbstractMetric getMenuMetric();
 
 	public abstract Collection<AbstractNode> getNodes();
 }

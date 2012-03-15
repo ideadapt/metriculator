@@ -24,7 +24,7 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -75,8 +75,8 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private static final int INITIAL_SORT_ORDER           = TreeColumnViewerSorter.NONE;
 	private static final int SCOPE_COLUMN_DEFAULT_WIDTH   = 160;
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
-	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
-	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader";
+	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"; //$NON-NLS-1$
+	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader"; //$NON-NLS-1$
 	
 	private HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>>();
 	private HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>> metricsTableColumnActions   = new HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>>();
@@ -93,7 +93,6 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private IAction actionFilterFile;
 	private TreeBuilder currTreeBuilder;
 	private ViewMode viewMode;
-	private Menu treeHeaderMenu;
 	private Menu tableHeaderMenu;
 	private Composite treeComposite;
 	private Composite tableComposite;
@@ -128,7 +127,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		createTableComponents();
 		
 		createActions();
-		addActionsToBars();
+		addActionsToMenus();
 		
 		applyViewMode(ViewMode.Hybrid, null);
 		
@@ -192,6 +191,15 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
+		// make scope column sortable and set initial sorter
+		TableColumnViewerSorter scopeSorter = new TableColumnViewerSorter(tableViewer, colNodes) {
+			protected int doCompare(Viewer viewer, Object e1, Object e2) {
+				AbstractNode p1 = (AbstractNode) e1;
+				AbstractNode p2 = (AbstractNode) e2;
+				return p1.toString().compareToIgnoreCase(p2.toString());
+			}
+		};
+		scopeSorter.setSorter(scopeSorter, INITIAL_SORT_ORDER);		
 	}
 
 	private void createTreeLabelColumn() {
@@ -201,7 +209,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
-		// set inital sorter
+		// make scope column sortable and set initial sorter
 		TreeColumnViewerSorter scopeSorter = new TreeColumnViewerSorter(treeViewer, colNodes) {
 			protected int doCompare(Viewer viewer, Object e1, Object e2) {
 				AbstractNode p1 = (AbstractNode) e1;
@@ -213,7 +221,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createTreeHeaderMenu() {
-		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
+		MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
 	}
 	
 	private void createTableHeaderMenu() {
@@ -234,6 +242,11 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			}
 			actionItem.toggleVisibility();
 		}
+		
+		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
@@ -249,7 +262,12 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 				metricsTableColumnActions.put(metric, actionItem);
 			}
 			actionItem.toggleVisibility();
-		}		
+		}	
+		
+		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
 	}	
 	
 	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
@@ -267,7 +285,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 	
 	@Override
-	public AbstractMetric getMetric(){
+	public AbstractMetric getMenuMetric(){
 		TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
 		if(selectedCol != null){
 			return MetricColumn.getMetric(selectedCol);
@@ -345,7 +363,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFile() {
-		actionFilterFile = new Action("only show file nodes", IAction.AS_CHECK_BOX)
+		actionFilterFile = new Action("Only show file nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -360,7 +378,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterNamespace() {
-		actionFilterNamespace = new Action("only show namespace nodes", IAction.AS_CHECK_BOX)
+		actionFilterNamespace = new Action("Only show namespace nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -375,7 +393,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionExpandAll() {
-		actionExpandAll = new Action("expand all nodes")
+		actionExpandAll = new Action("Expand all nodes")
 		{
 			public void run() {
 				treeViewer.expandAll();
@@ -396,7 +414,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionHybridView() {
-		actionHybridView = new Action("change to hybrid view mode", IAction.AS_RADIO_BUTTON) 
+		actionHybridView = new Action("Change to hybrid view mode (files, folders and source code nodes)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -411,7 +429,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 	
 	private void createActionLogicalView() {
-		actionLogicalView = new Action("change to logical view mode", IAction.AS_RADIO_BUTTON) 
+		actionLogicalView = new Action("Change to logical view mode (source code nodes only)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -426,7 +444,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterComposite() {
-		actionFilterComposite = new Action("only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
+		actionFilterComposite = new Action("Only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -441,7 +459,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFunction() {
-		actionFilterFunction = new Action("only show function nodes", IAction.AS_CHECK_BOX)
+		actionFilterFunction = new Action("Only show function nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -455,19 +473,28 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		actionFilterFunction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FUNCTION));
 	}
 
-	private void addActionsToBars() {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionHybridView);
-		toolBarManager.add(actionLogicalView);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionFilterFile);
-		toolBarManager.add(actionFilterNamespace);
-		toolBarManager.add(actionFilterComposite);
-		toolBarManager.add(actionFilterFunction);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionExpandAll);
-		toolBarManager.add(actionCollapseAll);
+	private void addActionsToMenus() {
+		
+		IContributionManager[] managers = 
+			{
+				getViewSite().getActionBars().getMenuManager(), 
+				getViewSite().getActionBars().getToolBarManager()
+			};
+		
+		for(IContributionManager manager : managers){
+			
+			manager.add(new Separator());
+			manager.add(actionHybridView);
+			manager.add(actionLogicalView);
+			manager.add(new Separator());
+			manager.add(actionFilterFile);
+			manager.add(actionFilterNamespace);
+			manager.add(actionFilterComposite);
+			manager.add(actionFilterFunction);
+			manager.add(new Separator());
+			manager.add(actionExpandAll);
+			manager.add(actionCollapseAll);
+		}
 	}
 
 	private void addViewerOpenListener(StructuredViewer viewer) {
@@ -578,9 +605,12 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 					}else{
 						metric = MetricColumn.getMetric(tableViewer.getTable().getColumn(cell.getColumnIndex()));
 					}
-					applyProblemsOf(metric, cell);
-					int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
-					cell.setText(NumberFormat.getInstance().format(metricValue));
+					
+					if(metric != null){
+						applyProblemsOf(metric, cell);
+						int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
+						cell.setText(NumberFormat.getInstance().format(metricValue));
+					}
 					break;
 			}
 		}
@@ -605,7 +635,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 		@Override
 		public String getToolTipText(Object element) {
-			if(getViewMode() != ViewMode.Logical && element instanceof AbstractNode){
+			if(element instanceof AbstractNode){
 				return String.format("'%s' , children: %s", 
 						((AbstractNode)element).getPath(), 
 						((AbstractNode) element).getChildren().size());
@@ -635,5 +665,9 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 	private void updateViewerData() {
 		activeViewer.setInput(currTreeBuilder.root);
+		
+		if(activeViewer instanceof TableViewer){
+			tableViewer.getTable().getColumn(0).setText(String.format("%s (%s items)", SCOPE_COLUMN_TITLE, ((TableViewer) activeViewer).getTable().getItemCount()));
+		}
 	}
 }

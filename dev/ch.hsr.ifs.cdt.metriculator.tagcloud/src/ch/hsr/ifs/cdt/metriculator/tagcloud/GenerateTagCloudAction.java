@@ -27,7 +27,7 @@ public class GenerateTagCloudAction implements org.eclipse.ui.IViewActionDelegat
 	public void run(IAction action) {
 
 		if(view != null){
-			AbstractMetric metric = view.getMetric();
+			AbstractMetric metric = view.getMenuMetric();
 			Collection<AbstractNode> nodes = view.getNodes();
 			generateTagCloud(nodes, metric);
 		}
