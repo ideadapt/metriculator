@@ -24,6 +24,8 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -127,7 +129,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		createTableComponents();
 		
 		createActions();
-		addActionsToBars();
+		addActionsToMenus();
 		
 		applyViewMode(ViewMode.Hybrid, null);
 		
@@ -344,7 +346,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFile() {
-		actionFilterFile = new Action("only show file nodes", IAction.AS_CHECK_BOX)
+		actionFilterFile = new Action("Only show file nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -359,7 +361,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterNamespace() {
-		actionFilterNamespace = new Action("only show namespace nodes", IAction.AS_CHECK_BOX)
+		actionFilterNamespace = new Action("Only show namespace nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -374,7 +376,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionExpandAll() {
-		actionExpandAll = new Action("expand all nodes")
+		actionExpandAll = new Action("Expand all nodes")
 		{
 			public void run() {
 				treeViewer.expandAll();
@@ -395,7 +397,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionHybridView() {
-		actionHybridView = new Action("change to hybrid view mode", IAction.AS_RADIO_BUTTON) 
+		actionHybridView = new Action("Change to hybrid view mode (files, folders and source code nodes)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -410,7 +412,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 	
 	private void createActionLogicalView() {
-		actionLogicalView = new Action("change to logical view mode", IAction.AS_RADIO_BUTTON) 
+		actionLogicalView = new Action("Change to logical view mode (source code nodes only)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -425,7 +427,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterComposite() {
-		actionFilterComposite = new Action("only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
+		actionFilterComposite = new Action("Only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -440,7 +442,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createActionFilterFunction() {
-		actionFilterFunction = new Action("only show function nodes", IAction.AS_CHECK_BOX)
+		actionFilterFunction = new Action("Only show function nodes", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -454,19 +456,28 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		actionFilterFunction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FUNCTION));
 	}
 
-	private void addActionsToBars() {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionHybridView);
-		toolBarManager.add(actionLogicalView);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionFilterFile);
-		toolBarManager.add(actionFilterNamespace);
-		toolBarManager.add(actionFilterComposite);
-		toolBarManager.add(actionFilterFunction);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionExpandAll);
-		toolBarManager.add(actionCollapseAll);
+	private void addActionsToMenus() {
+		
+		IContributionManager[] managers = 
+			{
+				getViewSite().getActionBars().getMenuManager(), 
+				getViewSite().getActionBars().getToolBarManager()
+			};
+		
+		for(IContributionManager manager : managers){
+			
+			manager.add(new Separator());
+			manager.add(actionHybridView);
+			manager.add(actionLogicalView);
+			manager.add(new Separator());
+			manager.add(actionFilterFile);
+			manager.add(actionFilterNamespace);
+			manager.add(actionFilterComposite);
+			manager.add(actionFilterFunction);
+			manager.add(new Separator());
+			manager.add(actionExpandAll);
+			manager.add(actionCollapseAll);
+		}
 	}
 
 	private void addViewerOpenListener(StructuredViewer viewer) {
