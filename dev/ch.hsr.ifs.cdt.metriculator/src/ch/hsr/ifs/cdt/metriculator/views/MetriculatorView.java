@@ -75,8 +75,8 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private static final int INITIAL_SORT_ORDER           = TreeColumnViewerSorter.NONE;
 	private static final int SCOPE_COLUMN_DEFAULT_WIDTH   = 160;
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
-	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
-	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader";
+	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"; //$NON-NLS-1$
+	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader"; //$NON-NLS-1$
 	
 	private HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>>();
 	private HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>> metricsTableColumnActions   = new HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>>();
@@ -93,7 +93,6 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private IAction actionFilterFile;
 	private TreeBuilder currTreeBuilder;
 	private ViewMode viewMode;
-	private Menu treeHeaderMenu;
 	private Menu tableHeaderMenu;
 	private Composite treeComposite;
 	private Composite tableComposite;
@@ -213,7 +212,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	private void createTreeHeaderMenu() {
-		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
+		MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
 	}
 	
 	private void createTableHeaderMenu() {
@@ -267,7 +266,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 	
 	@Override
-	public AbstractMetric getMetric(){
+	public AbstractMetric getMenuMetric(){
 		TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
 		if(selectedCol != null){
 			return MetricColumn.getMetric(selectedCol);
@@ -605,7 +604,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 		@Override
 		public String getToolTipText(Object element) {
-			if(getViewMode() != ViewMode.Logical && element instanceof AbstractNode){
+			if(element instanceof AbstractNode){
 				return String.format("'%s' , children: %s", 
 						((AbstractNode)element).getPath(), 
 						((AbstractNode) element).getChildren().size());
@@ -635,5 +634,9 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 
 	private void updateViewerData() {
 		activeViewer.setInput(currTreeBuilder.root);
+		
+		if(activeViewer instanceof TableViewer){
+			tableViewer.getTable().getColumn(0).setText(String.format("%s (%s items)", SCOPE_COLUMN_TITLE, ((TableViewer) activeViewer).getTable().getItemCount()));
+		}
 	}
 }
