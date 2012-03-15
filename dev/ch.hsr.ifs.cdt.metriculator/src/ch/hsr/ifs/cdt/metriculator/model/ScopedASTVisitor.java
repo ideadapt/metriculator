@@ -34,6 +34,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeNode;
 
 public class ScopedASTVisitor extends ASTVisitor {
 
@@ -161,7 +162,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 	public int leave(IASTDeclSpecifier declSpec) {
 		if(declSpec instanceof ICPPASTCompositeTypeSpecifier){
 			for(IScopeListener listener : listeners){
-				listener.leaving((TypeDefNode) scopeNode);
+				listener.leaving((TypeNode) scopeNode);
 			}
 			scopeNode = scopeNode.getParent();
 		}

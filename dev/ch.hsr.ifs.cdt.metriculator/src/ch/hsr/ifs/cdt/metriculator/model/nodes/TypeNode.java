@@ -1,7 +1,9 @@
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
@@ -35,5 +37,19 @@ public abstract class TypeNode extends MemberNode {
 			default:
 				return Icon.Size16.CLASS;
 		}
-	}	
+	}
+
+	@Override
+	protected boolean prepareBinding(IASTNode astNode) {
+		IASTName name = getASTName(astNode);
+		binding  = name.resolveBinding();
+		return binding != null;
+	}
+	
+	protected abstract IASTName getASTName(IASTNode astNode);
+
+	@Override
+	protected void prepareIsFriend(IASTNode astNode) {
+		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();	
+	}
 }

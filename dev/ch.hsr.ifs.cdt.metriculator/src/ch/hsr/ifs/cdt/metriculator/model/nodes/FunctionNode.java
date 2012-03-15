@@ -31,7 +31,7 @@ public abstract class FunctionNode extends MemberNode {
 	}
 
 	@Override
-	void prepareIsFriend(IASTNode astNode) {
+	protected void prepareIsFriend(IASTNode astNode) {
 		isFriend = astNode.getRawSignature().contains(KEYWORD_FRIEND);
 	}
 
@@ -41,7 +41,7 @@ public abstract class FunctionNode extends MemberNode {
 	}
 	
 	@Override
-	boolean prepareBinding(IASTNode astNode) {
+	protected boolean prepareBinding(IASTNode astNode) {
 		IASTName name = getASTName(astNode);
 		binding  = name.resolveBinding();
 		IIndex index = astNode.getTranslationUnit().getIndex();

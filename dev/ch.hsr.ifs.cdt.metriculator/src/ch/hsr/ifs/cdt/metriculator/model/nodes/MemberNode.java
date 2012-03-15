@@ -18,7 +18,7 @@ public abstract class MemberNode extends LogicNode {
 	protected IBinding binding;
 	protected IBinding indexBinding;
 	
-	public MemberNode(String scopeUniqueName) {
+	protected MemberNode(String scopeUniqueName) {
 		super(scopeUniqueName);
 	}
 	
@@ -31,9 +31,9 @@ public abstract class MemberNode extends LogicNode {
 		prepareIsFriend(astNode);		
 	}
 	
-	abstract void prepareIsFriend(IASTNode astNode);
+	protected abstract void prepareIsFriend(IASTNode astNode);
 
-	abstract boolean prepareBinding(IASTNode astNode);
+	protected abstract boolean prepareBinding(IASTNode astNode);
 	
 	public IBinding getBinding() {
 		return binding;

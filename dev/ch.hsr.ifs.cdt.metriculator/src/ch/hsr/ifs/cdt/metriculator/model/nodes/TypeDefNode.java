@@ -15,7 +15,6 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 
 
 public class TypeDefNode extends TypeNode {
@@ -30,15 +29,8 @@ public class TypeDefNode extends TypeNode {
 	}
 
 	@Override
-	void prepareIsFriend(IASTNode astNode) {
-		isFriend = ((ICPPASTDeclSpecifier)astNode).isFriend();	
-	}
-
-	@Override
-	boolean prepareBinding(IASTNode astNode) {
-		IASTName name = ((ICPPASTCompositeTypeSpecifier) astNode).getName();
-		binding  = name.resolveBinding();
-		return binding != null;
+	protected IASTName getASTName(IASTNode astNode) {
+		return ((ICPPASTCompositeTypeSpecifier)astNode).getName();
 	}
 
 }
