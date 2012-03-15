@@ -236,7 +236,8 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		
 		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
 		column.setMoveable(false);
-		column.setWidth(0);
+		column.setResizable(true);
+		//column.setWidth(0);
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
@@ -256,7 +257,8 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		
 		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
 		column.setMoveable(false);
-		column.setWidth(0);
+		column.setResizable(true);
+		//column.setWidth(0);
 	}	
 	
 	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
