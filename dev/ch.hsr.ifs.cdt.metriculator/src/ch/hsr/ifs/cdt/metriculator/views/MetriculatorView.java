@@ -25,6 +25,7 @@ import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -121,6 +122,9 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		stackLayout = new StackLayout();
 		parent.setLayout(stackLayout);
 		parentComposite = parent;
+		
+		MetricColumnHeaderMenu.treeMenuManager  = new MenuManager();
+		MetricColumnHeaderMenu.tableMenuManager = new MenuManager();
 		
 		createTreeComponents();
 		
@@ -229,10 +233,13 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		getSite().registerContextMenu(TABLE_COLUMN_HEADER_MENU_ID, MetricColumnHeaderMenu.tableMenuManager, tableViewer);
 	}
 	
+	
 	private void createAndUpdateMetricTreeColumns() {
+		ToggleColumnActionItem<TreeColumn> actionItem = null;
+		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
 			
-			ToggleColumnActionItem<TreeColumn> actionItem = metricsTreeColumnActions.get(metric);
+			actionItem = metricsTreeColumnActions.get(metric);
 			
 			if (actionItem == null) {
 
@@ -243,17 +250,17 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			actionItem.toggleVisibility();
 		}
 		
-		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
-		column.setMoveable(false);
-		column.setResizable(true);
-		column.setWidth(10);
+		if(actionItem != null){
+			MetricColumn.createFillerColumnOnce(treeViewer.getTree());
+		}
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
+		ToggleColumnActionItem<TableColumn> actionItem = null;
 		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
 			
-			ToggleColumnActionItem<TableColumn> actionItem = metricsTableColumnActions.get(metric);
+			actionItem = metricsTableColumnActions.get(metric);
 			
 			if (actionItem == null) {
 
@@ -264,10 +271,9 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			actionItem.toggleVisibility();
 		}	
 		
-		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
-		column.setMoveable(false);
-		column.setResizable(true);
-		column.setWidth(10);
+		if(actionItem != null){
+			MetricColumn.createFillerColumnOnce(tableViewer.getTable());
+		}
 	}	
 	
 	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
@@ -609,7 +615,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 					if(metric != null){
 						applyProblemsOf(metric, cell);
 						int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
-						cell.setText(NumberFormat.getInstance().format(metricValue));
+						cell.setText(NumberFormat.getIntegerInstance().format(metricValue));
 					}
 					break;
 			}
@@ -667,7 +673,10 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		activeViewer.setInput(currTreeBuilder.root);
 		
 		if(activeViewer instanceof TableViewer){
-			tableViewer.getTable().getColumn(0).setText(String.format("%s (%s items)", SCOPE_COLUMN_TITLE, ((TableViewer) activeViewer).getTable().getItemCount()));
+			int rowCount = ((TableViewer) activeViewer).getTable().getItemCount();
+			String rowCountString = NumberFormat.getIntegerInstance().format(rowCount);
+
+			tableViewer.getTable().getColumn(0).setText(String.format("%s (%s items)", SCOPE_COLUMN_TITLE, rowCountString));
 		}
 	}
 }

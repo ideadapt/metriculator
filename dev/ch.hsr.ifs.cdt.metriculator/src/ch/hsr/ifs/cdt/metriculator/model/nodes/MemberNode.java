@@ -74,6 +74,10 @@ public abstract class MemberNode extends LogicNode {
 	// TODO introduce StringBuilder
 	protected String buildLogicalOwnerName(IBinding owner, IASTTranslationUnit tu) {
 
+		if(owner == null){
+			return "";
+		}
+		
 		IASTNode node = null;
 		IASTName[] declarationsInAST = tu.getDeclarationsInAST(owner);
 		

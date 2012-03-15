@@ -15,7 +15,10 @@ package ch.hsr.ifs.cdt.metriculator.views;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.Widget;
 
@@ -26,8 +29,9 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
  * */
 public final class MetricColumn {
 
-	static final int DEFAULT_WIDTH           = 100;
-	static final String DATAKEY_COLUMNMETRIC = "metric";
+	static final String DATAKEY_IS_FILLER 	  = "isFiller";
+	static final int DEFAULT_WIDTH            = 100;
+	static final String DATAKEY_COLUMNMETRIC  = "metric";
 	
 	public static void showColumn(TreeColumn column) {
 		column.setWidth(DEFAULT_WIDTH);
@@ -80,4 +84,46 @@ public final class MetricColumn {
 	public static void setMetric(AbstractMetric metric, Widget column) {
 		column.setData(DATAKEY_COLUMNMETRIC, metric);
 	}
+
+	public static void createFillerColumnOnce(Tree tree) {
+		
+		if(hasFillerColumn(tree.getColumns())){
+			return;
+		}
+		
+		TreeColumn column = new TreeColumn(tree, SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
+		column.setData(DATAKEY_IS_FILLER, true);
+	}
+
+	public static void createFillerColumnOnce(Table table) {
+
+		if(hasFillerColumn(table.getColumns())){
+			return;
+		}
+		
+		TableColumn column = new TableColumn(table, SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
+		column.setData(DATAKEY_IS_FILLER, true);
+	}	
+
+	private static boolean hasFillerColumn(Item... items) {
+		for(Item column : items){
+			if(isFiller(column)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isFiller(Item column) {
+		if(column.getData(DATAKEY_IS_FILLER) != null && ((Boolean) column.getData(DATAKEY_IS_FILLER)) == true){
+			return true;
+		}
+		return false;
+	}	
 }

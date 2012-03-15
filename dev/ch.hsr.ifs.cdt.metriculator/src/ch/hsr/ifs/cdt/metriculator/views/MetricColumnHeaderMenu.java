@@ -36,7 +36,6 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 public final class MetricColumnHeaderMenu {
 
 	private static final String DATAKEY_CURR_COLUMN    = "current_column";
-	public static final String DATAKEY_MENUITEM_COLUMN = "menuitem_column";
 
 	/**
 	 * @column is either of type TableColumn or TreeColumn
@@ -47,10 +46,6 @@ public final class MetricColumnHeaderMenu {
 	
 	public static Item getCurrColumn(Menu menu) {
 		return (Item) menu.getData(DATAKEY_CURR_COLUMN);
-	}
-
-	public enum ItemType{
-		ToggleMetricColumn
 	}
 	
 	public static MenuManager tableMenuManager = new MenuManager();
@@ -67,16 +62,17 @@ public final class MetricColumnHeaderMenu {
 				Point treeRelativePoint = Display.getDefault().map(null, treeObj, new Point(event.x, event.y));
 				Rectangle clientArea    = treeObj.getClientArea();
 				boolean inHeaderArea    = clientArea.y <= treeRelativePoint.y && treeRelativePoint.y < (clientArea.y + treeObj.getHeaderHeight());
-				boolean inMetricColumn  = inHeaderArea && getColumnAt(treeRelativePoint.x) > 0;
-				
+				int selectedColIndex    = getColumnIndexAt(treeRelativePoint.x);
+				boolean inMetricColumn  = inHeaderArea && selectedColIndex > 0 && !MetricColumn.isFiller(treeObj.getColumn(selectedColIndex));
+
 				if(inMetricColumn){
-					setCurrColumn(headerMenu, treeObj.getColumn(getColumnAt(treeRelativePoint.x)));
+					setCurrColumn(headerMenu, treeObj.getColumn(selectedColIndex));
 				}else{
 					event.doit = false;
 				}
 			}
 
-			private int getColumnAt(int offsetLeft) {
+			private int getColumnIndexAt(int offsetLeft) {
 				int colWidthsTotal = 0;
 				int colIndex = -1;
 				for(TreeColumn col : treeObj.getColumns()){
@@ -109,16 +105,17 @@ public final class MetricColumnHeaderMenu {
 				Point treeRelativePoint = Display.getDefault().map(null, tableObj, new Point(event.x, event.y));
 				Rectangle clientArea    = tableObj.getClientArea();
 				boolean inHeaderArea    = clientArea.y <= treeRelativePoint.y && treeRelativePoint.y < (clientArea.y + tableObj.getHeaderHeight());
-				boolean inMetricColumn  = inHeaderArea && getColumnAt(treeRelativePoint.x) > 0;
+				int selectedColIndex    = getColumnIndexAt(treeRelativePoint.x);
+				boolean inMetricColumn  = inHeaderArea && selectedColIndex > 0 && !MetricColumn.isFiller(tableObj.getColumn(selectedColIndex));
 				
 				if(inMetricColumn){
-					setCurrColumn(headerMenu, tableObj.getColumn(getColumnAt(treeRelativePoint.x)));
+					setCurrColumn(headerMenu, tableObj.getColumn(selectedColIndex));
 				}else{
 					event.doit = false;
 				}
 			}
 
-			private int getColumnAt(int offsetLeft) {
+			private int getColumnIndexAt(int offsetLeft) {
 				int colWidthsTotal = 0;
 				int colIndex = -1;
 				for(TableColumn col : tableObj.getColumns()){
@@ -143,7 +140,7 @@ public final class MetricColumnHeaderMenu {
 
 	public static void updateItemSelections(MenuManager menu) {
 		for(IContributionItem item : menu.getItems()){
-			
+
 			if(item instanceof ToggleColumnActionItem){
 				((ToggleColumnActionItem<?>) item).toggleVisibility();
 			}
