@@ -310,14 +310,14 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 	//	namespace N {
 	//		struct A {
-	//		    virtual void fx() { }
+	//		    void fx() { }
 	//		};
 	//	}
 	//
 	//	namespace N {
 	//		struct B {
-	//		    virtual void f() { }
-	//		    virtual void f1() { }
+	//		    void f() { }
+	//		    void f1() { }
 	//		};
 	//	}
 	public void testMergeOfFunctionsInNamespaces(){
@@ -333,14 +333,14 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	
 	//	namespace {
 	//		struct A {
-	//		    virtual void fx() { }
+	//		    void fx() { }
 	//		};
 	//	}
 	//
 	//	namespace {
 	//		struct B {
-	//		    virtual void f() { }
-	//		    virtual void f1() { }
+	//		    void f() { }
+	//		    void f1() { }
 	//		};
 	//	}
 	public void testTwoAnonymousNamespaces(){
@@ -356,7 +356,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	
 	//	namespace {
 	//		struct A {
-	//		    virtual void fx();
+	//		    void fx();
 	//		};
 	//	}
 	//	void A::fx(){}
@@ -380,7 +380,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	
 	//	namespace {
 	//		struct A {
-	//		    virtual void fx();
+	//		    void fx();
 	//		};
 	//		void A::fx(){}
 	//	}
@@ -396,9 +396,9 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	}
 	
 	//	namespace Outer { // at depth 0
-	//		namespace {   // at depth 1
-	//			struct A {// at depth 2
-	//		    	virtual void fx();
+	//		namespace {   
+	//			struct A {
+	//		    	void fx();
 	//			};
 	//          void A::fx(){}
 	//		}
@@ -412,5 +412,6 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, getFirstChildInDepth(root, 1).getChildren().size());
 		assertEquals(1, getFirstChildInDepth(root, 2).getChildren().size());
+		assertTrue(getFirstChildInDepth(root, 3) instanceof FunctionDefNode);
 	}	
 }
