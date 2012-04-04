@@ -31,6 +31,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
@@ -81,7 +82,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 	public int leave(IASTDeclaration declaration) {
 		if(declaration instanceof ICPPASTFunctionDefinition){
 			for(IScopeListener listener : listeners){
-				listener.leaving((FunctionNode) scopeNode);
+				listener.leaving((MemberNode) scopeNode);
 			}
 			scopeNode = scopeNode.getParent();
 		}
@@ -120,7 +121,7 @@ public class ScopedASTVisitor extends ASTVisitor {
 					&& !(declarator.getParent() instanceof ICPPASTLambdaExpression)){
 				
 				for(IScopeListener listener : listeners){
-					listener.leaving((FunctionNode) scopeNode);
+					listener.leaving((MemberNode) scopeNode);
 				}
 				scopeNode = scopeNode.getParent();
 			}

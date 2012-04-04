@@ -20,8 +20,8 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
+import org.eclipse.cdt.core.index.IIndexBinding;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
@@ -32,7 +32,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 public class HybridTreeBuilder extends TreeBuilder {
 
 	private HashMap<String,AbstractNode> descendants     = new HashMap<String,AbstractNode>();
-	private HashMap<IBinding, MemberNode> declarations = new HashMap<IBinding, MemberNode>();
+	private HashMap<IIndexBinding, MemberNode> declarations = new HashMap<IIndexBinding, MemberNode>();
 
 	public HybridTreeBuilder(String workspace){
 		root = new WorkspaceNode(workspace);
@@ -75,11 +75,8 @@ public class HybridTreeBuilder extends TreeBuilder {
 	}
 
 	private void prepareDeclBinding(AbstractNode child) {
-		if(child instanceof FunctionDeclNode){
+		if(child instanceof FunctionDeclNode || child instanceof TypeDeclNode){
 			declarations.put(((MemberNode) child).getIndexBinding(), (MemberNode) child);
-
-		}else if(child instanceof TypeDeclNode){
-			declarations.put(((MemberNode) child).getBinding(), (MemberNode) child);
 		}
 	}
 
@@ -88,40 +85,26 @@ public class HybridTreeBuilder extends TreeBuilder {
 		for (IASTDeclaration decl : tu.getDeclarations()) {
 			
 			if(decl instanceof IASTSimpleDeclaration){
-				IBinding declBinding = null;
+				IIndexBinding declBinding = null;
 				
 				if(isTypeDecl((IASTSimpleDeclaration) decl)){
-					declBinding = getTypeBinding((IASTSimpleDeclaration) decl);
-					findDeclsOfDefs(tu, declBinding, true);
+					declBinding = getTypeBinding(tu, (IASTSimpleDeclaration) decl);
 				}else{
 					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
-					findDeclsOfDefs(tu, declBinding);
 				}
+				findDeclsOfDefs(tu, declBinding);
 			}
 		}
 		deleteBindings();
 	}
 
-
-	private void findDeclsOfDefs(IASTTranslationUnit tu, IBinding declBinding) {
-		findDeclsOfDefs(tu, declBinding, false);
-	}
-
-	private void findDeclsOfDefs(IASTTranslationUnit tu, IBinding declBinding, boolean isTypeDecl) {
+	private void findDeclsOfDefs(IASTTranslationUnit tu, IIndexBinding declBinding) {
 		if(declBinding != null){
 			for(IName name : tu.getDefinitions(declBinding)){
 				
 				if(name instanceof IASTName && name.isDefinition()){
-					
 					IASTName iastName = (IASTName)name;
-					AbstractNode foundDecl;
-					
-					if(isTypeDecl){
-						foundDecl = declarations.get(iastName.getBinding());
-					}else{
-						foundDecl = declarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
-					}
-					
+					AbstractNode foundDecl = declarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
 					removeFromTree(foundDecl);
 				}
 			}
@@ -132,18 +115,16 @@ public class HybridTreeBuilder extends TreeBuilder {
 		return decl.getDeclSpecifier() instanceof ICPPASTElaboratedTypeSpecifier;
 	}
 
-	private IBinding getTypeBinding(IASTSimpleDeclaration decl) {
+	private IIndexBinding getTypeBinding(IASTTranslationUnit tu, IASTSimpleDeclaration decl) {
 		ICPPASTElaboratedTypeSpecifier typeDecl = (ICPPASTElaboratedTypeSpecifier)decl.getDeclSpecifier();
-		return typeDecl.getName().getBinding();
+		
+		return tu.getIndex().adaptBinding(typeDecl.getName().getBinding());
 	}
 
-	private IBinding getFuncBinding(IASTTranslationUnit tu,IASTDeclarator[] declarators) {
-		IBinding declBinding = null;
+	private IIndexBinding getFuncBinding(IASTTranslationUnit tu,IASTDeclarator[] declarators) {
+		IIndexBinding declBinding = null;
 		if(declarators.length > 0){
 			declBinding = tu.getIndex().adaptBinding(declarators[0].getName().getBinding());
-			if(declBinding == null){
-				return declarators[0].getName().getBinding();
-			}
 		}
 		return declBinding;
 	}
