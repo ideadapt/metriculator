@@ -63,7 +63,7 @@ public abstract class MemberNode extends LogicNode {
 	protected void prepareOwnership(IBinding owner, IASTTranslationUnit tu) {
 		logicalName = binding.toString();
 		if(owner != null){
-			logicalOwnerName = buildLogicalOwnerName(binding.getOwner(), tu);
+			logicalOwnerName = buildLogicalOwnerName(owner, tu);
 			if(owner instanceof ICompositeType){
 				isMember = true;
 				binding = null;
@@ -99,14 +99,5 @@ public abstract class MemberNode extends LogicNode {
 	private boolean isAnonymousNamespace(IASTNode node) {
 		return node instanceof ICPPASTNamespaceDefinition && ((ICPPASTNamespaceDefinition) node).getName().toString().isEmpty();
 	}
-
-	public static IBinding getBindingFor(IASTName name, IASTTranslationUnit tu) {
-		IBinding typeBinding, indexBinding;
-
-		typeBinding  = name.resolveBinding();
-		IIndex index = tu.getIndex();
-		indexBinding = index.adaptBinding(typeBinding);
-
-		return indexBinding == null ? typeBinding : indexBinding;
-	}	
+	
 }

@@ -17,9 +17,11 @@ import java.util.HashSet;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.index.IIndex;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.IScopeListener;
@@ -27,7 +29,6 @@ import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 
@@ -93,7 +94,7 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 			}
 
 			if(name != null){
-				IBinding specBinding = MemberNode.getBindingFor(name, declSpec.getTranslationUnit());
+				IBinding specBinding = getBindingFor(name, declSpec.getTranslationUnit());
 
 				if(countedBindingsInNode.get(currType) != null && !countedBindingsInNode.get(currType).contains(specBinding)){
 					count();
@@ -106,5 +107,15 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 
 	private void count(){
 		scopeNode.setNodeValue(key, scopeNode.getNodeValue(key) + 1);
+	}
+	
+	private static IBinding getBindingFor(IASTName name, IASTTranslationUnit tu) {
+		IBinding typeBinding, indexBinding;
+
+		typeBinding  = name.resolveBinding();
+		IIndex index = tu.getIndex();
+		indexBinding = index.adaptBinding(typeBinding);
+
+		return indexBinding == null ? typeBinding : indexBinding;
 	}
 }

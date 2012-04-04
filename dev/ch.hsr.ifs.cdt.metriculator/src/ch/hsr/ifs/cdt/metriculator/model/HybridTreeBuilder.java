@@ -151,7 +151,6 @@ public class HybridTreeBuilder extends TreeBuilder {
 	private void removeFromTree(AbstractNode foundDecl) {
 		if(foundDecl != null){
 			foundDecl.removeFromParent();
-			foundDecl = null;
 		}
 	}
 

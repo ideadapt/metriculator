@@ -132,7 +132,6 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 		if(def.getLogicalOwnerName().equals(decl.getLogicalOwnerName())){
 			if(def.getLogicalName().equals(decl.getLogicalName())){
 				decl.removeFromParent();
-				decl = null;
 			}
 		}
 	}
