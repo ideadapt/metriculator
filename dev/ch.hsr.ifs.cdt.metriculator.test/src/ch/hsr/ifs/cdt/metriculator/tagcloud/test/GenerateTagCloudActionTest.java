@@ -56,7 +56,7 @@ public class GenerateTagCloudActionTest extends TestCase {
 		int randomValue = 1;
 		Random random = new Random();
 		String randomName = repeatString("123", 1);
-		int nodeCount   = 1000;
+		int nodeCount   = 400;
 		
 		for(int i = 0; i<nodeCount; i++){
 						

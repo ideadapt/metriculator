@@ -104,9 +104,8 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 		
 	}
 
-	// int main()
-	// {
-	// while(true); 
+	// int main(){
+	//     while(true); 
 	// }
 	public void testOneWhile(){
 		loadcode(getAboveComment());
