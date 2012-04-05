@@ -180,8 +180,7 @@ public class McCabeMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	#if a<0
 	//	#endif
 	public void testPreprocessorIfStatement(){
-		loadcode(getAboveComment());
-		runOnProject();
+		loadCodeAndRun(getAboveComment());
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
