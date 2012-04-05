@@ -39,13 +39,6 @@ public abstract class TypeNode extends MemberNode {
 		}
 	}
 
-	@Override
-	protected boolean prepareBinding(IASTNode astNode) {
-		IASTName name = getASTName(astNode);
-		binding  = name.resolveBinding();
-		return binding != null;
-	}
-	
 	protected abstract IASTName getASTName(IASTNode astNode);
 
 	@Override

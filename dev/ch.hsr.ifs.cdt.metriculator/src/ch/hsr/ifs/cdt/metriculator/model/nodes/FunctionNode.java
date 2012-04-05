@@ -12,9 +12,7 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.index.IIndex;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
@@ -40,14 +38,4 @@ public abstract class FunctionNode extends MemberNode {
 		return Icon.Size16.METHOD_PUBLIC;
 	}
 	
-	@Override
-	protected boolean prepareBinding(IASTNode astNode) {
-		IASTName name = getASTName(astNode);
-		binding  = name.resolveBinding();
-		IIndex index = astNode.getTranslationUnit().getIndex();
-		indexBinding = index.adaptBinding(binding);
-		return binding != null || indexBinding != null;		
-	}
-
-	protected abstract IASTName getASTName(IASTNode astNode);
 }

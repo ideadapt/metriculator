@@ -33,13 +33,13 @@ import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
 public abstract class AbstractNode implements Cloneable {
 
-	private final static String emptyString = ""; //$NON-NLS-1$
+	private final static String EMPTY_STRING = ""; //$NON-NLS-1$
 	protected String scopeName;
 	protected AbstractNode parent;
 	private String hybridId;
 	private EditorInfo editorInfo;
 
-	public String cachedPath;
+	private String cachedPath;
 
 	private HashMap<String, AbstractNode> children        = new HashMap<String, AbstractNode>();
 	private ArrayList<AbstractNode>		  orderedChildren = new ArrayList<AbstractNode>();
@@ -137,7 +137,7 @@ public abstract class AbstractNode implements Cloneable {
 	 * normalize string, remove new lines and extra whitespace
 	 * */
 	protected void setScopeName(String scopeName) {
-		this.scopeName = scopeName.replaceAll("[\n\r\t]", emptyString).replaceAll("\\s{2,}", emptyString);
+		this.scopeName = scopeName.replaceAll("[\n\r\t]", EMPTY_STRING).replaceAll("\\s{2,}", EMPTY_STRING);
 	}
 	
 	public String getScopeName(){
@@ -164,7 +164,7 @@ public abstract class AbstractNode implements Cloneable {
 	 * */
 	public String getPath() {
 		if(cachedPath == null){
-			cachedPath = getPath(new StringBuilder(emptyString));
+			cachedPath = getPath(new StringBuilder(EMPTY_STRING));
 		}
 		return cachedPath;
 	}

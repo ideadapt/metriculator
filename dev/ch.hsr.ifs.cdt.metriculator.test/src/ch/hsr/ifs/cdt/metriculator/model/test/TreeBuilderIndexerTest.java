@@ -360,7 +360,7 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	}
 	//	void A::fx(){}
-	public void testAnonymousNamespaceNoMemberMerging(){
+	public void testAnonymousNamespaceMemberMergingOutsideNamespace(){
 		loadcode(getAboveComment());
 		runOnProject();
 		
