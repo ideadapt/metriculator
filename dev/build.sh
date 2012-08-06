@@ -14,4 +14,4 @@ BUNDLE_ROOT="`dirname $THIS`"
 env
 echo $HOME
 cd $BUNDLE_ROOT
-mvn -e -Dmaven.repo.local=$HOME/.m2/repository clean install
+mvn -e -Dmaven.repo.local=/var/m2 clean install
