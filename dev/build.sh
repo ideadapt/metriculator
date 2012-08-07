@@ -12,7 +12,7 @@
 # ... ... ... Caused by: org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] at org.eclipse.swt.SWT.error(SWT.java:4308)
 # surprisingly env shows DISPLAY= (empty)
 export PATH=/usr/local/apache-maven-3.0.4/bin:$PATH
-#export DISPLAY=$DISPLAY
+export DISPLAY=:11
 THIS=$(readlink -f $0)
 BUNDLE_ROOT="`dirname $THIS`"
 env
