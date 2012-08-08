@@ -22,7 +22,7 @@ import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
@@ -65,7 +65,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 
 	// int main(){} // 1
 	public void testBraceCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(1, workspaceNode
@@ -86,7 +87,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//     i = 1;//3
 	//   }//4
 	public void testVariableDeclarationOrDefinitionCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(4, workspaceNode
@@ -104,7 +106,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1 compound
 	// }//2 compound
 	public void testEmptyForCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -114,7 +117,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// for(;;);//1 for
 	// }//2 compound
 	public void testEmptyNoBracesForCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -127,7 +131,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//2
 	// }//3
 	public void testEmptyNestingForCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}	
@@ -138,7 +143,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1 compound
 	// }//2 compound
 	public void testForCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -151,7 +157,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//2
 	// }//3 
 	public void testNestingForCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -166,7 +173,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//4
 	// }//5 
 	public void testNestingForWithContentCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(5, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -181,7 +189,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// };//2
 	// }//3
 	public void testWhileWithSemicolonAndBracesCountsTwo() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -192,7 +201,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1
 	// }//2
 	public void testEmptyWhileCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -202,7 +212,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// while(true); //1
 	// }//2
 	public void testEmptyNoBracesWhileCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -217,7 +228,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1 compound
 	// }//2 compound
 	public void testEmptyIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -227,7 +239,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// if(true);//1 for
 	// }//2 compound
 	public void testEmptyNoBracesIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -240,7 +253,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//2
 	// }//3
 	public void testEmptyNestingIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -251,7 +265,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//   if(true);//2
 	// }//3
 	public void testEmptyNoBraceNestingIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -262,7 +277,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1 compound
 	// }//2 compound
 	public void testIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -274,7 +290,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }//1 compound
 	// }//2 compound
 	public void testElseCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -285,7 +302,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }else;//1 else
 	// }//2 compound
 	public void testElseNoBracesCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -294,7 +312,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//   int i = true ? 0 : 1;//1
 	// }//2
 	public void testExpressionStatementCountsOne() {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -304,7 +323,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	 val2
 	// } //1
 	public void testEnumCountsOne(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -315,7 +335,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// }else if(false){}//1 else, 2 if
 	// }//3 compound
 	public void testElseIfCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -328,7 +349,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// while(true);// 1 some expressions
 	// }//2 compound
 	public void testDoWhileCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -340,7 +362,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// const int h()
 	// {} //3
 	public void testOverloadedFunctionCountsTwo(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);		
 	}
@@ -352,7 +375,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// const int h()
 	// {} //3
 	public void testEachOverloadedFunctionResultInOneNode(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode
 						.getChildren(ProjectNode.class).iterator().next()
@@ -368,7 +392,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	// {
 	// }//2 compound
 	public void testUsingNamespaceCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -379,7 +404,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//   using namespace std;//2
 	// }//3 compound
 	public void testFunctionNestsUsingNamespaceCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
@@ -407,7 +433,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//   }//3
 	// }//4 compound
 	public void testNamespaceNestsUsingNamespaceCountsOne() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(3, (workspaceNode
@@ -424,7 +451,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		#endif //3
 	// }//4
 	public void testPrecProcCounts() throws IOException {
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -435,19 +463,20 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	 struct y{
 	//	 };//2
 	public void testStructCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -463,19 +492,20 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//     public:
 	//	 };//2
 	public void testStructAccessLabelIgnored(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -489,19 +519,20 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	 typedef struct y{
 	//	 };//2
 	public void testTypedefStructCountsTwo(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -515,19 +546,20 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	 struct y{
 	//	 }Y;//3
 	public void testNamedStructCountsTwo(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -541,19 +573,20 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	 typedef struct y{
 	//	 }Y;//3
 	public void testNamedTypedefStructCountsTwo(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 		
 		assertEquals(2, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).nodeValue);
 		
 		assertEquals(0, workspaceNode
@@ -566,7 +599,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//   }//1
 	//	 typedef int I;//2
 	public void testTypedefCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
@@ -585,7 +619,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	   }
 	//   }//2
 	public void testSwitchCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();		
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
@@ -601,7 +636,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		break;//2
 	//   }//3
 	public void testBreakCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(3, workspaceNode
@@ -618,7 +654,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		break;//3
 	//   }//4
 	public void testExpressionInCaseCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();		
 		
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(4, workspaceNode
@@ -635,7 +672,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//      break;//2
 	//   }//3
 	public void testCaseAndDefaultIgnored(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(3, workspaceNode
@@ -650,7 +688,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//              };//1 compound
 	//   }//2
 	public void testEmptyLambdaWithoutCaptureCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
@@ -665,7 +704,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//              };//2
 	//   }//3
 	public void testLambdaWithCaptureCountsTwo(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();		
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(3, workspaceNode
@@ -680,7 +720,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//              };//2
 	//   }//3
 	public void testLambdaWithTwoCapturesCountsTwo(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(3, workspaceNode
@@ -696,7 +737,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//              };//3
 	//   }//4
 	public void testStatementInLambdaCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(4, workspaceNode
@@ -713,7 +755,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	   }
 	//   }//4
 	public void testTryAndCatchBlockEachCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(4, workspaceNode
@@ -726,13 +769,14 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	template<class xy> class Array {
 	//	};//1
 	public void testTemplateDeclarationCountsOne(){
-		loadCodeAndRun(getAboveComment());		
+		loadcode(getAboveComment());
+		runOnProject();	
 		
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(1, workspaceNode
 				.getChildren(ProjectNode.class).iterator().next()
 				.getChildren(FileNode.class).iterator().next()
-				.getChildren(CompositeTypeNode.class).iterator().next()
+				.getChildren(TypeDefNode.class).iterator().next()
 				.getValueOf(metric).aggregatedValue);
 	}
 	
@@ -742,7 +786,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//	  return objekte[Index];//1
 	//	}//2
 	public void testFunctionTemplateDeclarationCountsTwo(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(2, workspaceNode
@@ -764,7 +809,8 @@ public class LSLOCMetricCheckerTest extends MetriculatorCheckerTestCase {
 	//		}	//6
 	//	}	//7
 	public void testNestedNamespaces(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		assertEquals(7, workspaceNode.getValueOf(metric).aggregatedValue);
 		assertEquals(7, workspaceNode

@@ -12,20 +12,23 @@
 
 package ch.hsr.ifs.cdt.metriculator.views;
 
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
  * @author Ueli Kunz
@@ -33,43 +36,43 @@ import org.eclipse.swt.widgets.Widget;
 public final class MetricColumnHeaderMenu {
 
 	private static final String DATAKEY_CURR_COLUMN    = "current_column";
-	public static final String DATAKEY_MENUITEM_COLUMN = "menuitem_column";
 
-	public static void setCurrColumn(Menu menu, TableColumn column) {
+	/**
+	 * @column is either of type TableColumn or TreeColumn
+	 * */
+	public static void setCurrColumn(Menu menu, Item column) {
 		menu.setData(DATAKEY_CURR_COLUMN, column);
 	}	
 	
-	public static void setCurrColumn(Menu menu, TreeColumn column) {
-		menu.setData(DATAKEY_CURR_COLUMN, column);
-	}	
+	public static Item getCurrColumn(Menu menu) {
+		return (Item) menu.getData(DATAKEY_CURR_COLUMN);
+	}
 	
-	public static Widget getCurrColumn(Menu menu) {
-		return (Widget) menu.getData(DATAKEY_CURR_COLUMN);
-	}
-
-	public enum ItemType{
-		GenerateTagCloud, ToggleMetricColumn
-	}
-
+	public static MenuManager tableMenuManager = new MenuManager();
+	public static MenuManager treeMenuManager  = new MenuManager();
+	
 	public static Menu create(Shell shell, final Tree treeObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+		treeMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));	
+		treeMenuManager.add(new Separator());
+		final Menu headerMenu = treeMenuManager.createContextMenu(treeObj);
+		treeObj.setMenu(headerMenu);
 		
 		treeObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Point treeRelativePoint = Display.getDefault().map(null, treeObj, new Point(event.x, event.y));
 				Rectangle clientArea    = treeObj.getClientArea();
 				boolean inHeaderArea    = clientArea.y <= treeRelativePoint.y && treeRelativePoint.y < (clientArea.y + treeObj.getHeaderHeight());
-				boolean inMetricColumn  = inHeaderArea && getColumnAt(treeRelativePoint.x) > 0;
-				
+				int selectedColIndex    = getColumnIndexAt(treeRelativePoint.x);
+				boolean inMetricColumn  = inHeaderArea && selectedColIndex > 0 && !MetricColumn.isFiller(treeObj.getColumn(selectedColIndex));
+
 				if(inMetricColumn){
-					setCurrColumn(headerMenu, treeObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					treeObj.setMenu(headerMenu);
+					setCurrColumn(headerMenu, treeObj.getColumn(selectedColIndex));
 				}else{
 					event.doit = false;
 				}
 			}
 
-			private int getColumnAt(int offsetLeft) {
+			private int getColumnIndexAt(int offsetLeft) {
 				int colWidthsTotal = 0;
 				int colIndex = -1;
 				for(TreeColumn col : treeObj.getColumns()){
@@ -93,24 +96,26 @@ public final class MetricColumnHeaderMenu {
 	}
 	
 	public static Menu create(Shell shell, final Table tableObj){
-		final Menu headerMenu = new Menu(shell, SWT.POP_UP);
+		tableMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));		
+		final Menu headerMenu = tableMenuManager.createContextMenu(tableObj);
+		tableObj.setMenu(headerMenu);
 		
 		tableObj.addListener(SWT.MenuDetect, new Listener() {
 			public void handleEvent(Event event) {
 				Point treeRelativePoint = Display.getDefault().map(null, tableObj, new Point(event.x, event.y));
 				Rectangle clientArea    = tableObj.getClientArea();
 				boolean inHeaderArea    = clientArea.y <= treeRelativePoint.y && treeRelativePoint.y < (clientArea.y + tableObj.getHeaderHeight());
-				boolean inMetricColumn  = inHeaderArea && getColumnAt(treeRelativePoint.x) > 0;
+				int selectedColIndex    = getColumnIndexAt(treeRelativePoint.x);
+				boolean inMetricColumn  = inHeaderArea && selectedColIndex > 0 && !MetricColumn.isFiller(tableObj.getColumn(selectedColIndex));
 				
 				if(inMetricColumn){
-					setCurrColumn(headerMenu, tableObj.getColumn(getColumnAt(treeRelativePoint.x)));
-					tableObj.setMenu(headerMenu);
+					setCurrColumn(headerMenu, tableObj.getColumn(selectedColIndex));
 				}else{
 					event.doit = false;
 				}
 			}
 
-			private int getColumnAt(int offsetLeft) {
+			private int getColumnIndexAt(int offsetLeft) {
 				int colWidthsTotal = 0;
 				int colIndex = -1;
 				for(TableColumn col : tableObj.getColumns()){
@@ -128,32 +133,18 @@ public final class MetricColumnHeaderMenu {
 			public void handleEvent(Event event) {
 				headerMenu.dispose();
 			}
-		});	
+		});
 		
 		return headerMenu;
-	}	
-
-	public static void createTagCloudMenuItem(Menu menu, Listener listener) {
-		
-		MenuItem tagCloudItem = new MenuItem(menu, SWT.PUSH);
-		tagCloudItem.setText("Generate TagCloud");
-		tagCloudItem.setData(ItemType.GenerateTagCloud);
-		tagCloudItem.addListener(SWT.Selection, listener);
-		
-		new MenuItem(menu, SWT.SEPARATOR);
 	}
 
-	public static void updateItemSelections(Menu menu) {
-		for(MenuItem item : menu.getItems()){
-			if(item.getData() != null && item.getData().equals(ItemType.ToggleMetricColumn)){
-				Object col = item.getData(DATAKEY_MENUITEM_COLUMN);
-				if(col instanceof TreeColumn){
-					item.setSelection(MetricColumn.isVisible((TreeColumn)col));
-				}
-				if(col instanceof TableColumn){
-					item.setSelection(MetricColumn.isVisible((TableColumn)col));
-				}
+	public static void updateItemSelections(MenuManager menu) {
+		for(IContributionItem item : menu.getItems()){
+
+			if(item instanceof ToggleColumnActionItem){
+				((ToggleColumnActionItem<?>) item).toggleVisibility();
 			}
 		}
+		menu.isDirty();
 	}
 }

@@ -155,6 +155,7 @@ public class MetriculatorPluginActivator extends AbstractUIPlugin {
 							if(partRef.getId().equals(MetriculatorView.VIEW_ID)){
 								resetTreeBuilders();
 								resetMetricCaches();
+								System.gc();
 							}
 						}
 
@@ -231,6 +232,7 @@ public class MetriculatorPluginActivator extends AbstractUIPlugin {
 				if(event.getJob().getName().equals(CodanUIMessages.Job_TitleRunningAnalysis)){
 					resetTreeBuilders();
 					resetMetricCaches();
+					System.gc();
 					observable.setChangedAndNotifyJobAboutToRun();
 				}
 			}

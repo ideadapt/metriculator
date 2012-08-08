@@ -15,13 +15,16 @@ package ch.hsr.ifs.cdt.metriculator.test;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
-import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetric;
+import ch.hsr.ifs.cdt.metriculator.checkers.NumberMembersMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
+/**
+ * Test for {@see NumberMembersChecker} class, validates the implementation for Number Members per Type.
+ */
 public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	private NumberMembersMetricChecker checker;
 	private WorkspaceNode workspaceNode;
@@ -53,7 +56,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		int dataMember1;
 	//	};
 	public void testOneDataMemberInStruct(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -64,7 +68,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		private:
 	//	};
 	public void testDoNotCountVisibilityLabels(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(0, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -74,7 +79,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		int dataMember2;
 	//	};
 	public void testTwoDataMembersInStruct(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();;
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -84,7 +90,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//			MyClassMembers(int value);
 	//	};
 	public void testOnePrivateDataMemberInClass(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -94,7 +101,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		MyClassMembers(int value);
 	//	};
 	public void testOnePublicDataMemberInClass(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -104,7 +112,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		MyClassMembers(int value);
 	//	};
 	public void testOneProtectedDataMemberInClass(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);	
 	}
@@ -113,7 +122,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		int dataMember1;
 	//	};
 	public void testOneDataMemberInUnion(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -123,7 +133,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		int dataMember2;
 	//	};
 	public void testStaticMember(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -133,7 +144,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		class InnerClassMember;
 	//	};
 	public void testNestedClassMember(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -143,7 +155,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		struct InnerStructMember;
 	//	};
 	public void testNestedStructMember(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -153,7 +166,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		union InnerUnionMember;
 	//	};
 	public void testNestedUnionMember(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -163,7 +177,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		enum { a, b, c=0 };
 	//	};
 	public void testAnonymousEnum(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -173,7 +188,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		enum colorMember14 { red, yellow, green=20, blue };
 	//	};
 	public void testEnum(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -185,7 +201,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		typedef struct InnerClassMember12 X;	
 	//	};
 	public void testTypeDefDeclaration(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -198,7 +215,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	};
 	public void testNestedInNestedType(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -212,7 +230,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	};
 	public void testMembersOfNestedTypes(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(3, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -228,7 +247,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		};
 	//	};
 	public void testMembersOfNestedTypesInNesting(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(4, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -239,7 +259,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//			using SuperClassMembers::superMember1;
 	//	};
 	public void testDoNotCountUsingDeclarations(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(0, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -251,7 +272,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 1;
 	//	}
 	public void testDoNotCountGlobalFunctions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(0, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -262,7 +284,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		friend void func();
 	//	};
 	public void testDoNotCountFriendFunctionDeclaration(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -275,7 +298,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	};
 	public void testDoNotCountFriendFunctionDefinition(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -286,7 +310,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		friend class MyClass;
 	//	};
 	public void testDoNotCountFriendClass(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -303,7 +328,8 @@ public class NumberMembersCheckerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	};
 	public void testCountMembersCalledFriend(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(5, workspaceNode.getValueOf(metric).aggregatedValue);
 	}

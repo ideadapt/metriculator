@@ -21,6 +21,7 @@ import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
@@ -62,7 +63,7 @@ public class NodeCompositeTest extends TestCase {
 		
 		AbstractNode n = new NamespaceNode("");
 		
-		assertEquals("(anonymous)", n.toString());
+		assertEquals(LogicNode.ANONYMOUS_LABEL, n.toString());
 	}
 	
 

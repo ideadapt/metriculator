@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
@@ -42,7 +42,7 @@ public abstract class NodeFilter{
 
 		@Override
 		public boolean canPassThrough(AbstractNode node) {
-			return node instanceof CompositeTypeNode;
+			return node instanceof TypeDefNode;
 		}
 	}
 	public static CompositeNodeFilter composite(){

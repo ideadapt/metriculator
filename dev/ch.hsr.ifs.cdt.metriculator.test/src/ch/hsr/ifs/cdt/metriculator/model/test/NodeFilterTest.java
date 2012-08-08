@@ -19,9 +19,9 @@ import ch.hsr.ifs.cdt.metriculator.model.NodeFilter.FileNodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter.FunctionNodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter.NamespaceNodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter.NoneFilter;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 
 /**
@@ -45,10 +45,10 @@ public class NodeFilterTest extends TestCase {
 	
 	public void testCompositeNodeFilter(){
 		filter = NodeFilter.composite();
-		
+	
 		assertTrue(filter instanceof CompositeNodeFilter);
-		assertTrue(filter.canPassThrough(new CompositeTypeNode("")));
-		assertFalse(filter.canPassThrough(new FunctionNode("")));
+		assertTrue(filter.canPassThrough(new TypeDefNode("")));
+		assertFalse(filter.canPassThrough(new FunctionDefNode("")));
 		assertFalse(filter.canPassThrough(new NamespaceNode("")));
 		assertFalse(filter.canPassThrough(new FileNode("")));
 	}
@@ -58,9 +58,9 @@ public class NodeFilterTest extends TestCase {
 		
 		assertTrue(filter instanceof FileNodeFilter);
 		assertTrue(filter.canPassThrough(new FileNode("")));
-		assertFalse(filter.canPassThrough(new FunctionNode("")));
+		assertFalse(filter.canPassThrough(new FunctionDefNode("")));
 		assertFalse(filter.canPassThrough(new NamespaceNode("")));
-		assertFalse(filter.canPassThrough(new CompositeTypeNode("")));		
+		assertFalse(filter.canPassThrough(new TypeDefNode("")));		
 	}
 	
 	public void testNamespaceNodeFilter(){
@@ -68,29 +68,29 @@ public class NodeFilterTest extends TestCase {
 		
 		assertTrue(filter instanceof NamespaceNodeFilter);
 		assertTrue(filter.canPassThrough(new NamespaceNode("")));
-		assertFalse(filter.canPassThrough(new FunctionNode("")));
+		assertFalse(filter.canPassThrough(new FunctionDefNode("")));
 		assertFalse(filter.canPassThrough(new FileNode("")));
-		assertFalse(filter.canPassThrough(new CompositeTypeNode("")));		
+		assertFalse(filter.canPassThrough(new TypeDefNode("")));		
 	}
 	
 	public void testFunctionNodeFilter(){
 		filter = NodeFilter.function();
 		
 		assertTrue(filter instanceof FunctionNodeFilter);
-		assertTrue(filter.canPassThrough(new FunctionNode("")));
+		assertTrue(filter.canPassThrough(new FunctionDefNode("")));
 		assertFalse(filter.canPassThrough(new NamespaceNode("")));
 		assertFalse(filter.canPassThrough(new FileNode("")));
-		assertFalse(filter.canPassThrough(new CompositeTypeNode("")));
+		assertFalse(filter.canPassThrough(new TypeDefNode("")));
 	}
 	
 	public void testNoneNodeFilter(){
 		filter = NodeFilter.none();
 		
 		assertTrue(filter instanceof NoneFilter);
-		assertTrue(filter.canPassThrough(new FunctionNode("")));
+		assertTrue(filter.canPassThrough(new FunctionDefNode("")));
 		assertTrue(filter.canPassThrough(new NamespaceNode("")));
 		assertTrue(filter.canPassThrough(new FileNode("")));
-		assertTrue(filter.canPassThrough(new CompositeTypeNode("")));
+		assertTrue(filter.canPassThrough(new TypeDefNode("")));
 		
 	}
 }

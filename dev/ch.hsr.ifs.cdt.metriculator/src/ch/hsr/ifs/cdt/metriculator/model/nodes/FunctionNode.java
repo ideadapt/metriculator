@@ -12,48 +12,30 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class FunctionNode extends AbstractNode implements ILogicNode {
+public abstract class FunctionNode extends MemberNode {
 
-	public FunctionNode(String name) {
-		super(name);
+	private static final String KEYWORD_FRIEND = "friend";
+
+	public FunctionNode(String scopeUniqueName) {
+		super(scopeUniqueName);
 	}
-
-	public FunctionNode(ICPPASTFunctionDefinition fnNode) {
-		super(fnNode);
-		setAstNode(new NodeInfo(fnNode));
-
-		setScopeUniqueName(fnNode.getDeclarator().getRawSignature());
+	
+	protected FunctionNode(String scopeUniqueName, IASTNode astNode) {
+		super(scopeUniqueName, astNode);
 	}
-
-	public FunctionNode(ICPPASTFunctionDeclarator fnNode) {
-		super(fnNode);
-		setAstNode(new NodeInfo(fnNode));
-		
-		setScopeUniqueName(fnNode.getRawSignature());
-	}
-
-	private void setScopeUniqueName(String name) {
-		setScopeName(name);
-	}
-
 
 	@Override
-	public String toString() {
-		return getScopeName();
+	protected void prepareIsFriend(IASTNode astNode) {
+		isFriend = astNode.getRawSignature().contains(KEYWORD_FRIEND);
 	}
 
 	@Override
 	public String getIconPath() {
 		return Icon.Size16.METHOD_PUBLIC;
 	}
-
-	@Override
-	public boolean isAnonymous() {
-		return getScopeName().trim().isEmpty();
-	}
+	
 }

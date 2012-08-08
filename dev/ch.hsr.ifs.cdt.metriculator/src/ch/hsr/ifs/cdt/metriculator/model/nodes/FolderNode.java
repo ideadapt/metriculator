@@ -20,9 +20,7 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 public class FolderNode extends AbstractNode {
 
 	public FolderNode(IASTTranslationUnit tu, String scopeUniqueName) {
-		super(tu);
-		setAstNode(new NodeInfo(tu));
-		setScopeName(scopeUniqueName);
+		super(scopeUniqueName, tu);
 	}
 
 	@Override

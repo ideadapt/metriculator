@@ -14,7 +14,6 @@ package ch.hsr.ifs.cdt.metriculator.views;
 
 import java.awt.Color;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Observable;
@@ -23,12 +22,11 @@ import java.util.Observer;
 import org.eclipse.cdt.codan.core.model.CodanSeverity;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -48,18 +46,13 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -69,27 +62,25 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.CompositeTypeNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
-import ch.hsr.ifs.cdt.metriculator.tagcloud.model.Type;
-import ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart;
-import ch.hsr.ifs.cdt.metriculator.views.MetricColumnHeaderMenu.ItemType;
+import ch.hsr.ifs.cdt.metriculator.views.ToggleColumnActionItem.ToggleTableColumnActionContrItem;
+import ch.hsr.ifs.cdt.metriculator.views.ToggleColumnActionItem.ToggleTreeColumnActionContrItem;
 
 /**
  * @author Jules Weder, Ueli Kunz
  * */
-public class MetriculatorView extends ViewPart implements Observer {
+public class MetriculatorView extends ViewPart implements Observer, ITagCloudDataProvider {
 
 	private static final int INITIAL_SORT_ORDER           = TreeColumnViewerSorter.NONE;
 	private static final int SCOPE_COLUMN_DEFAULT_WIDTH   = 160;
 	private static final String SCOPE_COLUMN_TITLE        = "Scope";
-	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView";
+	public static final String VIEW_ID                    = "ch.hsr.ifs.cdt.metriculator.views.MetriculatorView"; //$NON-NLS-1$
+	public static final String TABLE_COLUMN_HEADER_MENU_ID = MetriculatorView.VIEW_ID+".menuTableColumnHeader"; //$NON-NLS-1$
 	
-	private HashMap<AbstractMetric, TreeColumn> metricsTreeColumns   = new HashMap<AbstractMetric, TreeColumn>();
-	private HashMap<AbstractMetric, TableColumn> metricsTableColumns = new HashMap<AbstractMetric, TableColumn>();
+	private HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>> metricsTreeColumnActions     = new HashMap<AbstractMetric, ToggleColumnActionItem<TreeColumn>>();
+	private HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>> metricsTableColumnActions   = new HashMap<AbstractMetric, ToggleColumnActionItem<TableColumn>>();
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
 	private NodeViewerFilter viewerFilter;
@@ -103,7 +94,6 @@ public class MetriculatorView extends ViewPart implements Observer {
 	private IAction actionFilterFile;
 	private TreeBuilder currTreeBuilder;
 	private ViewMode viewMode;
-	private Menu treeHeaderMenu;
 	private Menu tableHeaderMenu;
 	private Composite treeComposite;
 	private Composite tableComposite;
@@ -133,12 +123,15 @@ public class MetriculatorView extends ViewPart implements Observer {
 		parent.setLayout(stackLayout);
 		parentComposite = parent;
 		
+		MetricColumnHeaderMenu.treeMenuManager  = new MenuManager();
+		MetricColumnHeaderMenu.tableMenuManager = new MenuManager();
+		
 		createTreeComponents();
 		
 		createTableComponents();
 		
 		createActions();
-		addActionsToBars();
+		addActionsToMenus();
 		
 		applyViewMode(ViewMode.Hybrid, null);
 		
@@ -202,6 +195,15 @@ public class MetriculatorView extends ViewPart implements Observer {
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
+		// make scope column sortable and set initial sorter
+		TableColumnViewerSorter scopeSorter = new TableColumnViewerSorter(tableViewer, colNodes) {
+			protected int doCompare(Viewer viewer, Object e1, Object e2) {
+				AbstractNode p1 = (AbstractNode) e1;
+				AbstractNode p2 = (AbstractNode) e2;
+				return p1.toString().compareToIgnoreCase(p2.toString());
+			}
+		};
+		scopeSorter.setSorter(scopeSorter, INITIAL_SORT_ORDER);		
 	}
 
 	private void createTreeLabelColumn() {
@@ -211,7 +213,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 		colNodes.setWidth(SCOPE_COLUMN_DEFAULT_WIDTH);
 		colNodes.setMoveable(false);
 		colNodes.setResizable(true);
-		// set inital sorter
+		// make scope column sortable and set initial sorter
 		TreeColumnViewerSorter scopeSorter = new TreeColumnViewerSorter(treeViewer, colNodes) {
 			protected int doCompare(Viewer viewer, Object e1, Object e2) {
 				AbstractNode p1 = (AbstractNode) e1;
@@ -223,101 +225,84 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createTreeHeaderMenu() {
-		
-		treeHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
-		MetricColumnHeaderMenu.createTagCloudMenuItem(treeHeaderMenu, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				TreeColumn selectedCol = (TreeColumn) MetricColumnHeaderMenu.getCurrColumn(treeHeaderMenu);
-				if(selectedCol != null){
-					generateTagCloud(MetricColumn.getMetric(selectedCol));
-				}
-			}
-		});
+		MetricColumnHeaderMenu.create(parentComposite.getShell(), treeViewer.getTree());
 	}
 	
 	private void createTableHeaderMenu() {
-		
 		tableHeaderMenu = MetricColumnHeaderMenu.create(parentComposite.getShell(), tableViewer.getTable());
-		MetricColumnHeaderMenu.createTagCloudMenuItem(tableHeaderMenu, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
-				if(selectedCol != null){
-					generateTagCloud(MetricColumn.getMetric(selectedCol));
-				}
-			}
-		});
+		getSite().registerContextMenu(TABLE_COLUMN_HEADER_MENU_ID, MetricColumnHeaderMenu.tableMenuManager, tableViewer);
 	}
 	
+	
 	private void createAndUpdateMetricTreeColumns() {
+		ToggleColumnActionItem<TreeColumn> actionItem = null;
 		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
-			TreeColumn col = metricsTreeColumns.get(metric);
 			
-			if (col == null) {
+			actionItem = metricsTreeColumnActions.get(metric);
+			
+			if (actionItem == null) {
 
-				col = MetricColumn.createFor(metric, treeViewer);
-				createMetricMenuItemFor(col);
-				metricsTreeColumns.put(metric, col);
+				TreeColumn col = MetricColumn.createFor(metric, treeViewer);
+				actionItem = createMetricMenuItemFor(col);
+				metricsTreeColumnActions.put(metric, actionItem);
 			}
-			MetricColumn.toggleVisibility(metric, col);
+			actionItem.toggleVisibility();
+		}
+		
+		if(actionItem != null){
+			MetricColumn.createFillerColumnOnce(treeViewer.getTree());
 		}
 	}
 	
 	private void createAndUpdateMetricTableColumns() {
+		ToggleColumnActionItem<TableColumn> actionItem = null;
 		
 		for(AbstractMetric metric : MetriculatorPluginActivator.getDefault().getMetrics()){
-			TableColumn col = metricsTableColumns.get(metric);
 			
-			if (col == null) {
+			actionItem = metricsTableColumnActions.get(metric);
+			
+			if (actionItem == null) {
 
-				col = MetricColumn.createFor(metric, tableViewer);
-				createMetricMenuItemFor(col);
-				metricsTableColumns.put(metric, col);
+				TableColumn col = MetricColumn.createFor(metric, tableViewer);
+				actionItem = createMetricMenuItemFor(col);
+				metricsTableColumnActions.put(metric, actionItem);
 			}
-			MetricColumn.toggleVisibility(metric, col);
+			actionItem.toggleVisibility();
+		}	
+		
+		if(actionItem != null){
+			MetricColumn.createFillerColumnOnce(tableViewer.getTable());
 		}
 	}	
 	
-	private void createMetricMenuItemFor(final TreeColumn column) {
+	private ToggleColumnActionItem<TreeColumn> createMetricMenuItemFor(final TreeColumn column) {
 		
-		final MenuItem itemColName = new MenuItem(treeHeaderMenu, SWT.CHECK);
-		
-		itemColName.setData(ItemType.ToggleMetricColumn);
-		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
-		itemColName.setText(column.getText());
-		itemColName.setSelection(MetricColumn.isVisible(column));
-		
-		itemColName.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				if (itemColName.getSelection()) {
-					MetricColumn.showColumn(column);
-				} else {
-					MetricColumn.hideColumn(column);
-				}
-			}
-		});
+		ToggleTreeColumnActionContrItem actionItem = new ToggleTreeColumnActionContrItem(column);
+		MetricColumnHeaderMenu.treeMenuManager.add(actionItem);
+		return actionItem;
 	}
 	
-	private void createMetricMenuItemFor(final TableColumn column) {
+	private ToggleColumnActionItem<TableColumn> createMetricMenuItemFor(final TableColumn column) {
 		
-		final MenuItem itemColName = new MenuItem(tableHeaderMenu, SWT.CHECK);
-		
-		itemColName.setData(ItemType.ToggleMetricColumn);
-		itemColName.setData(MetricColumnHeaderMenu.DATAKEY_MENUITEM_COLUMN, column);
-		itemColName.setText(column.getText());
-		itemColName.setSelection(MetricColumn.isVisible(column));
-		
-		itemColName.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				if (itemColName.getSelection()) {
-					MetricColumn.showColumn(column);
-				} else {
-					MetricColumn.hideColumn(column);
-				}
-			}
-		});
+		ToggleTableColumnActionContrItem actionItem = new ToggleTableColumnActionContrItem(column);
+		MetricColumnHeaderMenu.tableMenuManager.add(actionItem);
+		return actionItem;
+	}
+	
+	@Override
+	public AbstractMetric getMenuMetric(){
+		TableColumn selectedCol = (TableColumn) MetricColumnHeaderMenu.getCurrColumn(tableHeaderMenu);
+		if(selectedCol != null){
+			return MetricColumn.getMetric(selectedCol);
+		}
+		return null;
+	}
+	
+	@Override
+	public Collection<AbstractNode> getNodes(){
+		Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(currTreeBuilder.root.getChildren());
+		return filteredNodes;
 	}
 	
 	private void createActions() {
@@ -384,7 +369,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionFilterFile() {
-		actionFilterFile = new Action("only show file nodes", IAction.AS_CHECK_BOX)
+		actionFilterFile = new Action("File Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -399,8 +384,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionFilterNamespace() {
-		actionFilterNamespace = new Action(
-				"only show namespace nodes", IAction.AS_CHECK_BOX)
+		actionFilterNamespace = new Action("Namespace Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -415,7 +399,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionExpandAll() {
-		actionExpandAll = new Action("expand all nodes")
+		actionExpandAll = new Action("Expand All Nodes")
 		{
 			public void run() {
 				treeViewer.expandAll();
@@ -436,7 +420,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionHybridView() {
-		actionHybridView = new Action("change to hybrid view mode", IAction.AS_RADIO_BUTTON) 
+		actionHybridView = new Action("Hybrid View Mode (Files, Folders and Source Code Nodes)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -449,45 +433,9 @@ public class MetriculatorView extends ViewPart implements Observer {
 		};
 		actionHybridView.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FILESYSTEM));
 	}
-
-	private void generateTagCloud(AbstractMetric metric) {
-		ProgressMonitorDialog dialog = null;
-		try {
-			dialog = new ProgressMonitorDialog(null);
-			dialog.setBlockOnOpen(false);
-			dialog.open();
-			IProgressMonitor pm = dialog.getProgressMonitor();
-			pm.beginTask("Generating tag cloud ...", IProgressMonitor.UNKNOWN);
-			
-			TreeBuilder builder                    = MetriculatorPluginActivator.getDefault().getFlatTreeBuilder();
-			Collection<AbstractNode> filteredNodes = viewerFilter.getNodeFilter().takeFrom(builder.root.getChildren());
-			ArrayList<Type> types                  = new ArrayList<Type>();
-			
-			for(AbstractNode n : filteredNodes){
-				String nodeName = n.toString();
-				// shorten strings, otherwise TagCloudViewPart 
-				// throws drawing exceptions due to the limited size of the drawing area.
-				if(nodeName.length() > 20){
-					nodeName = nodeName.substring(0, 20);
-				}
-				types.add(new Type(nodeName, n.getNodeValue(metric.getKey())));			
-			}
-
-			IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TagCloudViewPart.VIEW_ID);
-			((TagCloudViewPart) view).getViewer().setInput(types, pm);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			if(dialog != null){
-				dialog.close();
-			}
-		}
-	}
 	
 	private void createActionLogicalView() {
-		
-		actionLogicalView = new Action("change to logical view mode", IAction.AS_RADIO_BUTTON) 
+		actionLogicalView = new Action("Logical View Mode (Source Code Nodes Only)", IAction.AS_RADIO_BUTTON) 
 		{
 			public void run() {
 				if(isChecked()){
@@ -502,7 +450,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionFilterComposite() {
-		actionFilterComposite = new Action("only show composite nodes (class / structs)", IAction.AS_CHECK_BOX)
+		actionFilterComposite = new Action("Composite Nodes (Class / Structs / Union)", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -517,7 +465,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 	}
 
 	private void createActionFilterFunction() {
-		actionFilterFunction = new Action("only show function nodes", IAction.AS_CHECK_BOX)
+		actionFilterFunction = new Action("Function Nodes Only", IAction.AS_CHECK_BOX)
 		{
 			public void run() {
 				if(isChecked()){
@@ -531,19 +479,28 @@ public class MetriculatorView extends ViewPart implements Observer {
 		actionFilterFunction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.FUNCTION));
 	}
 
-	private void addActionsToBars() {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionHybridView);
-		toolBarManager.add(actionLogicalView);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionFilterFile);
-		toolBarManager.add(actionFilterNamespace);
-		toolBarManager.add(actionFilterComposite);
-		toolBarManager.add(actionFilterFunction);
-		toolBarManager.add(new Separator());
-		toolBarManager.add(actionExpandAll);
-		toolBarManager.add(actionCollapseAll);
+	private void addActionsToMenus() {
+		
+		IContributionManager[] managers = 
+			{
+				getViewSite().getActionBars().getMenuManager(), 
+				getViewSite().getActionBars().getToolBarManager()
+			};
+		
+		for(IContributionManager manager : managers){
+			
+			manager.add(new Separator());
+			manager.add(actionHybridView);
+			manager.add(actionLogicalView);
+			manager.add(new Separator());
+			manager.add(actionFilterFile);
+			manager.add(actionFilterNamespace);
+			manager.add(actionFilterComposite);
+			manager.add(actionFilterFunction);
+			manager.add(new Separator());
+			manager.add(actionExpandAll);
+			manager.add(actionCollapseAll);
+		}
 	}
 
 	private void addViewerOpenListener(StructuredViewer viewer) {
@@ -557,11 +514,12 @@ public class MetriculatorView extends ViewPart implements Observer {
 
 	private void openSelectedNode(ISelection selection) {
 		AbstractNode node             = getFirstNodeFrom(selection);
-		boolean selectionSupportsOpen = node instanceof NamespaceNode || node instanceof FunctionNode || node instanceof CompositeTypeNode || node instanceof FileNode;
+		boolean selectionSupportsOpen = node instanceof LogicNode || node instanceof FileNode;
 
 		if (selectionSupportsOpen) {
-
-			String filepath    = node.getNodeInfo().getFilePath();
+			
+			AbstractNode.EditorInfo info = node.getEditorInfo();
+			String filepath    = info.getFilePath();
 			IEditorPart editor = null;
 
 			try {
@@ -570,8 +528,8 @@ public class MetriculatorView extends ViewPart implements Observer {
 				if (editor instanceof ITextEditor && !(node instanceof FileNode)) {
 					ITextEditor textEditor = (ITextEditor) editor;
 					textEditor.selectAndReveal(
-							node.getNodeInfo().getNodeOffset(),
-							node.getNodeInfo().getNodeLength());
+							info.getNodeOffset(),
+							info.getNodeLength());
 				}
 			} catch (PartInitException e) {
 				e.printStackTrace();
@@ -605,7 +563,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					initCodanFinishedState();
+					applyCodanFinishedState();
 				}
 			});
 		}
@@ -615,7 +573,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					initCodanStartedState();
+					applyCodanStartedState();
 				}
 			});
 		}
@@ -653,9 +611,12 @@ public class MetriculatorView extends ViewPart implements Observer {
 					}else{
 						metric = MetricColumn.getMetric(tableViewer.getTable().getColumn(cell.getColumnIndex()));
 					}
-					applyProblemsOf(metric, cell);
-					int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
-					cell.setText(NumberFormat.getInstance().format(metricValue));
+					
+					if(metric != null){
+						applyProblemsOf(metric, cell);
+						int metricValue = ((AbstractNode) cell.getElement()).getAggregatedValueOf(metric);
+						cell.setText(NumberFormat.getIntegerInstance().format(metricValue));
+					}
 					break;
 			}
 		}
@@ -680,7 +641,7 @@ public class MetriculatorView extends ViewPart implements Observer {
 
 		@Override
 		public String getToolTipText(Object element) {
-			if(getViewMode() != ViewMode.Logical && element instanceof AbstractNode){
+			if(element instanceof AbstractNode){
 				return String.format("'%s' , children: %s", 
 						((AbstractNode)element).getPath(), 
 						((AbstractNode) element).getChildren().size());
@@ -694,21 +655,28 @@ public class MetriculatorView extends ViewPart implements Observer {
 		}		
 	}
 
-	private void initCodanFinishedState(){
+	private void applyCodanFinishedState(){
 		createAndUpdateMetricTreeColumns();
 		createAndUpdateMetricTableColumns();
 		applyViewMode(ViewMode.Hybrid, null);
 		updateViewerData();
-		MetricColumnHeaderMenu.updateItemSelections(treeHeaderMenu);
-		MetricColumnHeaderMenu.updateItemSelections(tableHeaderMenu);
+		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.treeMenuManager);
+		MetricColumnHeaderMenu.updateItemSelections(MetricColumnHeaderMenu.tableMenuManager);
 	}
 	
-	private void initCodanStartedState(){
+	private void applyCodanStartedState(){
 		treeViewer.setInput(null);
 		tableViewer.setInput(null);
 	}
 
 	private void updateViewerData() {
 		activeViewer.setInput(currTreeBuilder.root);
+		
+		if(activeViewer instanceof TableViewer){
+			int rowCount = ((TableViewer) activeViewer).getTable().getItemCount();
+			String rowCountString = NumberFormat.getIntegerInstance().format(rowCount);
+
+			tableViewer.getTable().getColumn(0).setText(String.format("%s (%s items)", SCOPE_COLUMN_TITLE, rowCountString));
+		}
 	}
 }

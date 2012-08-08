@@ -20,16 +20,22 @@ import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FileNode extends AbstractNode {
 
-	String projectRelativePath;
+	private String projectRelativePath;
+	private boolean isHeaderUnit = false;
 	
-	public FileNode(IASTTranslationUnit tu, String filename) {
-		super(tu);
-		setAstNode(new NodeInfo(tu));
-		setScopeName(filename);
-	}
-
 	public FileNode(String name) {
 		super(name);
+	}
+	
+	public FileNode(IASTTranslationUnit tu, String filename) {
+		super(filename, tu);
+		if(tu != null){
+			isHeaderUnit = tu.isHeaderUnit();
+		}
+	}
+	
+	public boolean isHeaderUnit() {
+		return isHeaderUnit;
 	}
 
 	@Override
@@ -37,7 +43,7 @@ public class FileNode extends AbstractNode {
 
 		if(parent instanceof ProjectNode && ((ProjectNode)parent).getProject() != null){
 			
-			// in test mode getlocation returns null => only shorten paths if not in test mode
+			// in test mode getLocation returns null => only shorten paths if not in test mode
 			if(((ProjectNode)parent).getProject().getLocation() != null && projectRelativePath == null){
 				projectRelativePath = PathUtil.getProjectRelativePath(
 						new Path(getScopeUniqueName()), 
@@ -52,7 +58,7 @@ public class FileNode extends AbstractNode {
 	@Override
 	public String getIconPath() {
 		
-		if(getNodeInfo().isHeaderUnit()){
+		if(isHeaderUnit()){
 			return Icon.Size16.H_FILE;
 		}
 		

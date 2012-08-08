@@ -12,9 +12,19 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
-public interface ILogicNode {
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
-	String ANONYMOUS_LABEL = "(anonymous)";
+public class FunctionDeclNode extends FunctionNode {
 
-	boolean isAnonymous();
+	public FunctionDeclNode(ICPPASTFunctionDeclarator fnNode) {
+		super(fnNode.getRawSignature(), fnNode);
+	}
+
+	@Override
+	protected IASTName getASTName(IASTNode astNode) {
+		return ((ICPPASTFunctionDeclarator)astNode).getName();
+	}
+
 }

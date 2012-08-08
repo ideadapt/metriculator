@@ -27,7 +27,7 @@ public class LogicTreeBuilder extends TreeBuilder {
 		visitor.visit(treeBuilder.root);
 		
 		visitor.mergeMembers();
-		visitor.mergeFunctionDefinitionsAndDeclarations();
+		visitor.mergeDefinitionsAndDeclarations();
 		
 		for(AbstractMetric m : MetriculatorPluginActivator.getDefault().getMetrics()){
 			m.useCachedValue = false;

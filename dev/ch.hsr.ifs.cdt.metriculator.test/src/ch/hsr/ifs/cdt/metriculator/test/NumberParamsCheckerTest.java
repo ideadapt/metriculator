@@ -15,13 +15,16 @@ package ch.hsr.ifs.cdt.metriculator.test;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
-import ch.hsr.ifs.cdt.metriculator.checkers.NumberParamsMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.NumberParamsMetric;
+import ch.hsr.ifs.cdt.metriculator.checkers.NumberParamsMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
+/**
+ * Test for {@see NumberParamsChecker} class, validates the implementation for Number Params per Function.
+ */
 public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	private NumberParamsMetricChecker checker;
 	private WorkspaceNode workspaceNode;
@@ -55,7 +58,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return i;
 	//	}
 	public void testOneParameter(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(1, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -64,7 +68,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return i + j;
 	//	}
 	public void testTwoParameters(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		assertEquals(2, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
@@ -77,8 +82,9 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 0;
 	//	}
 	public void testTwoFunctionsWithParameters(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		assertEquals(5, workspaceNode.getValueOf(metric).aggregatedValue);
 	}
 
@@ -94,7 +100,8 @@ public class NumberParamsCheckerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testFunctionDefinitionOverwritesDeclaration(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 		
 		workspaceNode = (WorkspaceNode) MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 

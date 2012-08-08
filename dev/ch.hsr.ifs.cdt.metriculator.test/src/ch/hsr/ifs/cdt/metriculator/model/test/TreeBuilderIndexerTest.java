@@ -21,6 +21,8 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 import ch.hsr.ifs.cdt.metriculator.test.MetriculatorCheckerTestCase;
 
@@ -118,10 +120,12 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctions(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 	}
 
@@ -141,10 +145,12 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
@@ -165,10 +171,12 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition2(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
@@ -189,10 +197,12 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		return 100;
 	//	}
 	public void testMergeOfMemberFunctionsWithInternDefinition3(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
+		assertEquals(1, root.getChildren().size());
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
 
 	}
@@ -212,7 +222,8 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//		}
 	//	}	
 	public void testMergOfMemberFunctionsInNamespace(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -229,12 +240,13 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	return forwardFunc(1);
 	//}
 	public void testMergOfFunctionDefinitionAndDeclarationInSameFile1(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+		assertTrue(root.getChildren().iterator().next() instanceof FunctionDefNode);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
 	}
 
@@ -248,13 +260,30 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	return forwardFunc(1);
 	//}
 	public void testMergOfFunctionDefinitionAndDeclarationInSameFile2(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 		
 		assertEquals(2, root.getChildren().size());
-		assertTrue(root.getChildren().iterator().next().getNodeInfo().isFunctionDefinition());
+		assertTrue(root.getChildren().iterator().next() instanceof FunctionDefNode);
 		assertEquals(0, root.getChildren().iterator().next().getChildren().size());
+	}
+	
+	//	class A;
+	//	class B;
+	//	class A{
+	//	};
+	//	class B{
+	//	};
+	public void testMergOfTypeDefinitionAndDeclarationInSameFile(){
+		loadcode(getAboveComment());
+		runOnProject();
+		
+		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
+		
+		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertTrue(root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next() instanceof TypeDefNode);
 	}
 
 	//	class MyClass {			
@@ -271,8 +300,9 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	//	struct MyClass::InnerStruct{
 	//	};
 	public void testMergeOfNestedTypeDeclarationAndDefition(){
-		loadCodeAndRun(getAboveComment());
-
+		loadcode(getAboveComment());
+		runOnProject();
+		
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
 		assertEquals(3, root.getChildren().iterator().next().getChildren().size());
@@ -280,18 +310,19 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 
 	//	namespace N {
 	//		struct A {
-	//		    virtual void fx() { }
+	//		    void fx() { }
 	//		};
 	//	}
 	//
 	//	namespace N {
 	//		struct B {
-	//		    virtual void f() { }
-	//		    virtual void f1() { }
+	//		    void f() { }
+	//		    void f1() { }
 	//		};
 	//	}
 	public void testMergeOfFunctionsInNamespaces(){
-		loadCodeAndRun(getAboveComment());
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
@@ -302,35 +333,85 @@ public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	
 	//	namespace {
 	//		struct A {
-	//		    virtual void fx() { }
+	//		    void fx() { }
 	//		};
 	//	}
 	//
 	//	namespace {
 	//		struct B {
-	//		    virtual void f() { }
-	//		    virtual void f1() { }
+	//		    void f() { }
+	//		    void f1() { }
 	//		};
 	//	}
-	public void testMergeOfFunctionsInAnonymousNamespaces(){
-		loadCodeAndRun(getAboveComment());
+	public void testTwoAnonymousNamespaces(){
+		loadcode(getAboveComment());
+		runOnProject();
 
 		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
 
 		assertEquals(2, root.getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
 		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
-		// TODO: test remove 2nd namespace
 	}
 	
-	// TODO: add test to test 2 ano namespaces result in 2 ano namespace nodes in logical view
-
-	// TODO: test merging in logical view of def und decl within ano namespaces.
 	//	namespace {
 	//		struct A {
-	//		    virtual void fx();
+	//		    void fx();
 	//		};
 	//	}
-	//
 	//	void A::fx(){}
+	public void testAnonymousNamespaceMemberMergingOutsideNamespace(){
+		loadcode(getAboveComment());
+		runOnProject();
+		
+		root = MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
+		assertEquals(2, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		
+		
+		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+		
+		assertEquals(1, root.getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+		
+	}
+	
+	//	namespace {
+	//		struct A {
+	//		    void fx();
+	//		};
+	//		void A::fx(){}
+	//	}
+	public void testAnonymousNamespaceMemberMerging(){
+		loadcode(getAboveComment());
+		runOnProject();
+		
+		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+		
+		assertEquals(1, root.getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().size());
+		assertEquals(1, root.getChildren().iterator().next().getChildren().iterator().next().getChildren().size());
+	}
+	
+	//	namespace Outer { // at depth 0
+	//		namespace {   
+	//			struct A {
+	//		    	void fx();
+	//			};
+	//          void A::fx(){}
+	//		}
+	//	}
+	public void testNestedAnonymousNamespaceMemberMerging(){
+		loadcode(getAboveComment());
+		runOnProject();
+
+		root = MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+
+		assertEquals(1, root.getChildren().size());
+		assertEquals(1, getFirstChildInDepth(root, 1).getChildren().size());
+		assertEquals(1, getFirstChildInDepth(root, 2).getChildren().size());
+		assertTrue(getFirstChildInDepth(root, 3) instanceof FunctionDefNode);
+	}	
 }

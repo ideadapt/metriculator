@@ -17,32 +17,47 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
+import org.eclipse.cdt.codan.core.CodanRuntime;
+import org.eclipse.cdt.codan.core.model.IProblemLocation;
+import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTImageLocation;
+import org.eclipse.cdt.core.dom.ast.IASTMacroExpansionLocation;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
+import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 
 public abstract class AbstractNode implements Cloneable {
 
-	private static String emptyString = "";
+	private final static String EMPTY_STRING = ""; //$NON-NLS-1$
 	protected String scopeName;
 	protected AbstractNode parent;
 	private String hybridId;
-	private NodeInfo nodeInfo;
+	private EditorInfo editorInfo;
 
-	public String cachedPath;
+	private String cachedPath;
 
 	private HashMap<String, AbstractNode> children        = new HashMap<String, AbstractNode>();
 	private ArrayList<AbstractNode>		  orderedChildren = new ArrayList<AbstractNode>();
 	private HashMap<String, CompositeValue> metricValues  = new HashMap<String, CompositeValue>();
 	
 	protected AbstractNode(String scopeUniqueName) {
-		this.scopeName = scopeUniqueName;
-		nodeInfo = new NodeInfo();
+		setScopeName(scopeUniqueName);
+	}
+	
+	public EditorInfo getEditorInfo(){
+		return editorInfo;
 	}
 
-	public AbstractNode(IASTNode astNode) {
-		nodeInfo = new NodeInfo(astNode);
+	protected AbstractNode(String scopeUniqueName, IASTNode astNode) {
+		this(scopeUniqueName);
+		if(astNode != null){
+			editorInfo = new EditorInfo(astNode);
+		}
 	}
 
 	public Collection<AbstractNode> getChildren() {
@@ -115,16 +130,14 @@ public abstract class AbstractNode implements Cloneable {
 	}
 
 	public String getScopeUniqueName() {
-		if(this instanceof ILogicNode){
-			return new StringBuilder(scopeName).append(nodeInfo.getASTNodeHash() == null ? "" : nodeInfo.getASTNodeHash()).toString();
-		}else{
-			return scopeName;
-		}
+		return scopeName;
 	}
 
+	/**
+	 * normalize string, remove new lines and extra whitespace
+	 * */
 	protected void setScopeName(String scopeName) {
-		// normalize string, remove new lines and extra whitespace
-		this.scopeName = scopeName.replaceAll("[\n\r\t]", emptyString).replaceAll("\\s{2,}", emptyString);
+		this.scopeName = scopeName.replaceAll("[\n\r\t]", EMPTY_STRING).replaceAll("\\s{2,}", EMPTY_STRING);
 	}
 	
 	public String getScopeName(){
@@ -146,12 +159,12 @@ public abstract class AbstractNode implements Cloneable {
 	}
 
 	/**
-	 * @return String path from the root node down to this one. Each nodes scopeUniqueName is separated by a period.
+	 * @return String path from the root node down to this one. The concatenated scopeUniqueNames are separated by period.
 	 * <code>e.g. Workspace1.Project0.FileX.ClassA</code>
 	 * */
 	public String getPath() {
 		if(cachedPath == null){
-			cachedPath = getPath(new StringBuilder(emptyString));
+			cachedPath = getPath(new StringBuilder(EMPTY_STRING));
 		}
 		return cachedPath;
 	}
@@ -177,14 +190,6 @@ public abstract class AbstractNode implements Cloneable {
 	@Override
 	public String toString() {
 		return getScopeName();
-	}
-
-	public NodeInfo getNodeInfo() {
-		return nodeInfo;
-	}
-	
-	protected void setAstNode(NodeInfo astNode) {
-		this.nodeInfo = astNode;
 	}
 
 	public AbstractNode getRoot() {
@@ -218,7 +223,8 @@ public abstract class AbstractNode implements Cloneable {
 	}
 	
 	/**
-	 * Clones all primitive member variables, metric values. The new node has no children and has the same parent as the original node.
+	 * Clones all primitive member variables and metric values. 
+	 * The new node has no children and has the same parent as the original node.
 	 * */
 	public AbstractNode shallowClone() {
 		try { 
@@ -247,4 +253,80 @@ public abstract class AbstractNode implements Cloneable {
 	}
 	
 	public abstract String getIconPath();
+	
+	public static class EditorInfo{
+		
+		private String filePath = "";
+		private int nodeOffSet;
+		private int nodeLength;
+		private int endingLineNumber;
+		private int startingLineNumber;
+		private int nodeOffSetStart;
+		private int nodeOffsetEnd;
+		private boolean isEclosedInMacroExpansion;
+		
+		public EditorInfo(IASTNode astNode){
+			prepareFilePath(astNode);
+			prepareNodeLocations(astNode);
+			prepareProblemLocation(astNode);
+		}		
+
+		public String getFilePath() {
+			return filePath;
+		}
+
+		public int getNodeOffset() {
+			return nodeOffSet;
+		}
+
+		public int getNodeLength() {
+			return nodeLength;
+		}
+		
+		public IProblemLocation createAndGetProblemLocation(IFile file) {
+			IProblemLocationFactory locFactory = CodanRuntime.getInstance().getProblemLocationFactory();
+			if(isEclosedInMacroExpansion || startingLineNumber == endingLineNumber){
+				return locFactory.createProblemLocation(file, nodeOffSetStart, nodeOffsetEnd, startingLineNumber);
+			}
+			return locFactory.createProblemLocation(file, startingLineNumber);
+		}	
+
+		private void prepareFilePath(IASTNode astNode) {
+			filePath = astNode.getTranslationUnit().getFilePath();
+		}
+
+		private void prepareNodeLocations(IASTNode astNode) {
+			nodeOffSet = astNode.getNodeLocations()[0].getNodeOffset();
+			nodeLength = astNode.getNodeLocations()[0].getNodeLength();
+		}
+
+		private void prepareProblemLocation(IASTNode astNode) {
+			IASTFileLocation astLocation       = astNode.getFileLocation();
+
+			startingLineNumber = astLocation.getStartingLineNumber();
+
+			if (isEnclosedInMacroExpansion(astNode) && astNode instanceof IASTName) {
+				isEclosedInMacroExpansion = true;
+				IASTImageLocation imageLocation = ((IASTName) astNode).getImageLocation();
+
+				if (imageLocation != null) {
+					nodeOffSetStart = imageLocation.getNodeOffset();
+					nodeOffsetEnd   = nodeOffSetStart + imageLocation.getNodeLength();
+					return;
+				}
+			}
+
+			endingLineNumber = astLocation.getEndingLineNumber();
+			if (startingLineNumber == endingLineNumber) {
+				nodeOffSetStart = astLocation.getNodeOffset();
+				nodeOffsetEnd = nodeOffSetStart + astLocation.getNodeLength();
+				return;
+			}
+		}
+
+		private static boolean isEnclosedInMacroExpansion(IASTNode node) {
+			IASTNodeLocation[] nodeLocations = node.getNodeLocations();
+			return nodeLocations.length == 1 && nodeLocations[0] instanceof IASTMacroExpansionLocation;
+		}		
+	}
 }

@@ -63,8 +63,14 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 	public boolean runInEditor() {
 		return false; // do not run this checker 'as you type'. only run on user command.
 	}
-
+	
 	public void processAst(IASTTranslationUnit ast) {
+		
+		// ignore c files, #201
+		if(ast.getFilePath().lastIndexOf(".c") == ast.getFilePath().length() - 2){
+			return;
+		}
+		
 		AbstractNode fileSystemLeaf = TreeBuilder.createTreeFromPath((ProjectNode) currentScopeNode, ast);
 		AbstractNode fileSystemTop  = fileSystemLeaf.getRoot(); 
 
@@ -72,6 +78,8 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 		currentScopeNode = builder.getChildBy(fileSystemLeaf.getHybridId());
 
 		processTanslationUnit(ast);
+		
+		builder.mergeDeclarationsAndDefinitions(ast);
 
 		currentScopeNode = fileSystemTop.getParent();
 	}
@@ -128,7 +136,7 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 		reportedProblems.put(abstractNode.getHybridId(), reportedProblems.get(abstractNode.getHybridId()));
 		
 		if(getShouldReportProblems()){
-			IProblemLocation loc = abstractNode.getNodeInfo().createAndGetProblemLocation(getFile());
+			IProblemLocation loc = abstractNode.getEditorInfo().createAndGetProblemLocation(getFile());
 	
 			if (loc != null){
 				super.reportProblem(problemId, loc, messageParameters);

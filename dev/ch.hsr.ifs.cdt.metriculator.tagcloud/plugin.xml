@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="ch.hsr.ifs.cdt.metriculator.tagcloud.menuContribution"
+            targetID="ch.hsr.ifs.cdt.metriculator.views.MetriculatorView.menuTableColumnHeader">
+         <action
+               class="ch.hsr.ifs.cdt.metriculator.tagcloud.GenerateTagCloudAction"
+               id="ch.hsr.ifs.cdt.metriculator.tagcloud.generateTagCloudAction"
+               label="Generate &amp;tag cloud"
+               menubarPath="additions">
+         </action>
+      </viewerContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="ch.hsr.ifs.cdt.metriculator"
+            name="metriculator Category">
+      </category>
+      <view
+            allowMultiple="true"
+            class="ch.hsr.ifs.cdt.metriculator.tagcloud.views.TagCloudViewPart"
+            id="ch.hsr.ifs.cdt.metriculator.tagcloud.TagCloudView"
+            icon="icons/view16/tagcloud.gif"
+            name="Source Cloud"
+            restorable="true">
+      </view>    
+   </extension>
+</plugin>

@@ -15,7 +15,10 @@ package ch.hsr.ifs.cdt.metriculator.views;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.Widget;
 
@@ -26,8 +29,9 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
  * */
 public final class MetricColumn {
 
-	private static final int DEFAULT_WIDTH           = 100;
-	private static final String DATAKEY_COLUMNMETRIC = "metric";
+	static final int DEFAULT_WIDTH            = 100;
+	static final String DATAKEY_IS_FILLER 	  = "isFiller";
+	static final String DATAKEY_COLUMNMETRIC  = "metric";
 	
 	public static void showColumn(TreeColumn column) {
 		column.setWidth(DEFAULT_WIDTH);
@@ -49,14 +53,6 @@ public final class MetricColumn {
 		column.setResizable(false);
 	}
 	
-	public static boolean isVisible(TreeColumn column){
-		return column.getWidth() > 0 && column.getResizable();
-	}
-	
-	public static boolean isVisible(TableColumn column){
-		return column.getWidth() > 0 && column.getResizable();
-	}
-
 	public static TreeColumn createFor(AbstractMetric metric, TreeViewer treeViewer) {
 
 		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
@@ -64,7 +60,6 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, treeViewer);
 		
 		return column;
@@ -77,33 +72,9 @@ public final class MetricColumn {
 		column.setToolTipText(metric.getDescription());
 		
 		setMetric(metric, column);				
-		toggleVisibility(metric, column);
 		MetricColumnViewerSorter.registerFor(column, tableViewer);
 		
 		return column;
-	}
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TreeColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
-	}
-	
-
-	/**
-	 * show column if metric has enabled problems, hide otherwise.
-	 * */
-	public static void toggleVisibility(AbstractMetric metric, TableColumn column) {
-		if (metric.getChecker().hasEnabledProblems()) {
-			showColumn(column);
-		}else{
-			hideColumn(column);
-		}
 	}
 
 	public static AbstractMetric getMetric(Widget column) {
@@ -113,4 +84,58 @@ public final class MetricColumn {
 	public static void setMetric(AbstractMetric metric, Widget column) {
 		column.setData(DATAKEY_COLUMNMETRIC, metric);
 	}
+
+	public static void createFillerColumnOnce(Tree tree) {
+		
+		if(isWindows()){
+			return;
+		}
+		
+		if(hasFillerColumn(tree.getColumns())){
+			return;
+		}
+		
+		TreeColumn column = new TreeColumn(tree, SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
+		column.setData(DATAKEY_IS_FILLER, true);
+	}
+	
+	private static boolean isWindows() {
+		return (System.getProperty("os.name", "unknown").toLowerCase().indexOf("windows") >= 0);
+	}
+	
+	public static void createFillerColumnOnce(Table table) {
+
+		if(isWindows()){
+			return;
+		}
+		
+		if(hasFillerColumn(table.getColumns())){
+			return;
+		}
+		
+		TableColumn column = new TableColumn(table, SWT.RIGHT);
+		column.setMoveable(false);
+		column.setResizable(true);
+		column.setWidth(10);
+		column.setData(DATAKEY_IS_FILLER, true);
+	}	
+
+	private static boolean hasFillerColumn(Item... items) {
+		for(Item column : items){
+			if(isFiller(column)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isFiller(Item column) {
+		if(column.getData(DATAKEY_IS_FILLER) != null && ((Boolean) column.getData(DATAKEY_IS_FILLER)) == true){
+			return true;
+		}
+		return false;
+	}	
 }

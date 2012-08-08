@@ -15,6 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.test;
 import org.eclipse.cdt.codan.core.test.CheckerTestCase;
 import org.eclipse.core.runtime.Plugin;
 
+import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+
 public class MetriculatorCheckerTestCase extends CheckerTestCase {
 
 	@Override
@@ -25,5 +27,18 @@ public class MetriculatorCheckerTestCase extends CheckerTestCase {
 	@Override
 	protected Plugin getPlugin() {
 		return MetriculatorTestActivator.getDefault();
+	}
+	
+	private static AbstractNode getNodeAtLevel(AbstractNode node, int level, int currentLevel){
+		
+		if(level == currentLevel){
+			return node;
+		}
+		
+		return getNodeAtLevel(node.getChildren().iterator().next(), level, currentLevel + 1);
+	}
+	
+	public static AbstractNode getFirstChildInDepth(AbstractNode node, int level){
+		return getNodeAtLevel(node.getChildren().iterator().next(), level, 0);
 	}
 }

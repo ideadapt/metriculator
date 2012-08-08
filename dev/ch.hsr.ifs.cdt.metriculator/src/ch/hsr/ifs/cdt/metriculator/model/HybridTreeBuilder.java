@@ -1,30 +1,38 @@
 /******************************************************************************
-* Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 
 package ch.hsr.ifs.cdt.metriculator.model;
 
 import java.util.HashMap;
 
-import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.IName;
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
+import org.eclipse.cdt.core.index.IIndexBinding;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.ILogicNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDeclNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
 public class HybridTreeBuilder extends TreeBuilder {
 
-	private HashMap<String,AbstractNode> descendants                   = new HashMap<String,AbstractNode>();
-	private HashMap<IBinding, AbstractNode> declarations               = new HashMap<IBinding, AbstractNode>();
-	private HashMap<IBinding, AbstractNode> removedDeclarationBindings = new HashMap<IBinding, AbstractNode>();
+	private HashMap<String,AbstractNode> descendants     = new HashMap<String,AbstractNode>();
+	private HashMap<IIndexBinding, MemberNode> declarations = new HashMap<IIndexBinding, MemberNode>();
 
 	public HybridTreeBuilder(String workspace){
 		root = new WorkspaceNode(workspace);
@@ -33,15 +41,12 @@ public class HybridTreeBuilder extends TreeBuilder {
 	@Override
 	public AbstractNode addChild(AbstractNode parent, AbstractNode child){
 
-		AbstractNode defNode = getDefinitionForDeclarationOf(child, parent);
-		if(defNode != null){
-			return parent; 
-		}
-		
 		String childsHybridId = combine(TreeBuilder.PATH_SEPARATOR, parent.getHybridId(), child.getScopeUniqueName());
 		AbstractNode existing = parent.getChildBy(childsHybridId);
 
-		if(sameNodeExists(child, existing)){
+		prepareDeclBinding(child);
+
+		if(existing != null){
 			mergeChildrenOf(child, existing);
 			child = existing;
 		}else{
@@ -59,64 +64,6 @@ public class HybridTreeBuilder extends TreeBuilder {
 		return child;
 	}
 
-	private boolean sameNodeExists(AbstractNode child, AbstractNode existing) {
-		boolean sameNodeExists = false;
-		if(existing != null){
-			sameNodeExists = true;
-			
-			if(child instanceof ILogicNode && existing.getNodeInfo().hasInfos()){
-				sameNodeExists = existing.getNodeInfo().equals(child.getNodeInfo());
-			}
-		}
-		
-		if(foundForwardDeclarationAssociatedWith(child) && existing != null){
-			if((existing.getNodeInfo().isFunctionDeclarator() && child.getNodeInfo().isFunctionDefinition()) ||
-				existing.getNodeInfo().isElaboratedTypeSpecifier() && child.getNodeInfo().isCompositeTypeSpecifier()){
-				sameNodeExists = false;
-			}
-		}
-		return sameNodeExists;
-	}
-
-	private AbstractNode getDefinitionForDeclarationOf(AbstractNode child, AbstractNode parent) {
-		if(child.getNodeInfo().isElaboratedTypeSpecifier() || (child.getNodeInfo().isFunctionDeclarator() && !(parent.getNodeInfo().isFunctionDefinition()))){
-			IBinding binding = child.getNodeInfo().getBinding();
-			if(child.getNodeInfo().isElaboratedTypeSpecifier()){
-				binding = child.getNodeInfo().getTypeBinding();
-			}
-			if(removedDeclarationBindings.containsKey(binding)){
-				return removedDeclarationBindings.get(binding);
-			}else{
-				if(!child.getNodeInfo().isFriend()){
-					declarations.put(binding, child);
-				}
-			}
-		}
-		return null;
-	}
-
-	private boolean foundForwardDeclarationAssociatedWith(AbstractNode child) {
-		if(declarations.size() > 0){
-			IBinding binding = null;
-			if(child.getNodeInfo().isFunctionDefinition()){
-				binding = child.getNodeInfo().getBinding();
-			}
-			if(child.getNodeInfo().isCompositeTypeSpecifier()){
-				binding = child.getNodeInfo().getTypeBinding();
-			}
-			AbstractNode foundDecl = declarations.get(binding);
-			if(foundDecl != null){
-				declarations.remove(binding);
-				removedDeclarationBindings.put(binding, child);
-				foundDecl.removeFromParent();
-				foundDecl = null;
-				return true;
-			}
-		}
-		return false;
-	}
-
-
 	private void mergeChildrenOf(AbstractNode node, AbstractNode intoParent){
 		for(AbstractNode n : node.getChildren()){
 			addChild(intoParent, n);
@@ -125,5 +72,73 @@ public class HybridTreeBuilder extends TreeBuilder {
 
 	public AbstractNode getChildBy(String hybridId){
 		return descendants.get(hybridId);
+	}
+
+	private void prepareDeclBinding(AbstractNode child) {
+		if(child instanceof FunctionDeclNode || child instanceof TypeDeclNode){
+			declarations.put(((MemberNode) child).getIndexBinding(), (MemberNode) child);
+		}
+	}
+
+	public void mergeDeclarationsAndDefinitions(IASTTranslationUnit tu) {
+
+		for (IASTDeclaration decl : tu.getDeclarations()) {
+			
+			if(decl instanceof IASTSimpleDeclaration){
+				IIndexBinding declBinding = null;
+				
+				if(isTypeDecl((IASTSimpleDeclaration) decl)){
+					declBinding = getTypeBinding(tu, (IASTSimpleDeclaration) decl);
+				}else{
+					declBinding = getFuncBinding(tu, ((IASTSimpleDeclaration)decl).getDeclarators());
+				}
+				findDeclsOfDefs(tu, declBinding);
+			}
+		}
+		deleteBindings();
+	}
+
+	private void findDeclsOfDefs(IASTTranslationUnit tu, IIndexBinding declBinding) {
+		if(declBinding != null){
+			for(IName name : tu.getDefinitions(declBinding)){
+				
+				if(name instanceof IASTName && name.isDefinition()){
+					IASTName iastName = (IASTName)name;
+					AbstractNode foundDecl = declarations.get(tu.getIndex().adaptBinding(iastName.getBinding()));
+					removeFromTree(foundDecl);
+				}
+			}
+		}
+	}
+
+	private boolean isTypeDecl(IASTSimpleDeclaration decl) {
+		return decl.getDeclSpecifier() instanceof ICPPASTElaboratedTypeSpecifier;
+	}
+
+	private IIndexBinding getTypeBinding(IASTTranslationUnit tu, IASTSimpleDeclaration decl) {
+		ICPPASTElaboratedTypeSpecifier typeDecl = (ICPPASTElaboratedTypeSpecifier)decl.getDeclSpecifier();
+		
+		return tu.getIndex().adaptBinding(typeDecl.getName().getBinding());
+	}
+
+	private IIndexBinding getFuncBinding(IASTTranslationUnit tu,IASTDeclarator[] declarators) {
+		IIndexBinding declBinding = null;
+		if(declarators.length > 0){
+			declBinding = tu.getIndex().adaptBinding(declarators[0].getName().getBinding());
+		}
+		return declBinding;
+	}
+
+	private void removeFromTree(AbstractNode foundDecl) {
+		if(foundDecl != null){
+			foundDecl.removeFromParent();
+		}
+	}
+
+	private void deleteBindings() {
+		for (MemberNode node : declarations.values()) {
+			node.clearBindings();
+		}
+		declarations.clear();
 	}
 }

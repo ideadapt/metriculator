@@ -29,7 +29,8 @@ import ch.hsr.ifs.cdt.metriculator.model.test.TreeBuilderTest;
 	LSLOCMetricCheckerTest.class, 
 	McCabeMetricCheckerTest.class, 
 	NumberParamsCheckerTest.class,
-	NumberMembersCheckerTest.class
+	NumberMembersCheckerTest.class,
+	EfferentCouplingMetricCheckerTest.class
 	 
 })
 
