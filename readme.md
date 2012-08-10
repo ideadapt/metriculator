@@ -6,4 +6,7 @@ Installation
   _zest_: https://hudson.eclipse.org/hudson/job/gef-zest-integration/ws/org.eclipse.zest.repository/target/repository/
    Zest is not supported in Eclipse Juno. Zest is only required if metriculator will be installed with the tag cloud feature.
 
-  _metriculator_: http://sinv-56013.edu.hsr.ch/metriculator/updatesite-nightly/site
+  _metriculator_: http://metriculator.ideadapt.net
+
+
+metriculator is also available from Eclipse marketplace: http://marketplace.eclipse.org/content/metriculator
