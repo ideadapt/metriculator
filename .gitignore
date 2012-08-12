@@ -93,6 +93,6 @@ Desktop.ini
 *.exe
 
 
-!dev/testing-project/plugins/**
-#!dev/ch.hsr.ifs.cdt.metriculator.site/**
-#!dev/ch.hsr.ifs.cdt.metriculator.site/**/*
+!testing-project/plugins/**
+#!ch.hsr.ifs.cdt.metriculator.site/**
+#!ch.hsr.ifs.cdt.metriculator.site/**/*
