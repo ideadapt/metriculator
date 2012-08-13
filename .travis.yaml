@@ -1,0 +1,15 @@
+# .travis.yml
+# uses jdk 6
+language: java
+before_script:
+    - "export DISPLAY:=99.0"
+    - "sh -e /etc/init.d/xvfb start"
+#script: ./build.sh
+#after_script: tell somebody to pull the build files and deploy it
+branches:
+    only:
+        - master
+#        - integration
+notifications:
+    email:
+        - kunz@ideadapt.net
