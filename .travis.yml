@@ -2,10 +2,6 @@ language: java
 jdk:
   - openjdk6
 env: DISPLAY=:99.0
-#before_install:
-#  - "export DISPLAY=:99.0"
-#  - "sh -e /etc/init.d/xvfb start"
-#  - sleep 3
 install: mvn install -Dmaven.test.skip=true
 before_script:
   - "export DISPLAY=:99.0"
