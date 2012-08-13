@@ -1,12 +1,14 @@
 language: java
 jdk:
-    - oraclejdk7
+  - oraclejdk7
 before_script:
-    - "export DISPLAY:=99.0"
-    - "sh -e /etc/init.d/xvfb start"
+  - "export DISPLAY:=99.0"
+  - "sh -e /etc/init.d/xvfb start"
+script: mvn test
+install: mvn -DskipTests=true install
 branches:
-    only:
-        - master
+  only:
+    - master
 notifications:
-    email:
-        - kunz@ideadapt.net
+  email:
+    - kunz@ideadapt.net
