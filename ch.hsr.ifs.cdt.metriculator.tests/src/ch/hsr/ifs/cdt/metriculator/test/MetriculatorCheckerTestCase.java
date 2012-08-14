@@ -41,4 +41,6 @@ public class MetriculatorCheckerTestCase extends CheckerTestCase {
 	public static AbstractNode getFirstChildInDepth(AbstractNode node, int level){
 		return getNodeAtLevel(node.getChildren().iterator().next(), level, 0);
 	}
+	
+	public void testNothing(){}
 }
