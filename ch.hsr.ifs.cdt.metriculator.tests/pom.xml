@@ -11,20 +11,12 @@
   <artifactId>ch.hsr.ifs.cdt.metriculator.tests</artifactId>
   <version>0.0.1.qualifier</version>
   <packaging>eclipse-test-plugin</packaging>
-	<!--
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>maven-osgi-test-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<testSuite>ch.hsr.ifs.cdt.metriculator.test</testSuite>
-					<testClass>ch.hsr.ifs.cdt.metriculator.test.AllTests</testClass>
-				</configuration>
-			</plugin>				
-    	</plugins>
-	</build>  
+	<!-- 
+	profile set-up inspired by https://github.com/mattiasholmqvist and https://docs.sonatype.org/display/TYCHO/How+to+integrate+EMMA+(code+coverage)+with+Tycho
+	command to add equinox jar to local maven repo (use absolute path):
+		mvn install:install-file -Dfile=D:\dev\Verschiedenes\SA\repo\metri\metriculator.src\testing-project\mvn\eclEmmaEquinox.jar -DgroupId=ch.hsr.ifs.cdt.metriculator -DartifactId=eclemma.runtime.equinox -Dversion=1.1.0.200908261008 -Dpackaging=jar
+	mvn build command to instrument and create test coverage:
+		mvn integration-test verify -Pcoverage
 	-->
 	<profiles>
 		<profile>
@@ -61,11 +53,15 @@
 								<configuration>
 									<tasks>
 										<taskdef resource="emma_ant.properties" />
-										<echo>Process emma report...</echo>
+										<echo>Process emma report... ${basedir}</echo>
 										<emma enabled="true">
 											<report>
-												<infileset dir="${project.build.directory}/emma"
-													includes="*.es" />
+												<infileset dir="${project.build.directory}/emma" includes="*.es" />
+												<sourcepath>
+													<fileset dir="${basedir}/src" >
+														<include name="**/*.java"/>
+													</fileset>
+												</sourcepath>
 												<txt outfile="${project.build.directory}/emma/coverage.txt" />
 												<xml outfile="${project.build.directory}/emma/coverage.xml" />
 												<html outfile="${project.build.directory}/emma/coverage.html" />

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: ch.hsr.ifs.cdt.metriculator.test
+Bundle-SymbolicName: ch.hsr.ifs.cdt.metriculator.tests
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: ch.hsr.ifs.cdt.metriculator.test.MetriculatorTestActivator
+Bundle-Activator: ch.hsr.ifs.cdt.metriculator.tests.MetriculatorTestActivator
 Require-Bundle: org.eclipse.cdt.core,
  org.eclipse.cdt.codan.core.test,
  ch.hsr.ifs.cdt.metriculator;bundle-version="0.0.1",
@@ -15,5 +15,5 @@ Require-Bundle: org.eclipse.cdt.core,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor
-Export-Package: ch.hsr.ifs.cdt.metriculator.test
+Export-Package: ch.hsr.ifs.cdt.metriculator.tests
 Import-Package: org.eclipse.cdt.codan.core.test

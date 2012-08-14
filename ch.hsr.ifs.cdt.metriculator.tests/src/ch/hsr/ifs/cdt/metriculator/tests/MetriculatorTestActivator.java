@@ -8,7 +8,7 @@
  * Contributors:
  *     Alena Laskavaia - initial API and implementation
  *******************************************************************************/
-package ch.hsr.ifs.cdt.metriculator.test;
+package ch.hsr.ifs.cdt.metriculator.tests;
 
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;

@@ -115,20 +115,7 @@
 						</environment>						
 					</environments>
 				</configuration>
-			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-				  <verbose>true</verbose>
-				  <fork>true</fork>
-				  <executable>${JAVA_HOME}/bin/javac</executable>
-				  <compilerVersion>${java-version}</compilerVersion>
-				</configuration>
-			</plugin>
-			-->			
+			</plugin>	
 		</plugins>
 	</build>
 	
@@ -175,6 +162,8 @@
 						<artifactId>maven-osgi-test-plugin</artifactId>
 						<version>${tycho-version}</version>
 						<configuration>
+							<testSuite>ch.hsr.ifs.cdt.metriculator.tests</testSuite>
+							<testClass>ch.hsr.ifs.cdt.metriculator.tests.AllTests</testClass>											
 							<systemProperties combine.children="append">
 								<eclemma.help>true</eclemma.help>
 								<emma.session.out.file>${emma.session.out.file}</emma.session.out.file>
