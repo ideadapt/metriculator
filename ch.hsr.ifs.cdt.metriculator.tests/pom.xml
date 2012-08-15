@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>dev</artifactId>
+    <groupId>ch.hsr.ifs.cdt.metriculator</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>ch.hsr.ifs.cdt.metriculator</groupId>
+  <artifactId>ch.hsr.ifs.cdt.metriculator.tests</artifactId>
+  <version>0.0.1.qualifier</version>
+  <packaging>eclipse-test-plugin</packaging>
+	<!-- 
+	profile set-up inspired by https://github.com/mattiasholmqvist and https://docs.sonatype.org/display/TYCHO/How+to+integrate+EMMA+(code+coverage)+with+Tycho
+	command to add equinox jar to local maven repo (use absolute path):
+		mvn install:install-file -Dfile=D:\dev\Verschiedenes\SA\repo\metri\metriculator.src\testing-project\mvn\eclEmmaEquinox.jar -DgroupId=ch.hsr.ifs.cdt.metriculator -DartifactId=eclemma.runtime.equinox -Dversion=1.1.0.200908261008 -Dpackaging=jar
+	mvn build command to instrument and create test coverage:
+		mvn integration-test verify -Pcoverage
+	-->
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<activation>
+				<property>
+					<name>coverage</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>emma</groupId>
+								<artifactId>emma_ant</artifactId>
+								<version>2.0.5312</version>
+							</dependency>
+							<dependency>
+								<groupId>emma</groupId>
+								<artifactId>emma</artifactId>
+								<version>2.0.5312</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>emma-report</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<taskdef resource="emma_ant.properties" />
+										<echo>Process emma report... ${basedir}</echo>
+										<emma enabled="true">
+											<report>
+												<infileset dir="${project.build.directory}/emma" includes="*.es" />
+												<!-- neither works
+												<sourcepath>
+												-->
+												<!--<pathelement path="${basedir}/src" />-->
+												<!--
+													<dirset dir="${basedir}" >
+														<include name="**/src" />
+													</dirset>
+												-->
+												<!--</sourcepath>-->
+												<txt outfile="${project.build.directory}/emma/coverage.txt" />
+												<xml outfile="${project.build.directory}/emma/coverage.xml" />
+												<html outfile="${project.build.directory}/emma/coverage.html" />
+											</report>
+										</emma>
+										<loadfile property="emma.txt"
+											srcFile="${project.build.directory}/emma/coverage.txt"
+											failonerror="false" />
+										<echo>${emma.txt}</echo>
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>	
+</project>

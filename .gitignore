@@ -94,5 +94,6 @@ Desktop.ini
 
 
 !testing-project/plugins/**
+!testing-project/mvn/**
 #!ch.hsr.ifs.cdt.metriculator.site/**
 #!ch.hsr.ifs.cdt.metriculator.site/**/*

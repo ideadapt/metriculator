@@ -10,7 +10,7 @@
 * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
 ******************************************************************************/
 
-package ch.hsr.ifs.cdt.metriculator.test;
+package ch.hsr.ifs.cdt.metriculator.tests;
 
 import java.io.IOException;
 
