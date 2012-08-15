@@ -57,15 +57,19 @@
 										<emma enabled="true">
 											<report>
 												<infileset dir="${project.build.directory}/emma" includes="*.es" />
+												<!-- neither works
 												<sourcepath>
-													<fileset dir="${basedir}/src" >
-														<include name="**/*.java"/>
-													</fileset>
-												</sourcepath>
+												-->
+												<!--<pathelement path="${basedir}/src" />-->
+												<!--
+													<dirset dir="${basedir}" >
+														<include name="**/src" />
+													</dirset>
+												-->
+												<!--</sourcepath>-->
 												<txt outfile="${project.build.directory}/emma/coverage.txt" />
 												<xml outfile="${project.build.directory}/emma/coverage.xml" />
 												<html outfile="${project.build.directory}/emma/coverage.html" />
-												<!-- Could also generate an HTML report, if you want... -->
 											</report>
 										</emma>
 										<loadfile property="emma.txt"
