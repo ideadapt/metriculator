@@ -18,8 +18,8 @@ To install from marketplace simply drag and drop the following _install_ button 
 	<img src='http://marketplace.eclipse.org/misc/installbutton.png'/>
 </a>
 
-Developer Manual
-================
+Contributer Notes
+=================
 Metriculator allows you to add new C++ metrics easily. There are already some metrics implemented which might help you to implement additional metrics. The following steps describe how you can add new metrics fast an simple. This manual assumes that you are working with Eclipse and have installed the Plug-in Development Environment (PDE) as well as the C/C++ Development Tooling (CDT) plug-in.
 
 Set up metriculator Eclipse Workspace
