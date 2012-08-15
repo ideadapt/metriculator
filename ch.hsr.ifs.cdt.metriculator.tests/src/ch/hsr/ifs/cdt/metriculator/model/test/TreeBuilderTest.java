@@ -34,7 +34,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
-import ch.hsr.ifs.cdt.metriculator.test.MetriculatorCheckerTestCase;
+import ch.hsr.ifs.cdt.metriculator.tests.MetriculatorCheckerTestCase;
 
 /**
  * Test for {@see AbtractNode} and other model classes. Validates tree structure operations like 'add a node' and recursive metric calculation.

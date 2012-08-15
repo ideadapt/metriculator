@@ -10,7 +10,7 @@
 * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
 ******************************************************************************/
 
-package ch.hsr.ifs.cdt.metriculator.test;
+package ch.hsr.ifs.cdt.metriculator.tests;
 
 import org.eclipse.cdt.codan.core.test.CheckerTestCase;
 import org.eclipse.core.runtime.Plugin;
@@ -41,4 +41,6 @@ public class MetriculatorCheckerTestCase extends CheckerTestCase {
 	public static AbstractNode getFirstChildInDepth(AbstractNode node, int level){
 		return getNodeAtLevel(node.getChildren().iterator().next(), level, 0);
 	}
+	
+//	public void testNothing(){}
 }

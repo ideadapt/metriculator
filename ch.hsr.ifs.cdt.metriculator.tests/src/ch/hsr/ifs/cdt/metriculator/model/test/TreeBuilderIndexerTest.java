@@ -24,7 +24,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
-import ch.hsr.ifs.cdt.metriculator.test.MetriculatorCheckerTestCase;
+import ch.hsr.ifs.cdt.metriculator.tests.MetriculatorCheckerTestCase;
 
 public class TreeBuilderIndexerTest extends MetriculatorCheckerTestCase {
 	AbstractNode root;
