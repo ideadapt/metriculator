@@ -4,4 +4,11 @@ export DISPLAY=$DISPLAY
 THIS=$(readlink -f $0)
 BUNDLE_ROOT="`dirname $THIS`"
 cd $BUNDLE_ROOT
-mvn -e -Dmaven.repo.local=/var/m2 clean install
+# just build
+mvn install -Dmaven.test.skip=true
+# install eclemma jar to local maven repo, used to create test coverage
+cd testing-project
+mvn install:install-file -Dfile=./mvn/eclEmmaEquinox.jar -DgroupId=ch.hsr.ifs.cdt.metriculator -DartifactId=eclemma.runtime.equinox -Dversion=1.1.0.200908261008 -Dpackaging=jar
+cd ..
+# run tests with code coverage
+mvn integration-test verify -Pcoverage -Dmaven.repo.local=/var/m2 -e
