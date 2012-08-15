@@ -11,4 +11,4 @@ cd testing-project
 mvn install:install-file -Dmaven.repo.local=/var/m2 -Dfile=./mvn/eclEmmaEquinox.jar -DgroupId=ch.hsr.ifs.cdt.metriculator -DartifactId=eclemma.runtime.equinox -Dversion=1.1.0.200908261008 -Dpackaging=jar
 cd ..
 # run tests with code coverage
-mvn integration-test verify -Pcoverage -Dmaven.repo.local=/var/m2 -e
+mvn integration-test verify findbugs:findbugs -Pcoverage -Dmaven.repo.local=/var/m2 -e
