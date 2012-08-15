@@ -55,7 +55,7 @@
 										<taskdef resource="emma_ant.properties" />
 										<echo>Process emma report... ${basedir}</echo>
 										<emma enabled="true">
-											<report>
+											<report sourcepath="${basedir}/src">
 												<infileset dir="${project.build.directory}/emma" includes="*.es" />
 												<!-- neither works
 												<sourcepath>
