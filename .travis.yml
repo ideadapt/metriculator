@@ -9,7 +9,11 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
 # customized to explicitly call maven-osgi-test-plugin test goal: mvn clean compile package org.sonatype.tycho:maven-osgi-test-plugin:test
-script: mvn integration-test verify -Pcoverage
+script:
+  - cd testing-project
+  - mvn install:install-file -Dfile=.\mvn\eclEmmaEquinox.jar -DgroupId=ch.hsr.ifs.cdt.metriculator -DartifactId=eclemma.runtime.equinox -Dversion=1.1.0.200908261008 -Dpackaging=jar
+  - cd ..
+  - mvn integration-test verify -Pcoverage
 branches:
   only:
     - master
