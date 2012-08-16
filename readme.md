@@ -50,4 +50,4 @@ Adding a New Metric
  
 Pull Requests
 -------------------------------------
-If you plan to do "pull requests" you can watch if your potential contribution would build successful on <a href='http://travis-ci.org/#!/ideadapt/metriculator/pull_requests' title='Travis Build'>
+If you plan to do "pull requests" you can watch if your potential contribution would build successfully at <a href='http://travis-ci.org/#!/ideadapt/metriculator/pull_requests' title='Travis Build'>Travis-CI</a>
