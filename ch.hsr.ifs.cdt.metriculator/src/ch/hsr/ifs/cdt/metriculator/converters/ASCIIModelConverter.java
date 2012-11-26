@@ -7,20 +7,16 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
-public class ASCIIModelConverter {
-
-	protected AbstractNode node;
-	protected AbstractMetric[] metrics;
+public class ASCIIModelConverter implements IModelConverter<String> {
+	
+	ByteArrayOutputStream os = new ByteArrayOutputStream();
 	
 	public void convert(AbstractNode node, AbstractMetric... metrics){
-		this.node = node;
-		this.metrics = metrics;
+		
+		TreePrinter.printTree(node, new PrintStream(os), metrics);
 	}
 	
 	public String getResult(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		PrintStream ps = new PrintStream(os);
-		TreePrinter.printTree(node, ps, metrics);
 		return os.toString();
 	}
 }
