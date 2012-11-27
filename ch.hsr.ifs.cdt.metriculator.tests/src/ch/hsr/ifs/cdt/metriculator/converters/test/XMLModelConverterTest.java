@@ -19,14 +19,12 @@ import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetricChecker;
-import ch.hsr.ifs.cdt.metriculator.converters.IModelConverter;
-import ch.hsr.ifs.cdt.metriculator.converters.XMLModelConverter;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
-import ch.hsr.ifs.cdt.metriculator.model.HybridTreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.converters.IModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.XMLModelConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
-import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 import ch.hsr.ifs.cdt.metriculator.tests.MetriculatorCheckerTestCase;
@@ -54,10 +52,17 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 		
 		System.out.println(getName());
 		root = new WorkspaceNode("rootnotmodified");
-	}
+	}	
 	
-	public void testXmlBasics(){
-				
+	public void testSimpleTree(){
+		
+		AbstractNode n 	= new ProjectNode("testproject");
+		FolderNode f 	= new FolderNode(null, "testfolder");
+		FolderNode f2 	= new FolderNode(null, "testfolder2");
+		root.add(n)
+				.add(f).getParent()
+			.add(f2);
+		
 		IModelConverter<Document> conv = new XMLModelConverter();
 		conv.convert(root, metricLsLoc, metricMcCabe);
 		Document result = ((XMLModelConverter)conv).getResult();
@@ -67,9 +72,26 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 		
 		final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 				"<metriculator>\n" +
-				"  <Directory/>\n" +
+				"  <ProjectNode label=\"testproject\">\n" +
+				"    <metrics>\n" +
+				"      <lsloc>0</lsloc>\n" +
+				"      <mccabe>0</mccabe>\n" +
+				"    </metrics>\n" +
+				"    <FolderNode label=\"testfolder\">\n" +
+				"      <metrics>\n" +
+				"        <lsloc>0</lsloc>\n" +
+				"        <mccabe>0</mccabe>\n" +
+				"      </metrics>\n" +
+				"    </FolderNode>\n" +
+				"    <FolderNode label=\"testfolder2\">\n" +
+				"      <metrics>\n" +
+				"        <lsloc>0</lsloc>\n" +
+				"        <mccabe>0</mccabe>\n" +
+				"      </metrics>\n" +
+				"    </FolderNode>\n" +
+				"  </ProjectNode>\n" +
 				"</metriculator>\n";
 		
 		Assert.assertEquals(expected, resultString);
-	}	
+	}
 }

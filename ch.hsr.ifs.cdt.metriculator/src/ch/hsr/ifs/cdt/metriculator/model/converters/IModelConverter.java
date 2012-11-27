@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cdt.metriculator.converters;
+package ch.hsr.ifs.cdt.metriculator.model.converters;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;

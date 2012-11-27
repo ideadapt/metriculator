@@ -29,9 +29,10 @@ import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitorAccepter;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 
-public abstract class AbstractNode implements Cloneable {
+public abstract class AbstractNode implements Cloneable, INodeVisitorAccepter {
 
 	private final static String EMPTY_STRING = ""; //$NON-NLS-1$
 	protected String scopeName;
@@ -149,7 +150,7 @@ public abstract class AbstractNode implements Cloneable {
 		if(pathBuilder.length() == 0){
 			pathBuilder.insert(0, getScopeUniqueName());
 		}else{
-			pathBuilder.insert(0, TreeBuilder.PATH_SEPARATOR).insert(0, getScopeUniqueName());
+			pathBuilder.insert(0, AbstractTreeBuilder.PATH_SEPARATOR).insert(0, getScopeUniqueName());
 		}
 
 		if (parent != null) {

@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class FileNode extends AbstractNode {
@@ -32,6 +33,10 @@ public class FileNode extends AbstractNode {
 		if(tu != null){
 			isHeaderUnit = tu.isHeaderUnit();
 		}
+	}
+	
+	public void accept(INodeVisitor v){
+		v.visit(this);
 	}
 	
 	public boolean isHeaderUnit() {

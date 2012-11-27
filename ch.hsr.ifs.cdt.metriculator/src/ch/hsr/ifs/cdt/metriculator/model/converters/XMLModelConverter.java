@@ -1,17 +1,13 @@
-package ch.hsr.ifs.cdt.metriculator.converters;
+package ch.hsr.ifs.cdt.metriculator.model.converters;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
@@ -23,21 +19,11 @@ public class XMLModelConverter implements IModelConverter<Document> {
 
 	@Override
 	public void convert(AbstractNode node, AbstractMetric... metrics) {
-
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = null;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-
-		doc = documentBuilder.newDocument();
-		Element root = doc.createElement("metriculator");
-		doc.appendChild(root);
 		
-		root.appendChild(doc.createElement("Directory"));
+		INodeVisitor v = new PreOrderXMLTreeVisitor();
+		node.accept(v);
 		
+		doc = ((PreOrderXMLTreeVisitor)v).doc;
 	}
 
 	@Override

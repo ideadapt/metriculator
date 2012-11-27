@@ -16,6 +16,8 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+
 public class FunctionDefNode extends FunctionNode {
 
 	public FunctionDefNode(ICPPASTFunctionDefinition fnNode) {
@@ -25,6 +27,13 @@ public class FunctionDefNode extends FunctionNode {
 	public FunctionDefNode(String scopeUniqueName) {
 		super(scopeUniqueName);
 	}
+	
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
+	}
+
 
 	@Override
 	protected IASTName getASTName(IASTNode astNode) {

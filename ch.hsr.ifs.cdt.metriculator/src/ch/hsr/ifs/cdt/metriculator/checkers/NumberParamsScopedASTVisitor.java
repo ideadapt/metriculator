@@ -18,7 +18,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 
@@ -26,7 +26,7 @@ public class NumberParamsScopedASTVisitor extends ScopedASTVisitor {
 
 	String key = AbstractMetric.getKeyFor(NumberParamsMetric.class);
 
-	public NumberParamsScopedASTVisitor(AbstractNode scopeNode, TreeBuilder builder) {
+	public NumberParamsScopedASTVisitor(AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		super(scopeNode, builder);
 		shouldVisitParameterDeclarations = true;
 	}

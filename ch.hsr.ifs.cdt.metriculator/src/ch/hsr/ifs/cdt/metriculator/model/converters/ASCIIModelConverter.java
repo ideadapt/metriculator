@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cdt.metriculator.converters;
+package ch.hsr.ifs.cdt.metriculator.model.converters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

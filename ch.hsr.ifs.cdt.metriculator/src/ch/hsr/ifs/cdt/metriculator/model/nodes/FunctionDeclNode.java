@@ -16,12 +16,19 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+
 public class FunctionDeclNode extends FunctionNode {
 
 	public FunctionDeclNode(ICPPASTFunctionDeclarator fnNode) {
 		super(fnNode.getRawSignature(), fnNode);
 	}
 
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
+	}
+	
 	@Override
 	protected IASTName getASTName(IASTNode astNode) {
 		return ((ICPPASTFunctionDeclarator)astNode).getName();

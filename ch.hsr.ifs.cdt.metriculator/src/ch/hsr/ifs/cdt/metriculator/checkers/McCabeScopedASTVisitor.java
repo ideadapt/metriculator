@@ -30,14 +30,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTWhileStatement;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class McCabeScopedASTVisitor extends ScopedASTVisitor {
 	
 	String key = AbstractMetric.getKeyFor(McCabeMetric.class);
 
-	public McCabeScopedASTVisitor(AbstractNode scopeNode, TreeBuilder builder) {
+	public McCabeScopedASTVisitor(AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		super(scopeNode, builder);
 		shouldVisitExpressions     = true;
 		shouldVisitTranslationUnit = true;
