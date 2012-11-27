@@ -21,6 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
@@ -29,11 +30,22 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
 public class PreOrderXMLTreeVisitor implements INodeVisitor {
 	
+	private AbstractMetric[] metrics;
 	public Document doc;
 	public Node curr;
 	
-	public PreOrderXMLTreeVisitor() {
+	public PreOrderXMLTreeVisitor(AbstractMetric... metrics) {
+		this.metrics = metrics;
 		
+		iniXMLDoc();
+		curr = createRootElement();
+	}
+
+	private Node createRootElement() {
+		return doc.appendChild(doc.createElement("metriculator"));
+	}
+
+	private void iniXMLDoc() {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = null;
 		try {
@@ -43,14 +55,13 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 		}
 		
 		doc = documentBuilder.newDocument();
-		Element root = doc.createElement("metriculator");
-		doc.appendChild(root);
-		curr = root;
 	}
 
 	public void visit(ProjectNode n){
 		Element e = doc.createElement(n.getClass().getSimpleName());
 		e.setAttribute("label", n.getScopeName());
+		e.appendChild(createMetricsElement(n));	
+		
 		curr.appendChild(e);
 		
 		processChildrenOf(n, e);
@@ -59,9 +70,25 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 	public void visit(FolderNode n){
 		Element e = doc.createElement(n.getClass().getSimpleName());
 		e.setAttribute("label", n.getScopeName());
+		e.appendChild(createMetricsElement(n));	
 		curr.appendChild(e);
 		
 		processChildrenOf(n, e);
+	}
+	
+	private Element createMetricsElement(AbstractNode n) {
+		Element metrics = doc.createElement("metrics");
+		
+		for(AbstractMetric m : this.metrics){
+			
+			Element metric = doc.createElement(m.getName().toLowerCase());
+			int aggregatedValue = n.getValueOf(m).aggregatedValue;
+			System.out.println(aggregatedValue);
+			metric.setTextContent(Integer.valueOf(aggregatedValue).toString());
+			
+			metrics.appendChild(metric);
+		}
+		return metrics;
 	}
 
 	public void processChildrenOf(AbstractNode parent, Node parentXmlNode){

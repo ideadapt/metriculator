@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 
 package ch.hsr.ifs.cdt.metriculator.converters.test;
 
@@ -36,62 +36,108 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 	private AbstractMetricChecker checkerMcCabe;
 	private AbstractMetric metricMcCabe;
 	private AbstractMetric metricLsLoc;
-	
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		
+
 		if (checkerLsloc == null) {
-			checkerLsloc = AbstractMetricChecker.getChecker(LSLOCMetricChecker.class);
-			metricLsLoc = new LSLOCMetric(checkerLsloc, "LSLOC", "lines of code");
+			checkerLsloc = AbstractMetricChecker
+					.getChecker(LSLOCMetricChecker.class);
+			metricLsLoc = new LSLOCMetric(checkerLsloc, "LSLOC",
+					"lines of code");
 		}
 		if (checkerMcCabe == null) {
-			checkerMcCabe = AbstractMetricChecker.getChecker(McCabeMetricChecker.class);
+			checkerMcCabe = AbstractMetricChecker
+					.getChecker(McCabeMetricChecker.class);
 			metricMcCabe = new McCabeMetric(checkerMcCabe, "McCabe", "CC");
 		}
-		
+
 		System.out.println(getName());
 		root = new WorkspaceNode("rootnotmodified");
-	}	
-	
-	public void testSimpleTree(){
-		
-		AbstractNode n 	= new ProjectNode("testproject");
-		FolderNode f 	= new FolderNode(null, "testfolder");
-		FolderNode f2 	= new FolderNode(null, "testfolder2");
+	}
+
+	public void testNestedWithMetrics() {
+
+		AbstractNode n = new ProjectNode("testproject");
+
+		FolderNode f1 = new FolderNode(null, "testfolder1");
+		f1.setNodeValue(metricLsLoc.getKey(), 10);
+		f1.setNodeValue(metricMcCabe.getKey(), 7);
+
+		FolderNode f2 = new FolderNode(null, "testfolder2");
+		f2.setNodeValue(metricLsLoc.getKey(), 20);
+		f2.setNodeValue(metricMcCabe.getKey(), 0);
+
 		root.add(n)
-				.add(f).getParent()
+			.add(f1).getParent()
 			.add(f2);
-		
+
 		IModelConverter<Document> conv = new XMLModelConverter();
 		conv.convert(root, metricLsLoc, metricMcCabe);
-		Document result = ((XMLModelConverter)conv).getResult();
-		String resultString = ((XMLModelConverter)conv).getXML();
+		String resultString = ((XMLModelConverter) conv).getXML();
 
 		System.out.println(resultString);
-		
+
 		final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 				"<metriculator>\n" +
 				"  <ProjectNode label=\"testproject\">\n" +
 				"    <metrics>\n" +
-				"      <lsloc>0</lsloc>\n" +
-				"      <mccabe>0</mccabe>\n" +
+				"      <lsloc>30</lsloc>\n" +
+				"      <mccabe>8</mccabe>\n" +
 				"    </metrics>\n" +
-				"    <FolderNode label=\"testfolder\">\n" +
+				"    <FolderNode label=\"testfolder1\">\n" +
 				"      <metrics>\n" +
-				"        <lsloc>0</lsloc>\n" +
-				"        <mccabe>0</mccabe>\n" +
+				"        <lsloc>10</lsloc>\n" +
+				"        <mccabe>8</mccabe>\n" +
 				"      </metrics>\n" +
 				"    </FolderNode>\n" +
 				"    <FolderNode label=\"testfolder2\">\n" +
 				"      <metrics>\n" +
-				"        <lsloc>0</lsloc>\n" +
-				"        <mccabe>0</mccabe>\n" +
+				"        <lsloc>20</lsloc>\n" +
+				"        <mccabe>1</mccabe>\n" +
 				"      </metrics>\n" +
 				"    </FolderNode>\n" +
 				"  </ProjectNode>\n" +
 				"</metriculator>\n";
-		
+
+		Assert.assertEquals(expected, resultString);
+	}
+
+	public void testNestedNoMetrics() {
+
+		AbstractNode n = new ProjectNode("testproject");
+
+		FolderNode f1 = new FolderNode(null, "testfolder1");
+		f1.setNodeValue(metricLsLoc.getKey(), 10);
+		f1.setNodeValue(metricMcCabe.getKey(), 7);
+		FolderNode f2 = new FolderNode(null, "testfolder2");
+		f2.setNodeValue(metricLsLoc.getKey(), 20);
+		f2.setNodeValue(metricMcCabe.getKey(), 0);
+
+		root.add(n)
+			.add(f1).getParent()
+			.add(f2);
+
+		IModelConverter<Document> conv = new XMLModelConverter();
+		conv.convert(root);
+		String resultString = ((XMLModelConverter) conv).getXML();
+
+		System.out.println(resultString);
+
+		final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+				"<metriculator>\n" +
+				"  <ProjectNode label=\"testproject\">\n" +
+				"    <metrics/>\n" +
+				"    <FolderNode label=\"testfolder1\">\n" +
+				"      <metrics/>\n" +
+				"    </FolderNode>\n" +
+				"    <FolderNode label=\"testfolder2\">\n" +
+				"      <metrics/>\n" +
+				"    </FolderNode>\n" +
+				"  </ProjectNode>\n" +
+				"</metriculator>\n";
+
 		Assert.assertEquals(expected, resultString);
 	}
 }

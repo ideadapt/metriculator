@@ -20,7 +20,7 @@ public class XMLModelConverter implements IModelConverter<Document> {
 	@Override
 	public void convert(AbstractNode node, AbstractMetric... metrics) {
 		
-		INodeVisitor v = new PreOrderXMLTreeVisitor();
+		INodeVisitor v = new PreOrderXMLTreeVisitor(metrics);
 		node.accept(v);
 		
 		doc = ((PreOrderXMLTreeVisitor)v).doc;
