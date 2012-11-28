@@ -1,22 +1,30 @@
 <?xml version="1.0"?>
 <!DOCTYPE xsl:stylesheet PUBLIC "Unofficial XSLT 1.0 DTD" "http://www.w3.org/1999/11/xslt10.dtd">
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-	<xsl:output method="xml" indent="yes"/>
-
+	<xsl:output method="html" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:template match="/">
-		<table>
-			<thead>
-				<xsl:call-template name="header" />
-			</thead>
-			<tbody>
-				<xsl:apply-templates/>	
-			</tbody>
-		</table>
+		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
+		<html>
+			<head>
+				<link rel="stylesheet" type="text/css" href="themes/simple/style.css" />
+			</head>
+			<body>
+				<table>
+					<thead>
+						<xsl:call-template name="header-cells"/>
+					</thead>
+					<tbody>
+						<xsl:apply-templates/>
+					</tbody>
+				</table>
+			</body>
+		</html>
 	</xsl:template>
-	<xsl:template name="header">
-		<xsl:for-each select="metriculator/meta/metrics/*">
-			<th data-description="{@description}">
-				<xsl:value-of select="local-name()" />
+	<xsl:template name="header-cells">
+		<th>Label</th>
+		<xsl:for-each select="metriculator/*/metrics/*">
+			<th data-description="{@description}" class="metric">
+				<xsl:value-of select="local-name()"/>
 			</th>
 		</xsl:for-each>
 	</xsl:template>
@@ -28,9 +36,9 @@
 			<xsl:apply-templates select="metrics/*"/>
 		</tr>
 		<xsl:apply-templates select="node"/>
-	</xsl:template>	
+	</xsl:template>
 	<xsl:template match="metrics/*">
-		<td class="{local-name()}">
+		<td class="{local-name()} metric-value">
 			<xsl:value-of select="."/>
 		</td>
 	</xsl:template>

@@ -26,6 +26,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
@@ -102,14 +103,30 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 		
 		createNodeXMLElement(n);
 	}
-
-	private void createNodeXMLElement(AbstractNode n) {
+	
+	@Override
+	public void visit(NamespaceNode n) {
+		//throw new InvalidOpenTypeException("Should never come here, implement visitor for each node type.");
+		
+		if(n.isAnonymous()){
+			createNodeXMLElement(n, "anonymous");
+		}else{			
+			createNodeXMLElement(n);
+		}
+		
+	}
+	
+	private void createNodeXMLElement(AbstractNode n, String label) {
 		Element e = doc.createElement("node");
 		e.setAttribute("type", n.getClass().getSimpleName().toLowerCase());
-		e.setAttribute("label", n.getScopeName()); // TODO xml / html escape
+		e.setAttribute("label", label); // TODO xml / html escape
 		e.appendChild(createMetricsElement(n));	
 		curr.appendChild(e);
 		
 		processChildrenOf(n, e);
+	}
+
+	private void createNodeXMLElement(AbstractNode n) {
+		createNodeXMLElement(n, n.getScopeName());
 	}
 }

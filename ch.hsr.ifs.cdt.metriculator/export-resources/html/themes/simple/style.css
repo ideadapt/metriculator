@@ -1,0 +1,69 @@
+html, body, *{
+             font-family: Verdana;
+             font-size: 13px;
+         }
+         table{
+         	margin: 20px;
+         }
+         td, th{
+             padding: 3px;
+         }
+         td.metric-value{
+             font-family: "Courier New";
+             font-weight: bold;
+             text-align: right;
+         }
+         th{
+             text-align: left;
+         }
+         th.metric{
+             width: 60px;
+         }
+         tr.indent-0 td.label{
+             padding-left: 0px;
+         }
+         tr.indent-1 td.label{
+             padding-left: 10px;
+         }
+         tr.indent-2 td.label{
+             padding-left: 20px;
+         }
+         tr.indent-3 td.label{
+             padding-left: 30px;
+         }
+         tr.indent-4 td.label{
+             padding-left: 40px;
+         }
+         tr.indent-5 td.label{
+             padding-left: 50px;
+         }
+         tr.indent-6 td.label{
+             padding-left: 60px;
+         }
+         tr.indent-7 td.label{
+             padding-left: 70px;
+         }
+         tr.indent-8 td.label{
+             padding-left: 80px;
+         }
+         tr.indent-9 td.label{
+             padding-left: 90px;
+         }
+         tr.indent-10 td.label{
+             padding-left: 100px;
+         }
+         tr.indent-11 td.label{
+             padding-left: 110px;
+         }
+         tr.indent-12 td.label{
+             padding-left: 120px;
+         }
+         tr.indent-13 td.label{
+             padding-left: 130px;
+         }
+         tr.indent-14 td.label{
+             padding-left: 140px;
+         }
+         tr.indent-15 td.label{
+             padding-left: 150px;
+         }
