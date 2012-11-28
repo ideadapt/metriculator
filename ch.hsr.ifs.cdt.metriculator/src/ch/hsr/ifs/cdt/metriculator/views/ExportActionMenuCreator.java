@@ -30,18 +30,16 @@ public class ExportActionMenuCreator implements IMenuCreator {
 		@Override
 		protected IContributionItem[] getContributionItems() {
 			List<IContributionItem> itemList = new LinkedList<IContributionItem>();
+			
+			// feature: only export displayed metrics or choose metrics in wizard
+			final Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
+			// feature: wizard to set path
+			final Path export_folder = Path.EMPTY;
+			final AbstractNode root = getRootFromActiveView();
 
 			Action exportHTMLAction = new Action() {
 				@Override
 				public void run() {
-					/*
-					 * enhancement: show dialog with options
-					 * */
-					
-					// default options
-					Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
-					Path export_folder = Path.EMPTY;
-					AbstractNode root = getRootFromActiveView();
 					
 					FileExporter fex = new HTMLFileExporter(export_folder, root, metrics);
 					fex.run();
@@ -53,14 +51,6 @@ public class ExportActionMenuCreator implements IMenuCreator {
 			Action exportTextAction = new Action() {
 				@Override
 				public void run() {
-					/*
-					 * enhancement: show dialog with options
-					 * */
-					
-					// default options
-					Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
-					Path export_folder = Path.EMPTY;
-					AbstractNode root = getRootFromActiveView();
 					
 					FileExporter fex = new TextFileExporter(export_folder, root, metrics);
 					fex.run();

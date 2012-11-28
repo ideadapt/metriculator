@@ -2,6 +2,7 @@ package ch.hsr.ifs.cdt.metriculator.views;
 
 import java.util.Collection;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
@@ -9,7 +10,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public abstract class FileExporter {
 	
-	Path export_location;
+	IPath export_location;
 	Collection<AbstractMetric> metrics;
 	AbstractNode root;
 

@@ -38,7 +38,6 @@ public class XMLModelConverter implements IModelConverter<Document> {
 	}
 
 	public String getXML() {
-
 		OutputFormat format = new OutputFormat(doc);
 		format.setLineWidth(65);
 		format.setIndenting(true);
