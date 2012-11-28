@@ -100,6 +100,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private Composite parentComposite;
 	private StructuredViewer activeViewer;
 	private StackLayout stackLayout;
+	private Action actionExport;
 	
 	public enum ViewMode {
 		Hybrid,
@@ -314,6 +315,12 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		createActionFilterFunction();
 		createActionFilterNamespace();
 		createActionFilterFile();
+		createActionExport();
+	}
+
+	private void createActionExport() {
+		actionExport = new Action("Export"){ };
+		actionExport.setMenuCreator(new ExportActionMenuCreator(this));
 	}
 
 	private void applyViewMode(ViewMode view, NodeFilter filter) {
@@ -501,6 +508,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			manager.add(actionExpandAll);
 			manager.add(actionCollapseAll);
 		}
+		managers[1].add(actionExport);
 	}
 
 	private void addViewerOpenListener(StructuredViewer viewer) {

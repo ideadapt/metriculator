@@ -12,6 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.converters.test;
 
+import java.util.Arrays;
+
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetric;
@@ -73,7 +75,8 @@ public class ASCIIModelConverterTest extends MetriculatorCheckerTestCase {
 				b.addChild(n3, n6);
 				
 		ASCIIModelConverter conv = new ASCIIModelConverter();
-		conv.convert(b.root, metricLsLoc, metricMcCabe);
+		AbstractMetric[] abstractMetrics = new AbstractMetric[]{ metricLsLoc, metricMcCabe};
+		conv.convert(b.root, Arrays.asList(abstractMetrics));
 		String result = conv.getResult();
 		
 		System.out.println(result);

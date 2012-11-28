@@ -3,6 +3,8 @@ package ch.hsr.ifs.cdt.metriculator.model.converters;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.w3c.dom.Document;
 
@@ -18,7 +20,11 @@ public class XMLModelConverter implements IModelConverter<Document> {
 	protected Document doc;
 
 	@Override
-	public void convert(AbstractNode node, AbstractMetric... metrics) {
+	public void convert(AbstractNode node, Collection<AbstractMetric> metrics) {
+		
+		if(metrics == null){
+			metrics = new ArrayList<AbstractMetric>();
+		}
 		
 		INodeVisitor v = new PreOrderXMLTreeVisitor(metrics);
 		node.accept(v);

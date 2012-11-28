@@ -12,6 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.converters.test;
 
+import java.util.Arrays;
+
 import org.junit.Assert;
 import org.w3c.dom.Document;
 
@@ -74,7 +76,8 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f2);
 
 		IModelConverter<Document> conv = new XMLModelConverter();
-		conv.convert(root, metricLsLoc, metricMcCabe);
+		AbstractMetric[] abstractMetrics = new AbstractMetric[]{metricLsLoc, metricMcCabe};
+		conv.convert(root, Arrays.asList(abstractMetrics));
 		String resultString = ((XMLModelConverter) conv).getXML();
 
 		System.out.println(resultString);
@@ -120,7 +123,7 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f2);
 
 		IModelConverter<Document> conv = new XMLModelConverter();
-		conv.convert(root);
+		conv.convert(root, null);
 		String resultString = ((XMLModelConverter) conv).getXML();
 
 		System.out.println(resultString);

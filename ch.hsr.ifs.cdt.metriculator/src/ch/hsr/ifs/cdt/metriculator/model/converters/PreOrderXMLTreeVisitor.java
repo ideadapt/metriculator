@@ -12,7 +12,8 @@
 
 package ch.hsr.ifs.cdt.metriculator.model.converters;
 
-import javax.management.openmbean.InvalidOpenTypeException;
+import java.util.Collection;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,11 +31,11 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
 public class PreOrderXMLTreeVisitor implements INodeVisitor {
 	
-	private AbstractMetric[] metrics;
+	private Collection<AbstractMetric> metrics;
 	public Document doc;
 	public Node curr;
 	
-	public PreOrderXMLTreeVisitor(AbstractMetric... metrics) {
+	public PreOrderXMLTreeVisitor(Collection<AbstractMetric> metrics) {
 		this.metrics = metrics;
 		
 		iniXMLDoc();
@@ -55,25 +56,6 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 		}
 		
 		doc = documentBuilder.newDocument();
-	}
-
-	public void visit(ProjectNode n){
-		Element e = doc.createElement(n.getClass().getSimpleName());
-		e.setAttribute("label", n.getScopeName());
-		e.appendChild(createMetricsElement(n));	
-		
-		curr.appendChild(e);
-		
-		processChildrenOf(n, e);
-	}
-	
-	public void visit(FolderNode n){
-		Element e = doc.createElement(n.getClass().getSimpleName());
-		e.setAttribute("label", n.getScopeName());
-		e.appendChild(createMetricsElement(n));	
-		curr.appendChild(e);
-		
-		processChildrenOf(n, e);
 	}
 	
 	private Element createMetricsElement(AbstractNode n) {
@@ -101,14 +83,33 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 		
 		curr = parentXmlNode.getParentNode();
 	}
-	
+		
 	@Override
 	public void visit(WorkspaceNode n){
 		processChildrenOf(n, curr);
 	}
+	
+	public void visit(ProjectNode n){
+		createNodeXMLElement(n);
+	}
+	
+	public void visit(FolderNode n){
+		createNodeXMLElement(n);
+	}
 
 	@Override
 	public void visit(AbstractNode n) {
-		throw new InvalidOpenTypeException("Should never come here, implement visitor for each node type.");
+		//throw new InvalidOpenTypeException("Should never come here, implement visitor for each node type.");
+		
+		createNodeXMLElement(n);
+	}
+
+	private void createNodeXMLElement(AbstractNode n) {
+		Element e = doc.createElement(n.getClass().getSimpleName());
+		e.setAttribute("label", n.getScopeName());
+		e.appendChild(createMetricsElement(n));	
+		curr.appendChild(e);
+		
+		processChildrenOf(n, e);
 	}
 }
