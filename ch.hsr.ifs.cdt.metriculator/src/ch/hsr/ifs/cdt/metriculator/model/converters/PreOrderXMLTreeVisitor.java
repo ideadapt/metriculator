@@ -65,7 +65,6 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 			
 			Element metric = doc.createElement(m.getName().toLowerCase());
 			int aggregatedValue = n.getValueOf(m).aggregatedValue;
-			System.out.println(aggregatedValue);
 			metric.setTextContent(Integer.valueOf(aggregatedValue).toString());
 			
 			metrics.appendChild(metric);
@@ -105,8 +104,9 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 	}
 
 	private void createNodeXMLElement(AbstractNode n) {
-		Element e = doc.createElement(n.getClass().getSimpleName());
-		e.setAttribute("label", n.getScopeName());
+		Element e = doc.createElement("node");
+		e.setAttribute("type", n.getClass().getSimpleName().toLowerCase());
+		e.setAttribute("label", n.getScopeName()); // TODO xml / html escape
 		e.appendChild(createMetricsElement(n));	
 		curr.appendChild(e);
 		
