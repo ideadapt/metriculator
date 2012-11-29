@@ -22,7 +22,6 @@
 						</tbody>
 					</table>
 				</div>
-				<script src="script.js"/>
 			</body>
 		</html>
 	</xsl:template>

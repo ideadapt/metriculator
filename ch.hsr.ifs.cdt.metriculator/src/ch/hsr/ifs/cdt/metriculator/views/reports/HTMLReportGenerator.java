@@ -64,12 +64,15 @@ public class HTMLReportGenerator extends FileReportGenerator {
 		propEl.appendChild(themeEl);
 	}
 
-	private void transform(StreamSource xmlStream, StreamSource xslStream,
-			StreamResult result) throws TransformerException {
+	private void transform(StreamSource xmlStream, StreamSource xslStream, StreamResult result)  {
+		try {
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Templates template = factory.newTemplates(xslStream);
 		Transformer transformer = template.newTransformer();
-		transformer.transform(xmlStream, result);
+			transformer.transform(xmlStream, result);
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void copyResourcesTo(IPath export_location) throws IOException {

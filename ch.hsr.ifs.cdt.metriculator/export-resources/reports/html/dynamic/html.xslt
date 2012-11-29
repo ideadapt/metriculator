@@ -15,14 +15,16 @@
 				<div id="tree">
 					<table>
 						<thead>
-							<xsl:call-template name="header-cells"/>
+							<tr>
+								<xsl:call-template name="header-cells"/>
+							</tr>
 						</thead>
 						<tbody>
 							<xsl:call-template name="tree"/>
 						</tbody>
 					</table>
 				</div>
-				<script src="script.js"/>
+				<script src="require-jquery.js" data-main="script" />
 			</body>
 		</html>
 	</xsl:template>
@@ -30,9 +32,9 @@
 		<table>
 			<xsl:for-each select="metriculator/properties/preferences/*">
 				<tr class="metric">
-					<td colspan="2">
+					<th colspan="2">
 						<xsl:value-of select="@longname"/> (<xsl:value-of select="@shortname"/>)
-					</td>
+					</th>
 				</tr>
 				<xsl:for-each select="problem/*[not(self::report_problems)]">
 					<tr class="preference">
@@ -59,7 +61,7 @@
 		<xsl:for-each select="//node">
 			<tr class="{@type} indent-{count(ancestor::node)}">
 				<td class="label">
-					<xsl:value-of select="@label"/>
+					<span><xsl:value-of select="@label"/></span>
 				</td>
 				<xsl:apply-templates select="metrics/*"/>
 			</tr>
