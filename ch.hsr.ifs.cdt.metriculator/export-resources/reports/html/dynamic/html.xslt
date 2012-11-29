@@ -22,7 +22,7 @@
 						</tbody>
 					</table>
 				</div>
-				<script src="themes/{string(/metriculator/properties/theme/@name)}/script.js"/>
+				<script src="script.js"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -48,7 +48,7 @@
 		</table>
 	</xsl:template>
 	<xsl:template name="header-cells">
-		<th>Label</th>
+		<th>Scope</th>
 		<xsl:for-each select="metriculator/properties/preferences/*">
 			<th data-longname="{@longname}" class="metric">
 				<xsl:value-of select="@shortname"/>

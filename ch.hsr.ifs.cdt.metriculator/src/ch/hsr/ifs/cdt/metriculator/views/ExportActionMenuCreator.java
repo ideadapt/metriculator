@@ -17,6 +17,8 @@ import org.eclipse.ui.actions.CompoundContributionItem;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.views.reports.HTMLReportGenerator;
+import ch.hsr.ifs.cdt.metriculator.views.reports.TextReportGenerator;
 
 /**
  * @see https://dev.eclipse.org/svnroot/technology/eu.geclipse/branches/I20090916/plugins/eu.geclipse.ui/src/eu/geclipse/ui/views/AuthTokenView.java
@@ -41,8 +43,16 @@ public class ExportActionMenuCreator implements IMenuCreator {
 				@Override
 				public void run() {
 					
-					FileExporter fex = new HTMLFileExporter(export_folder, root, metrics);
-					fex.run();
+					try {
+						HTMLReportGenerator gen = new HTMLReportGenerator(export_folder, root, metrics);
+						gen.report = "static";
+						gen.run();
+						gen = new HTMLReportGenerator(export_folder, root, metrics);
+						gen.report = "dynamic";
+						gen.run();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			};
 			exportHTMLAction.setText("HTML");
@@ -52,8 +62,8 @@ public class ExportActionMenuCreator implements IMenuCreator {
 				@Override
 				public void run() {
 					
-					FileExporter fex = new TextFileExporter(export_folder, root, metrics);
-					fex.run();
+					TextReportGenerator gen = new TextReportGenerator(export_folder, root, metrics);
+					gen.run();
 				}
 			};
 			exportTextAction.setText("ASCII");
