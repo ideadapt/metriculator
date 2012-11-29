@@ -91,6 +91,7 @@ Desktop.ini
 
 # stuff
 *.exe
+.DS_STORE
 
 
 !testing-project/plugins/**

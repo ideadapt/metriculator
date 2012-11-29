@@ -26,7 +26,7 @@ import org.eclipse.cdt.core.index.IIndexBinding;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.IScopeListener;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
@@ -44,7 +44,7 @@ public class EfferentCouplingScopedASTVisitor extends ScopedASTVisitor {
 		return typeNestingLevel > 0;
 	}
 
-	public EfferentCouplingScopedASTVisitor(final AbstractNode scopeNode, TreeBuilder builder) {
+	public EfferentCouplingScopedASTVisitor(final AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		super(scopeNode, builder);
 
 		this.add(new IScopeListener() {

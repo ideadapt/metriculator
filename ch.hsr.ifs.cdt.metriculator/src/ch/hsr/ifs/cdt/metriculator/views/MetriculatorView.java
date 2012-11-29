@@ -60,7 +60,7 @@ import ch.hsr.ifs.cdt.metriculator.JobObservable.JobState;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
@@ -92,7 +92,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private IAction actionFilterFunction;
 	private IAction actionFilterNamespace;
 	private IAction actionFilterFile;
-	private TreeBuilder currTreeBuilder;
+	private AbstractTreeBuilder currTreeBuilder;
 	private ViewMode viewMode;
 	private Menu tableHeaderMenu;
 	private Composite treeComposite;
@@ -100,6 +100,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private Composite parentComposite;
 	private StructuredViewer activeViewer;
 	private StackLayout stackLayout;
+	private Action actionExport;
 	
 	public enum ViewMode {
 		Hybrid,
@@ -314,6 +315,12 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		createActionFilterFunction();
 		createActionFilterNamespace();
 		createActionFilterFile();
+		createActionExport();
+	}
+
+	private void createActionExport() {
+		actionExport = new Action("Export"){ };
+		actionExport.setMenuCreator(new ExportActionMenuCreator(this));
 	}
 
 	private void applyViewMode(ViewMode view, NodeFilter filter) {
@@ -501,6 +508,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			manager.add(actionExpandAll);
 			manager.add(actionCollapseAll);
 		}
+		managers[1].add(actionExport);
 	}
 
 	private void addViewerOpenListener(StructuredViewer viewer) {

@@ -71,7 +71,7 @@ public abstract class AbstractMetricChecker extends AbstractIndexAstChecker impl
 			return;
 		}
 		
-		AbstractNode fileSystemLeaf = TreeBuilder.createTreeFromPath((ProjectNode) currentScopeNode, ast);
+		AbstractNode fileSystemLeaf = AbstractTreeBuilder.createTreeFromPath((ProjectNode) currentScopeNode, ast);
 		AbstractNode fileSystemTop  = fileSystemLeaf.getRoot(); 
 
 		currentScopeNode = builder.addChild(currentScopeNode, fileSystemTop);

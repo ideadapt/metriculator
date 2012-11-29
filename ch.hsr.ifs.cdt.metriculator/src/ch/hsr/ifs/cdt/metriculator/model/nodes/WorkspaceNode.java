@@ -14,13 +14,20 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import java.util.Collection;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitorAccepter;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class WorkspaceNode extends AbstractNode {
+public class WorkspaceNode extends AbstractNode implements INodeVisitorAccepter {
 	
 	public WorkspaceNode(String name) {
 		super(name);
 		setHybridId(name);
+	}
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
 	}
 
 	@Override

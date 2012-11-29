@@ -16,7 +16,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class PreOrderFlatTreeVisitor extends PreOrderTreeVisitor{
 	@Override
-	void visitNode(AbstractNode n){
+	protected void visitNode(AbstractNode n){
 		if(n.getParent() == null){
 			rootNode = n.shallowClone();			
 		}else{

@@ -22,14 +22,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class NumberMembersScopedASTVisitor extends ScopedASTVisitor {
 	
 	String key = AbstractMetric.getKeyFor(NumberMembersMetric.class);
 
-	public NumberMembersScopedASTVisitor(AbstractNode scopeNode, TreeBuilder builder) {
+	public NumberMembersScopedASTVisitor(AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		super(scopeNode, builder);
 		shouldVisitDeclarators = true;
 	}

@@ -70,8 +70,8 @@ public class TreePrinter {
 		return out.toString();
 	}
 
-	public static void printTree(AbstractNode node, AbstractMetric... metricLSLOC){
-		printTree(node, 0, System.out, metricLSLOC);
+	public static void printTree(AbstractNode node, AbstractMetric... metricsToPrint){
+		printTree(node, 0, System.out, metricsToPrint);
 		System.out.println("\n----------");
 	}
 	

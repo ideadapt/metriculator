@@ -14,15 +14,22 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import org.eclipse.core.resources.IProject;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitorAccepter;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
-public class ProjectNode extends AbstractNode {
+public class ProjectNode extends AbstractNode implements INodeVisitorAccepter {
 
 	private IProject project;
 	
 	public ProjectNode(IProject project) {
 		super(project.getName());
 		this.project = project;
+	}
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
 	}
 	
 	public ProjectNode(String projectName) {

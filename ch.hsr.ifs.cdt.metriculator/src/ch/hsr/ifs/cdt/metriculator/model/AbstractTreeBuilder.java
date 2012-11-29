@@ -23,7 +23,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 
-public abstract class TreeBuilder {
+public abstract class AbstractTreeBuilder {
 	
 	public AbstractNode root;
 	public static final String PATH_SEPARATOR = "#";
@@ -62,7 +62,7 @@ public abstract class TreeBuilder {
 	}
 	
 	/**
-	 * @see TreeBuilder#createTreeFromPath(IProject, IASTTranslationUnit)
+	 * @see AbstractTreeBuilder#createTreeFromPath(IProject, IASTTranslationUnit)
 	 * @param projectRelativePath
 	 * @param tu used in FileNode and FolderNode constructors, can be null
 	 * @return
@@ -79,7 +79,7 @@ public abstract class TreeBuilder {
 			AbstractNode newNode 	= isLastSegment ? new FileNode(tu, segment) : new FolderNode(tu, segment);
 			
 			if (currentNode == null) {
-				newNode.setHybridId(combine(TreeBuilder.PATH_SEPARATOR, hybridIdPrefix, newNode.getScopeUniqueName()));
+				newNode.setHybridId(combine(AbstractTreeBuilder.PATH_SEPARATOR, hybridIdPrefix, newNode.getScopeUniqueName()));
 				currentNode = newNode;
 			} else {
 				newNode.setHybridId(buildPath(hybridIdPrefix, currentNode, newNode));
@@ -93,10 +93,10 @@ public abstract class TreeBuilder {
 	private static String buildPath(String prefix, AbstractNode parent, AbstractNode child){
 		
 		if(prefix != null && prefix.length() > 0){
-			return combine(TreeBuilder.PATH_SEPARATOR, prefix, parent.getPath(), child.getScopeUniqueName());
+			return combine(AbstractTreeBuilder.PATH_SEPARATOR, prefix, parent.getPath(), child.getScopeUniqueName());
 		}
 		
-		return combine(TreeBuilder.PATH_SEPARATOR, parent.getPath(), child.getScopeUniqueName());
+		return combine(AbstractTreeBuilder.PATH_SEPARATOR, parent.getPath(), child.getScopeUniqueName());
 	}
 	
 	/**
