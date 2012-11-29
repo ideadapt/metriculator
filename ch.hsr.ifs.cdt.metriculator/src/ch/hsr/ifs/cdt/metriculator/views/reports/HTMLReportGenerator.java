@@ -52,6 +52,10 @@ public class HTMLReportGenerator extends FileReportGenerator {
 		StreamSource xslStream = new StreamSource(getProjectFile("export-resources/reports/html/"+report+"/html.xslt"));
 		
 		copyResourcesTo(export_to_dir);
+		/*
+		 * if u get angry here, try setting your system locale to USA's
+		 * http://netbeans.org/bugzilla/show_bug.cgi?id=64574
+		 * */
 		transform(xmlStream, xslStream, new StreamResult(htmlFilename.toOSString()));
 		open(export_to_dir);
 	}
@@ -66,9 +70,10 @@ public class HTMLReportGenerator extends FileReportGenerator {
 
 	private void transform(StreamSource xmlStream, StreamSource xslStream, StreamResult result)  {
 		try {
-		TransformerFactory factory = TransformerFactory.newInstance();
-		Templates template = factory.newTemplates(xslStream);
-		Transformer transformer = template.newTransformer();
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Templates template = factory.newTemplates(xslStream);
+			Transformer transformer = template.newTransformer();
+
 			transformer.transform(xmlStream, result);
 		} catch (TransformerException e) {
 			e.printStackTrace();
