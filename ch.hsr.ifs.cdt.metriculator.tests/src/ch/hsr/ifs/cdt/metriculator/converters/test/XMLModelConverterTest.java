@@ -24,7 +24,7 @@ import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.converters.IModelConverter;
-import ch.hsr.ifs.cdt.metriculator.model.converters.XMLModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToXMLConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
@@ -75,10 +75,10 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f1).getParent()
 			.add(f2);
 
-		IModelConverter<Document> conv = new XMLModelConverter();
+		IModelConverter<Document> conv = new ModelToXMLConverter();
 		AbstractMetric[] abstractMetrics = new AbstractMetric[]{metricLsLoc, metricMcCabe};
 		conv.convert(root, Arrays.asList(abstractMetrics));
-		String resultString = ((XMLModelConverter) conv).getXML();
+		String resultString = ((ModelToXMLConverter) conv).getXML();
 
 		System.out.println(resultString);
 
@@ -122,9 +122,9 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f1).getParent()
 			.add(f2);
 
-		IModelConverter<Document> conv = new XMLModelConverter();
+		IModelConverter<Document> conv = new ModelToXMLConverter();
 		conv.convert(root, null);
-		String resultString = ((XMLModelConverter) conv).getXML();
+		String resultString = ((ModelToXMLConverter) conv).getXML();
 
 		System.out.println(resultString);
 

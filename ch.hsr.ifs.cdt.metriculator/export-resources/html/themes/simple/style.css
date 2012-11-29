@@ -1,23 +1,51 @@
-html, body, *{
-             font-family: Verdana;
-             font-size: 13px;
+html, body {
+            font-family: Verdana;
+            font-size: 14px;
+          	vertical-align: baseline;
+			border: 0 none;
+			outline: 0;
+			padding: 0;
+			margin: 0;
+			text-align: left;
          }
+         table
+		 {
+		    border-collapse: collapse;
+		    border-spacing: 0;
+		    font-family: "Courier New";
+		 }
+		
+		 img { border: 0; }
+         
+         /*end reset*/
+         
          table{
          	margin: 20px;
          }
          td, th{
              padding: 3px;
+             padding-left: 0;
          }
          td.metric-value{
-             font-family: "Courier New";
              font-weight: bold;
              text-align: right;
          }
          th{
-             text-align: left;
+             font-family: Verdana;
          }
          th.metric{
              width: 60px;
+             text-align: right;
+         }
+         td.problem-none{}
+         td.problem-warning{
+         	color: orange;
+         }
+         td.problem-error{
+         	color: red;
+         }
+         tr:hover{
+         	background-color: #eee;
          }
          tr.indent-0 td.label{
              padding-left: 0px;

@@ -18,6 +18,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.cdt.codan.core.model.CodanSeverity;
+import org.eclipse.cdt.codan.core.model.IProblem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,13 +32,13 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
-public class PreOrderXMLTreeVisitor implements INodeVisitor {
+public class XMLBuilderVisitor implements INodeVisitor {
 	
 	private Collection<AbstractMetric> metrics;
 	public Document doc;
 	public Node curr;
 	
-	public PreOrderXMLTreeVisitor(Collection<AbstractMetric> metrics) {
+	public XMLBuilderVisitor(Collection<AbstractMetric> metrics) {
 		this.metrics = metrics;
 		
 		iniXMLDoc();
@@ -59,18 +61,36 @@ public class PreOrderXMLTreeVisitor implements INodeVisitor {
 		doc = documentBuilder.newDocument();
 	}
 	
-	private Element createMetricsElement(AbstractNode n) {
+	private Element createMetricsElement(AbstractNode forNode) {
 		Element metrics = doc.createElement("metrics");
 		
 		for(AbstractMetric m : this.metrics){
 			
 			Element metric = doc.createElement(m.getName().toLowerCase());
-			int aggregatedValue = n.getValueOf(m).aggregatedValue;
+			int aggregatedValue = forNode.getValueOf(m).aggregatedValue;
 			metric.setTextContent(Integer.valueOf(aggregatedValue).toString());
-			
+			applyProblemsOf(m, forNode, metric);
 			metrics.appendChild(metric);
 		}
 		return metrics;
+	}
+	
+	private void applyProblemsOf(AbstractMetric metric, AbstractNode inNode, Element toElement) {
+		Collection<IProblem> problems = metric.getChecker().getProblemsFor(inNode);
+		
+		if(problems != null){
+			for(IProblem p : problems){
+				if(p.getSeverity() == CodanSeverity.Warning){
+					toElement.setAttribute("problem-state", "warning");
+				}else if(p.getSeverity() == CodanSeverity.Error){
+					toElement.setAttribute("problem-state", "error");
+				}else if(p.getSeverity() == CodanSeverity.Info){
+					toElement.setAttribute("problem-state", "none");
+				}
+			}
+		}else{
+			toElement.setAttribute("problem-state", "none");
+		}
 	}
 
 	public void processChildrenOf(AbstractNode parent, Node parentXmlNode){

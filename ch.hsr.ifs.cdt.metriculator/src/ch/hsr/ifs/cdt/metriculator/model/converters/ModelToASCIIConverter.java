@@ -8,7 +8,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
-public class ASCIIModelConverter implements IModelConverter<String> {
+public class ModelToASCIIConverter implements IModelConverter<String> {
 	
 	ByteArrayOutputStream os = new ByteArrayOutputStream();
 	

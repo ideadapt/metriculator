@@ -15,7 +15,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
-public class XMLModelConverter implements IModelConverter<Document> {
+public class ModelToXMLConverter implements IModelConverter<Document> {
 
 	protected Document doc;
 
@@ -26,10 +26,10 @@ public class XMLModelConverter implements IModelConverter<Document> {
 			metrics = new ArrayList<AbstractMetric>();
 		}
 		
-		INodeVisitor v = new PreOrderXMLTreeVisitor(metrics);
+		INodeVisitor v = new XMLBuilderVisitor(metrics);
 		node.accept(v);
 		
-		doc = ((PreOrderXMLTreeVisitor)v).doc;
+		doc = ((XMLBuilderVisitor)v).doc;
 	}
 
 	@Override

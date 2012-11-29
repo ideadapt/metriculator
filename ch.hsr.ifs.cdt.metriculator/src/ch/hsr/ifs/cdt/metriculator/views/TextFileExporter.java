@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.converters.ASCIIModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToASCIIConverter;
 import ch.hsr.ifs.cdt.metriculator.model.converters.IModelConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
@@ -17,7 +17,7 @@ public class TextFileExporter extends FileExporter {
 
 	@Override
 	public void run() {
-		IModelConverter<String> a = new ASCIIModelConverter();
+		IModelConverter<String> a = new ModelToASCIIConverter();
 		a.convert(root, metrics);
 	
 		// TODO write to file

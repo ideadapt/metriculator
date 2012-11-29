@@ -6,7 +6,7 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html>
 			<head>
-				<link rel="stylesheet" type="text/css" href="themes/simple/style.css" />
+				<link rel="stylesheet" type="text/css" href="themes/{string(/metriculator/properties/theme/@name)}/style.css" />
 			</head>
 			<body>
 				<table>
@@ -17,12 +17,13 @@
 						<xsl:apply-templates/>
 					</tbody>
 				</table>
+				<script src="themes/{string(/metriculator/properties/theme/@name)}/script.js" />
 			</body>
 		</html>
 	</xsl:template>
 	<xsl:template name="header-cells">
 		<th>Label</th>
-		<xsl:for-each select="metriculator/*/metrics/*">
+		<xsl:for-each select="metriculator/node[1]/metrics/*">
 			<th data-description="{@description}" class="metric">
 				<xsl:value-of select="local-name()"/>
 			</th>
@@ -38,7 +39,7 @@
 		<xsl:apply-templates select="node"/>
 	</xsl:template>
 	<xsl:template match="metrics/*">
-		<td class="{local-name()} metric-value">
+		<td class="{local-name()} metric-value problem-{@problem-state}">
 			<xsl:value-of select="."/>
 		</td>
 	</xsl:template>

@@ -21,36 +21,54 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.converters.XMLModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToXMLConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class HTMLFileExporter extends FileExporter {
 
+	public String theme = "simple";
+	
 	public HTMLFileExporter(Path export_location, AbstractNode root, Collection<AbstractMetric> metrics) {
 		super(export_location, root, metrics);
 	}
 
 	@Override
 	public void run() {
-		XMLModelConverter x = new XMLModelConverter();
+		ModelToXMLConverter x = new ModelToXMLConverter();
 		x.convert(root, metrics);
-		String xml = x.getXML();
-		System.out.println(xml);
 
+		Document doc = x.getResult();
+		injectProperties(doc);
+		
 		if (export_location.isEmpty()) {
 			export_location = Path.fromOSString(System.getProperty("user.home")).append("metriculator-export");
 		}
-
+		
+		String xml = x.getXML();
+		System.out.println(xml);
 		StreamSource xmlStream = new StreamSource(new StringReader(xml));
-		StreamSource xslStream = new StreamSource(getXSLTFile());
+		StreamSource xslStream = new StreamSource(getProjectFile("export-resources/html/html.xslt"));
 		IPath htmlFilename = export_location.append("index").addFileExtension("html");
 		
 		copyResourcesTo(export_location);
 		transform(xmlStream, xslStream, new StreamResult(htmlFilename.toOSString()));
 		open(htmlFilename);
+	}
+
+	private void injectProperties(Document doc) {
+		//CheckersRegistry.getInstance().getRefProblems(metrics.iterator().next().getChecker());
+		Element propEl = doc.createElement("properties");
+		doc.getDocumentElement().appendChild(propEl);
+		
+		// inject theme property
+		Element themeEl = doc.createElement("theme");
+		themeEl.setAttribute("name", theme);
+		propEl.appendChild(themeEl);
 	}
 
 	private void transform(StreamSource xmlStream, StreamSource xslStream, StreamResult result) {
@@ -64,19 +82,8 @@ public class HTMLFileExporter extends FileExporter {
 		}
 	}
 
-	private File getXSLTFile() {
-		Bundle bundle = MetriculatorPluginActivator.getDefault().getBundle();
-		URL resource = bundle.getEntry("export-resources/html/static.xslt");
-		try {
-			return new File(FileLocator.resolve(resource).toURI());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-
-	private void open(IPath xmlFilename) {
-		File file = new File(xmlFilename.toOSString());
+	private void open(IPath filename) {
+		File file = new File(filename.toOSString());
 		try {
 			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
 				String cmd = "rundll32 url.dll,FileProtocolHandler " + file.getCanonicalPath();
@@ -90,20 +97,24 @@ public class HTMLFileExporter extends FileExporter {
 	}
 
 	private void copyResourcesTo(IPath export_location) {
-
-        Bundle bundle = MetriculatorPluginActivator.getDefault().getBundle();
-
-        URL resource = bundle.getEntry("export-resources/html");
-        File source = null;
-        File dest = null;
         try {
-			source = new File(FileLocator.resolve(resource).toURI());
-			dest = new File(export_location.toOSString());
-			
+			File source = getProjectFile("export-resources/html");
+			File dest = new File(export_location.toOSString());
 			copyFolder(source, dest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private File getProjectFile(String projectrelativePath) {
+		Bundle bundle = MetriculatorPluginActivator.getDefault().getBundle();
+        URL resource = bundle.getEntry(projectrelativePath);
+		try {
+			return new File(FileLocator.resolve(resource).toURI());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**

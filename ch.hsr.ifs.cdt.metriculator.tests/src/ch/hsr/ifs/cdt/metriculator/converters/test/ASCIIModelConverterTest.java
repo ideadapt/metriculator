@@ -22,7 +22,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.HybridTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
-import ch.hsr.ifs.cdt.metriculator.model.converters.ASCIIModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToASCIIConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
@@ -74,7 +74,7 @@ public class ASCIIModelConverterTest extends MetriculatorCheckerTestCase {
 				b.addChild(n2, n5);
 				b.addChild(n3, n6);
 				
-		ASCIIModelConverter conv = new ASCIIModelConverter();
+		ModelToASCIIConverter conv = new ModelToASCIIConverter();
 		AbstractMetric[] abstractMetrics = new AbstractMetric[]{ metricLsLoc, metricMcCabe};
 		conv.convert(b.root, Arrays.asList(abstractMetrics));
 		String result = conv.getResult();
