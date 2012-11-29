@@ -4,10 +4,10 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.net.URL;
 import java.util.Collection;
 
@@ -21,17 +21,18 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToXMLConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.MetriculatorToXMLConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.MetriculatorXMLDocument;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class HTMLFileExporter extends FileExporter {
 
-	public String theme = "simple";
+	public static String theme = "simple";
 	
 	public HTMLFileExporter(Path export_location, AbstractNode root, Collection<AbstractMetric> metrics) {
 		super(export_location, root, metrics);
@@ -39,34 +40,44 @@ public class HTMLFileExporter extends FileExporter {
 
 	@Override
 	public void run() {
-		ModelToXMLConverter x = new ModelToXMLConverter();
+		MetriculatorToXMLConverter x = new MetriculatorToXMLConverter();
 		x.convert(root, metrics);
 
-		Document doc = x.getResult();
+		MetriculatorXMLDocument doc = x.getResult();
 		injectProperties(doc);
 		
 		if (export_location.isEmpty()) {
 			export_location = Path.fromOSString(System.getProperty("user.home")).append("metriculator-export");
 		}
 		
-		String xml = x.getXML();
-		System.out.println(xml);
-		StreamSource xmlStream = new StreamSource(new StringReader(xml));
-		StreamSource xslStream = new StreamSource(getProjectFile("export-resources/html/html.xslt"));
 		IPath htmlFilename = export_location.append("index").addFileExtension("html");
+		IPath xmlFilename = export_location.append("model").addFileExtension("xml");
+		String xml = x.getFormattedXML();
+		writeTo(xmlFilename, xml);
+		StreamSource xmlStream = new StreamSource(new File(xmlFilename.toOSString()));
+		StreamSource xslStream = new StreamSource(getProjectFile("export-resources/html/html.xslt"));
 		
 		copyResourcesTo(export_location);
 		transform(xmlStream, xslStream, new StreamResult(htmlFilename.toOSString()));
 		open(htmlFilename);
 	}
 
-	private void injectProperties(Document doc) {
-		//CheckersRegistry.getInstance().getRefProblems(metrics.iterator().next().getChecker());
-		Element propEl = doc.createElement("properties");
-		doc.getDocumentElement().appendChild(propEl);
-		
+	private void writeTo(IPath xmlFilename, String xml) {
+		try {
+			FileWriter fileWriter = new FileWriter(xmlFilename.toOSString());
+			fileWriter.write(xml);
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void injectProperties(MetriculatorXMLDocument xml) {
+		Node propEl = xml.propertiesElement;
+
 		// inject theme property
-		Element themeEl = doc.createElement("theme");
+		Element themeEl = xml.doc.createElement("theme");
 		themeEl.setAttribute("name", theme);
 		propEl.appendChild(themeEl);
 	}
@@ -157,7 +168,7 @@ public class HTMLFileExporter extends FileExporter {
 
 			in.close();
 			out.close();
-			System.out.println("File copied from " + src + " to " + dest);
+//			System.out.println("File copied from " + src + " to " + dest);
 		}
 	}
 }

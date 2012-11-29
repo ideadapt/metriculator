@@ -14,13 +14,8 @@ package ch.hsr.ifs.cdt.metriculator.model.converters;
 
 import java.util.Collection;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.eclipse.cdt.codan.core.model.CodanSeverity;
 import org.eclipse.cdt.codan.core.model.IProblem;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -35,38 +30,22 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 public class XMLBuilderVisitor implements INodeVisitor {
 	
 	private Collection<AbstractMetric> metrics;
-	public Document doc;
+	public MetriculatorXMLDocument xml;
 	public Node curr;
 	
-	public XMLBuilderVisitor(Collection<AbstractMetric> metrics) {
+	public XMLBuilderVisitor(Collection<AbstractMetric> metrics, MetriculatorXMLDocument xml) {
 		this.metrics = metrics;
-		
-		iniXMLDoc();
-		curr = createRootElement();
+		this.xml = xml;
+		curr = this.xml.doc.getDocumentElement();
+
 	}
 
-	private Node createRootElement() {
-		return doc.appendChild(doc.createElement("metriculator"));
-	}
-
-	private void iniXMLDoc() {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = null;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-		
-		doc = documentBuilder.newDocument();
-	}
-	
 	private Element createMetricsElement(AbstractNode forNode) {
-		Element metrics = doc.createElement("metrics");
+		Element metrics = xml.doc.createElement("metrics");
 		
 		for(AbstractMetric m : this.metrics){
 			
-			Element metric = doc.createElement(m.getName().toLowerCase());
+			Element metric = xml.doc.createElement(m.getName().toLowerCase());
 			int aggregatedValue = forNode.getValueOf(m).aggregatedValue;
 			metric.setTextContent(Integer.valueOf(aggregatedValue).toString());
 			applyProblemsOf(m, forNode, metric);
@@ -88,8 +67,6 @@ public class XMLBuilderVisitor implements INodeVisitor {
 					toElement.setAttribute("problem-state", "none");
 				}
 			}
-		}else{
-			toElement.setAttribute("problem-state", "none");
 		}
 	}
 
@@ -119,27 +96,22 @@ public class XMLBuilderVisitor implements INodeVisitor {
 
 	@Override
 	public void visit(AbstractNode n) {
-		//throw new InvalidOpenTypeException("Should never come here, implement visitor for each node type.");
-		
 		createNodeXMLElement(n);
 	}
 	
 	@Override
 	public void visit(NamespaceNode n) {
-		//throw new InvalidOpenTypeException("Should never come here, implement visitor for each node type.");
-		
 		if(n.isAnonymous()){
 			createNodeXMLElement(n, "anonymous");
 		}else{			
 			createNodeXMLElement(n);
 		}
-		
 	}
 	
 	private void createNodeXMLElement(AbstractNode n, String label) {
-		Element e = doc.createElement("node");
+		Element e = xml.doc.createElement("node");
 		e.setAttribute("type", n.getClass().getSimpleName().toLowerCase());
-		e.setAttribute("label", label); // TODO xml / html escape
+		e.setAttribute("label", label);
 		e.appendChild(createMetricsElement(n));	
 		curr.appendChild(e);
 		

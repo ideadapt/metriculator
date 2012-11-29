@@ -6,8 +6,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.w3c.dom.Document;
-
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
@@ -15,9 +13,9 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
-public class ModelToXMLConverter implements IModelConverter<Document> {
+public class ModelToXMLConverter implements IModelConverter<MetriculatorXMLDocument> {
 
-	protected Document doc;
+	protected MetriculatorXMLDocument xml;
 
 	@Override
 	public void convert(AbstractNode node, Collection<AbstractMetric> metrics) {
@@ -25,27 +23,26 @@ public class ModelToXMLConverter implements IModelConverter<Document> {
 		if(metrics == null){
 			metrics = new ArrayList<AbstractMetric>();
 		}
-		
-		INodeVisitor v = new XMLBuilderVisitor(metrics);
+
+		xml = new MetriculatorXMLDocument();
+		INodeVisitor v = new XMLBuilderVisitor(metrics, xml);
 		node.accept(v);
-		
-		doc = ((XMLBuilderVisitor)v).doc;
 	}
 
 	@Override
-	public Document getResult() {
-		return doc;
+	public MetriculatorXMLDocument getResult() {
+		return xml;
 	}
 
-	public String getXML() {
-		OutputFormat format = new OutputFormat(doc);
+	public String getFormattedXML() {
+		OutputFormat format = new OutputFormat(xml.doc);
 		format.setLineWidth(65);
 		format.setIndenting(true);
 		format.setIndent(2);
 		Writer out = new StringWriter();
 		XMLSerializer serializer = new XMLSerializer(out, format);
 		try {
-			serializer.serialize(doc);
+			serializer.serialize(xml.doc);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

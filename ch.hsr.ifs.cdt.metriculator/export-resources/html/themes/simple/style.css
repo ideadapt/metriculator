@@ -26,22 +26,33 @@ html, body {
              padding: 3px;
              padding-left: 0;
          }
-         td.metric-value{
-             font-weight: bold;
-             text-align: right;
-         }
          th{
              font-family: Verdana;
+         }
+         /*preferences*/
+         #preferences td{
+         	font-family: Verdana;
+         }
+         table tr.metric{
+         	font-weight: bold;
+         }
+         table tr.preference td:first-child{
+         	padding-left: 20px;
+         }
+         /*tree*/
+         td.value{
+             font-weight: bold;
+             text-align: right;
          }
          th.metric{
              width: 60px;
              text-align: right;
          }
-         td.problem-none{}
-         td.problem-warning{
+         td.none{}
+         td.warning{
          	color: orange;
          }
-         td.problem-error{
+         td.error{
          	color: red;
          }
          tr:hover{

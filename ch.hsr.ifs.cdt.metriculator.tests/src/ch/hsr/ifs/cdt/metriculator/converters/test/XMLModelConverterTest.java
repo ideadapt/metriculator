@@ -15,7 +15,6 @@ package ch.hsr.ifs.cdt.metriculator.converters.test;
 import java.util.Arrays;
 
 import org.junit.Assert;
-import org.w3c.dom.Document;
 
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
@@ -24,6 +23,7 @@ import ch.hsr.ifs.cdt.metriculator.checkers.McCabeMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.converters.IModelConverter;
+import ch.hsr.ifs.cdt.metriculator.model.converters.MetriculatorXMLDocument;
 import ch.hsr.ifs.cdt.metriculator.model.converters.ModelToXMLConverter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
@@ -75,33 +75,34 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f1).getParent()
 			.add(f2);
 
-		IModelConverter<Document> conv = new ModelToXMLConverter();
+		IModelConverter<MetriculatorXMLDocument> conv = new ModelToXMLConverter();
 		AbstractMetric[] abstractMetrics = new AbstractMetric[]{metricLsLoc, metricMcCabe};
 		conv.convert(root, Arrays.asList(abstractMetrics));
-		String resultString = ((ModelToXMLConverter) conv).getXML();
+		String resultString = ((ModelToXMLConverter) conv).getFormattedXML();
 
 		System.out.println(resultString);
 
 		final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 				"<metriculator>\n" +
-				"  <ProjectNode label=\"testproject\">\n" +
+				"  <properties/>\n" +
+				"  <node label=\"testproject\" type=\"projectnode\">\n" +
 				"    <metrics>\n" +
 				"      <lsloc>30</lsloc>\n" +
 				"      <mccabe>8</mccabe>\n" +
 				"    </metrics>\n" +
-				"    <FolderNode label=\"testfolder1\">\n" +
+				"    <node label=\"testfolder1\" type=\"foldernode\">\n" +
 				"      <metrics>\n" +
 				"        <lsloc>10</lsloc>\n" +
 				"        <mccabe>8</mccabe>\n" +
 				"      </metrics>\n" +
-				"    </FolderNode>\n" +
-				"    <FolderNode label=\"testfolder2\">\n" +
+				"    </node>\n" +
+				"    <node label=\"testfolder2\" type=\"foldernode\">\n" +
 				"      <metrics>\n" +
 				"        <lsloc>20</lsloc>\n" +
 				"        <mccabe>1</mccabe>\n" +
 				"      </metrics>\n" +
-				"    </FolderNode>\n" +
-				"  </ProjectNode>\n" +
+				"    </node>\n" +
+				"  </node>\n" +
 				"</metriculator>\n";
 
 		Assert.assertEquals(expected, resultString);
@@ -122,23 +123,24 @@ public class XMLModelConverterTest extends MetriculatorCheckerTestCase {
 			.add(f1).getParent()
 			.add(f2);
 
-		IModelConverter<Document> conv = new ModelToXMLConverter();
+		IModelConverter<MetriculatorXMLDocument> conv = new ModelToXMLConverter();
 		conv.convert(root, null);
-		String resultString = ((ModelToXMLConverter) conv).getXML();
+		String resultString = ((ModelToXMLConverter) conv).getFormattedXML();
 
 		System.out.println(resultString);
 
 		final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 				"<metriculator>\n" +
-				"  <ProjectNode label=\"testproject\">\n" +
+				"  <properties/>\n" +
+				"  <node label=\"testproject\" type=\"projectnode\">\n" +
 				"    <metrics/>\n" +
-				"    <FolderNode label=\"testfolder1\">\n" +
+				"    <node label=\"testfolder1\" type=\"foldernode\">\n" +
 				"      <metrics/>\n" +
-				"    </FolderNode>\n" +
-				"    <FolderNode label=\"testfolder2\">\n" +
+				"    </node>\n" +
+				"    <node label=\"testfolder2\" type=\"foldernode\">\n" +
 				"      <metrics/>\n" +
-				"    </FolderNode>\n" +
-				"  </ProjectNode>\n" +
+				"    </node>\n" +
+				"  </node>\n" +
 				"</metriculator>\n";
 
 		Assert.assertEquals(expected, resultString);
