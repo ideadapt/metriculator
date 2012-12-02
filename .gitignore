@@ -91,7 +91,7 @@ Desktop.ini
 
 # stuff
 *.exe
-.DS_Store
+.DS_STORE
 
 !testing-project/plugins/**
 !testing-project/mvn/**

@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 
@@ -26,5 +27,10 @@ public class FolderNode extends AbstractNode {
 	@Override
 	public String getIconPath() {
 		return Icon.Size16.FOLDER;
+	}
+
+	@Override
+	public void accept(INodeVisitor v) {
+		v.visit(this);
 	}
 }

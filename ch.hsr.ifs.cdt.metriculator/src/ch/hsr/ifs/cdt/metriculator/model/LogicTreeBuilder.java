@@ -15,13 +15,13 @@ package ch.hsr.ifs.cdt.metriculator.model;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
-public class LogicTreeBuilder extends TreeBuilder {
+public class LogicTreeBuilder extends AbstractTreeBuilder {
 
 	public LogicTreeBuilder(AbstractNode root) {
 		this.root = root;
 	}
 
-	public static LogicTreeBuilder buildFrom(TreeBuilder treeBuilder){
+	public static LogicTreeBuilder buildFrom(AbstractTreeBuilder treeBuilder){
 		PreOrderLogicTreeVisitor visitor = new PreOrderLogicTreeVisitor();
 		
 		visitor.visit(treeBuilder.root);

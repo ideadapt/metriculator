@@ -29,7 +29,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 	private AbstractNode currentNode = null;
 
 	@Override
-	void visitNode(AbstractNode n) {
+	protected void visitNode(AbstractNode n) {
 		if(n.getParent() == null){
 			rootNode    = n.shallowClone();
 			currentNode = rootNode;
@@ -72,7 +72,7 @@ public class PreOrderLogicTreeVisitor extends PreOrderTreeVisitor{
 			if(logicalNamePrefix.length() == 0){
 				logicalNamePrefix.append(scopeName);
 			}else{
-				logicalNamePrefix.insert(0, TreeBuilder.PATH_SEPARATOR).insert(0, scopeName);
+				logicalNamePrefix.insert(0, AbstractTreeBuilder.PATH_SEPARATOR).insert(0, scopeName);
 			}
 		}
 

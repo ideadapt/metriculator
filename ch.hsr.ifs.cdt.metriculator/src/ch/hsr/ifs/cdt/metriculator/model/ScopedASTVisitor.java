@@ -40,9 +40,9 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeNode;
 public class ScopedASTVisitor extends ASTVisitor {
 
 	protected AbstractNode scopeNode;
-	TreeBuilder builder;
+	AbstractTreeBuilder builder;
 
-	public ScopedASTVisitor(AbstractNode scopeNode, TreeBuilder builder) {
+	public ScopedASTVisitor(AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		this.scopeNode = scopeNode;
 		this.builder   = builder;
 

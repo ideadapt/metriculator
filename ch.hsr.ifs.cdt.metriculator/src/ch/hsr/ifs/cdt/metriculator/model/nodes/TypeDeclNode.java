@@ -16,6 +16,8 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+
 
 public class TypeDeclNode extends TypeNode {
 
@@ -23,6 +25,12 @@ public class TypeDeclNode extends TypeNode {
 		super(astNode.getName().toString(), astNode);
 		typeKey = astNode.getKind();
 	}
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
+	}
+
 
 	@Override
 	protected IASTName getASTName(IASTNode astNode) {

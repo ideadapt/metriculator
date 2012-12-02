@@ -1,0 +1,192 @@
+html, body {
+    font-family: Verdana;
+    font-size: 13px;
+    vertical-align: baseline;
+    border: 0 none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: "Courier New";
+}
+
+@media print {
+    thead {display: table-header-group;}
+}
+
+img {
+    border: 0;
+}
+
+/*end reset*/
+
+table {
+    margin: 20px;
+}
+
+td, th {
+    padding: 3px;
+    padding-left: 0;
+}
+
+th {
+    font-family: Verdana;
+    color: #333;
+}
+
+/*preferences*/
+#preferences td {
+    font-family: Verdana;
+}
+
+table tr.metric {
+    font-weight: bold;
+}
+
+table tr.preference td:first-child {
+    padding-left: 20px;
+}
+
+/*tree*/
+td.value {
+    font-weight: bold;
+    text-align: right;
+}
+
+th.metric {
+    min-width: 60px;
+    text-align: right;
+}
+
+#tree thead th {
+    background-color: #eee;
+}
+
+#tree .tableFloatingHeader th:first-child {
+    background-color: transparent;
+    visibility: hidden;
+}
+
+tr:hover, th:hover {
+    background-color: #eee;
+}
+
+tr.selected {
+    background-color: #ddd;
+}
+
+th.metric.header {
+    padding-left: 20px;
+}
+
+td.none {
+}
+
+td.warning {
+    color: orange;
+}
+
+td.error {
+    color: red;
+}
+
+td.label span {
+    padding-left: 20px;
+    padding-top: 1px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+tr.functiondefnode .label span, tr.functiondeclnode .label span {
+    background-image: url(images/method_public_obj.gif);
+}
+
+tr.filenode .label span {
+    background-image: url(images/file_obj.gif);
+}
+
+tr.foldernode .label span {
+    background-image: url(images/hfolder_obj.gif);
+}
+
+tr.typedefnode .label span {
+    background-image: url(images/class_obj.gif);
+}
+
+tr.projectnode .label span {
+    background-image: url(images/cprojects.gif);
+}
+
+tr.namespacenode .label span {
+    background-image: url(images/namespace_obj.gif);
+}
+
+tr.indent-0 td.label {
+    padding-left: 0px;
+}
+
+tr.indent-1 td.label {
+    padding-left: 10px;
+}
+
+tr.indent-2 td.label {
+    padding-left: 20px;
+}
+
+tr.indent-3 td.label {
+    padding-left: 30px;
+}
+
+tr.indent-4 td.label {
+    padding-left: 40px;
+}
+
+tr.indent-5 td.label {
+    padding-left: 50px;
+}
+
+tr.indent-6 td.label {
+    padding-left: 60px;
+}
+
+tr.indent-7 td.label {
+    padding-left: 70px;
+}
+
+tr.indent-8 td.label {
+    padding-left: 80px;
+}
+
+tr.indent-9 td.label {
+    padding-left: 90px;
+}
+
+tr.indent-10 td.label {
+    padding-left: 100px;
+}
+
+tr.indent-11 td.label {
+    padding-left: 110px;
+}
+
+tr.indent-12 td.label {
+    padding-left: 120px;
+}
+
+tr.indent-13 td.label {
+    padding-left: 130px;
+}
+
+tr.indent-14 td.label {
+    padding-left: 140px;
+}
+
+tr.indent-15 td.label {
+    padding-left: 150px;
+}

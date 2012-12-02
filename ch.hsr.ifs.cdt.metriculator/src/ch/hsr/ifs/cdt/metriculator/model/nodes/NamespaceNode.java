@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.metriculator.model.nodes;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 
 public class NamespaceNode extends LogicNode {
@@ -24,6 +25,11 @@ public class NamespaceNode extends LogicNode {
 	
 	public NamespaceNode(ICPPASTNamespaceDefinition nsNode){
 		super(nsNode.getName().toString(), nsNode);
+	}
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
 	}
 
 	@Override

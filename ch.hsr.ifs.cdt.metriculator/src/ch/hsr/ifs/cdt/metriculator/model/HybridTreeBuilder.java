@@ -29,7 +29,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.MemberNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
-public class HybridTreeBuilder extends TreeBuilder {
+public class HybridTreeBuilder extends AbstractTreeBuilder {
 
 	private HashMap<String,AbstractNode> descendants     = new HashMap<String,AbstractNode>();
 	private HashMap<IIndexBinding, MemberNode> declarations = new HashMap<IIndexBinding, MemberNode>();
@@ -41,7 +41,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 	@Override
 	public AbstractNode addChild(AbstractNode parent, AbstractNode child){
 
-		String childsHybridId = combine(TreeBuilder.PATH_SEPARATOR, parent.getHybridId(), child.getScopeUniqueName());
+		String childsHybridId = combine(AbstractTreeBuilder.PATH_SEPARATOR, parent.getHybridId(), child.getScopeUniqueName());
 		AbstractNode existing = parent.getChildBy(childsHybridId);
 
 		prepareDeclBinding(child);
@@ -54,7 +54,7 @@ public class HybridTreeBuilder extends TreeBuilder {
 			child = parent.add(child);
 			PreOrderTreeVisitor visitor = new PreOrderTreeVisitor() {
 				@Override
-				void visitNode(AbstractNode n) {
+				protected void visitNode(AbstractNode n) {
 					descendants.put(n.getHybridId(), n);
 				}
 			};
