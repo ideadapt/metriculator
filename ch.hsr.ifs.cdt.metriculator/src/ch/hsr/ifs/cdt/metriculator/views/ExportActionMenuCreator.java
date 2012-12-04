@@ -39,7 +39,6 @@ public class ExportActionMenuCreator implements IMenuCreator {
 			
 			// feature: only export displayed metrics or choose metrics in wizard
 			final Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
-			// feature: wizard to set path
 			final AbstractNode root = getRootFromActiveView();
 
 			Action exportHTMLAction = new Action() {
