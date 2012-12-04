@@ -17,6 +17,7 @@ import org.eclipse.ui.actions.CompoundContributionItem;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.resources.Icon;
 import ch.hsr.ifs.cdt.metriculator.views.reports.HTMLReportGenerator;
 import ch.hsr.ifs.cdt.metriculator.views.reports.TextReportGenerator;
 
@@ -56,6 +57,7 @@ public class ExportActionMenuCreator implements IMenuCreator {
 				}
 			};
 			exportHTMLAction.setText("HTML");
+			exportHTMLAction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.HTML));
 			itemList.add(new ActionContributionItem(exportHTMLAction));
 
 			Action exportTextAction = new Action() {
@@ -67,6 +69,7 @@ public class ExportActionMenuCreator implements IMenuCreator {
 				}
 			};
 			exportTextAction.setText("ASCII");
+			exportTextAction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.TEXT));
 			itemList.add(new ActionContributionItem(exportTextAction));
 			
 			
@@ -109,20 +112,18 @@ public class ExportActionMenuCreator implements IMenuCreator {
 	}
 
 	public Menu getMenu(final Menu parent) {
-//		createDropDownMenuMgr();
-//		Menu menu = new Menu(parent);
-//		IContributionItem[] items = this.dropDownMenuMgr.getItems();
-//		for (int i = 0; i < items.length; i++) {
-//			IContributionItem item = items[i];
-//			IContributionItem newItem = item;
-//			if (item instanceof ActionContributionItem) {
-//				newItem = new ActionContributionItem(
-//						((ActionContributionItem) item).getAction());
-//			}
-//			newItem.fill(menu, -1);
-//		}
-//		return menu;
-		return null;
+		createDropDownMenuMgr();
+		Menu menu = new Menu(parent);
+		IContributionItem[] items = this.dropDownMenuMgr.getItems();
+		for (int i = 0; i < items.length; i++) {
+			IContributionItem item = items[i];
+			IContributionItem newItem = item;
+			if (item instanceof ActionContributionItem) {
+				newItem = new ActionContributionItem(
+						((ActionContributionItem) item).getAction());
+			}
+			newItem.fill(menu, -1);
+		}
+		return menu;
 	}
-
 }

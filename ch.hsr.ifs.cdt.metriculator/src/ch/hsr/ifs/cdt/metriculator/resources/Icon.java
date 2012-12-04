@@ -32,5 +32,8 @@ public class Icon {
 		public static final String WORKSPACE = "icons/obj16/workspace.gif";
 		public static final String TAGCLOUD = "icons/obj16/tagcloud.gif";
 		public static final String UNION = "icons/obj16/union_obj.gif";
+		public static final String EXPORT = "icons/view16/templates.gif";
+		public static final String TEXT = "icons/elcl16/segment_edit.gif";
+		public static final String HTML = "icons/elcl16/th_single.gif";
 	}
 }
