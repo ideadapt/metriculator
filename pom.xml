@@ -71,8 +71,25 @@
    	   		<url>https://repository.sonatype.org/content/repositories/snapshots</url>
     	</pluginRepository>
   	</pluginRepositories>  
-	
+	<distributionManagement>
+    <repository>
+      <id>ftp-cyon</id>
+      <url>ftp://ideadapt.net/public_html/share/metriculator</url>
+    </repository>
+    <snapshotRepository>
+      <id>ftp-cyon</id>
+      <url>ftp://ideadapt.net/public_html/share/metriculator</url>
+    </snapshotRepository>
+  </distributionManagement>
 	<build>
+		<extensions>
+      <!-- Enabling the use of FTP -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ftp</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+    </extensions>	
 		<plugins>
 			<plugin>
 				<groupId>org.sonatype.tycho</groupId>

@@ -26,8 +26,8 @@ public class HTMLReportGenerator extends FileReportGenerator {
 	public String theme = "simple";
 	public String report = "static";
 	
-	public HTMLReportGenerator(Path export_to_dir, AbstractNode root, Collection<AbstractMetric> metrics) {
-		super(export_to_dir, root, metrics);
+	public HTMLReportGenerator(IPath export_folder, AbstractNode root, Collection<AbstractMetric> metrics) {
+		super(export_folder, root, metrics);
 	}
 
 	@Override

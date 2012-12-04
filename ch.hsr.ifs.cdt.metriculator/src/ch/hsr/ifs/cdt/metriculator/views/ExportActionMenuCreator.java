@@ -4,13 +4,16 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
@@ -37,7 +40,6 @@ public class ExportActionMenuCreator implements IMenuCreator {
 			// feature: only export displayed metrics or choose metrics in wizard
 			final Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
 			// feature: wizard to set path
-			final Path export_folder = Path.EMPTY;
 			final AbstractNode root = getRootFromActiveView();
 
 			Action exportHTMLAction = new Action() {
@@ -45,6 +47,15 @@ public class ExportActionMenuCreator implements IMenuCreator {
 				public void run() {
 					
 					try {
+						
+						DirectoryDialog dialog = new DirectoryDialog(metriculatorView.getViewSite().getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+						dialog.setText("Directory to Export");
+						dialog.setMessage("Choose Directory to Export to");
+						String returnCode = dialog.open(); 
+						
+						if(returnCode == null) return;
+						IPath export_folder = Path.fromOSString(returnCode);
+						
 						HTMLReportGenerator gen = new HTMLReportGenerator(export_folder, root, metrics);
 						gen.report = "static";
 						gen.run();
@@ -63,6 +74,14 @@ public class ExportActionMenuCreator implements IMenuCreator {
 			Action exportTextAction = new Action() {
 				@Override
 				public void run() {
+					
+					DirectoryDialog dialog = new DirectoryDialog(metriculatorView.getViewSite().getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+					dialog.setText("Directory to Export");
+					dialog.setMessage("Choose Directory to Export to");
+					String returnCode = dialog.open(); 
+					
+					if(returnCode == null) return;
+					IPath export_folder = Path.fromOSString(returnCode);
 					
 					TextReportGenerator gen = new TextReportGenerator(export_folder, root, metrics);
 					gen.run();
