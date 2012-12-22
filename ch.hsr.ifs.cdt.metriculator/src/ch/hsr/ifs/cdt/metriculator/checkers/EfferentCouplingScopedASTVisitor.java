@@ -24,9 +24,9 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.IScopeListener;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDeclNode;

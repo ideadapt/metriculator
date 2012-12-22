@@ -17,8 +17,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FunctionDefNode;
 

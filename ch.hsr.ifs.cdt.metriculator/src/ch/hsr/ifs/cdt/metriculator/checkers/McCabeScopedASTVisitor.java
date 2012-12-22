@@ -29,8 +29,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTWhileStatement;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class McCabeScopedASTVisitor extends ScopedASTVisitor {

@@ -4,25 +4,27 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.report.FileReportGenerator;
+import ch.hsr.ifs.cdt.metriculator.report.HTMLReportGenerator;
+import ch.hsr.ifs.cdt.metriculator.report.ReportConfigurationStore;
+import ch.hsr.ifs.cdt.metriculator.report.TextReportGenerator;
+import ch.hsr.ifs.cdt.metriculator.report.views.ConfigurationView;
+import ch.hsr.ifs.cdt.metriculator.report.views.IConfigurableReport;
+import ch.hsr.ifs.cdt.metriculator.report.views.ReportConfigurationDialog;
 import ch.hsr.ifs.cdt.metriculator.resources.Icon;
-import ch.hsr.ifs.cdt.metriculator.views.reports.HTMLReportGenerator;
-import ch.hsr.ifs.cdt.metriculator.views.reports.TextReportGenerator;
 
 /**
  * @see https://dev.eclipse.org/svnroot/technology/eu.geclipse/branches/I20090916/plugins/eu.geclipse.ui/src/eu/geclipse/ui/views/AuthTokenView.java
@@ -32,38 +34,68 @@ public class ExportActionMenuCreator implements IMenuCreator {
 	private MenuManager dropDownMenuMgr;
 	private MetriculatorView metriculatorView;
 
+	public ExportActionMenuCreator(MetriculatorView metriculatorView) {
+		this.metriculatorView = metriculatorView;
+	}
+	
 	private CompoundContributionItem dropdownMenu = new CompoundContributionItem() {
+		
+		private AbstractNode getRootFromActiveView() {
+			switch(metriculatorView.getViewMode()){
+				case Filtered:
+					return MetriculatorPluginActivator.getDefault().getFlatTreeBuilder().root;
+				case Logical:
+					return MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
+				default:
+					return MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
+			}
+		}
+		
+		private void runReportGenerator(FileReportGenerator gen) {
+			try {
+				// feature: only export displayed metrics or choose metrics in wizard
+				final Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
+				final AbstractNode root = getRootFromActiveView();
+				
+				// possibly init settingsstore with defaults (from cookies etc.)
+				ReportConfigurationStore configStore = new ReportConfigurationStore();
+				configStore.set(MetriculatorView.class, "instance", metriculatorView);
+				
+				if (gen instanceof IConfigurableReport) {
+					List<ConfigurationView> views = ((IConfigurableReport) gen).getConfigurationViews(configStore);
+					int status = createConfigurationView(views).open();
+					
+					if(status != Window.OK){
+						return;
+					}
+					
+					for(ConfigurationView view : views){
+						view.writeConfiguration();
+					}
+				}
+				gen.run(configStore, root, metrics);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		private ReportConfigurationDialog createConfigurationView(List<ConfigurationView> views) {
+			
+			ReportConfigurationDialog reportConfigurationDialog = new ReportConfigurationDialog(metriculatorView.getSite().getShell(), views);
+			reportConfigurationDialog.create();
+			reportConfigurationDialog.setHelpAvailable(false);
+			
+			return reportConfigurationDialog;
+		}
+		
 		@Override
 		protected IContributionItem[] getContributionItems() {
 			List<IContributionItem> itemList = new LinkedList<IContributionItem>();
-			
-			// feature: only export displayed metrics or choose metrics in wizard
-			final Collection<AbstractMetric> metrics = MetriculatorPluginActivator.getDefault().getMetrics();
-			final AbstractNode root = getRootFromActiveView();
 
 			Action exportHTMLAction = new Action() {
 				@Override
 				public void run() {
-					
-					try {
-						
-						DirectoryDialog dialog = new DirectoryDialog(metriculatorView.getViewSite().getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-						dialog.setText("Directory to Export");
-						dialog.setMessage("Choose Directory to Export to");
-						String returnCode = dialog.open(); 
-						
-						if(returnCode == null) return;
-						IPath export_folder = Path.fromOSString(returnCode);
-						
-						HTMLReportGenerator gen = new HTMLReportGenerator(export_folder, root, metrics);
-						gen.report = "static";
-						gen.run();
-						gen = new HTMLReportGenerator(export_folder, root, metrics);
-						gen.report = "dynamic";
-						gen.run();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					runReportGenerator(new HTMLReportGenerator());
 				}
 			};
 			exportHTMLAction.setText("HTML");
@@ -73,42 +105,16 @@ public class ExportActionMenuCreator implements IMenuCreator {
 			Action exportTextAction = new Action() {
 				@Override
 				public void run() {
-					
-					DirectoryDialog dialog = new DirectoryDialog(metriculatorView.getViewSite().getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-					dialog.setText("Directory to Export");
-					dialog.setMessage("Choose Directory to Export to");
-					String returnCode = dialog.open(); 
-					
-					if(returnCode == null) return;
-					IPath export_folder = Path.fromOSString(returnCode);
-					
-					TextReportGenerator gen = new TextReportGenerator(export_folder, root, metrics);
-					gen.run();
+					runReportGenerator(new TextReportGenerator());
 				}
 			};
 			exportTextAction.setText("ASCII");
 			exportTextAction.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.TEXT));
 			itemList.add(new ActionContributionItem(exportTextAction));
 			
-			
 			return itemList.toArray(new IContributionItem[0]);
 		}
 	};
-	
-	private AbstractNode getRootFromActiveView() {
-		switch(metriculatorView.getViewMode()){
-			case Filtered:
-				return MetriculatorPluginActivator.getDefault().getFlatTreeBuilder().root;
-			case Logical:
-				return MetriculatorPluginActivator.getDefault().getLogicTreeBuilder().root;
-			default:
-				return MetriculatorPluginActivator.getDefault().getHybridTreeBuilder().root;
-		}
-	}
-
-	public ExportActionMenuCreator(MetriculatorView metriculatorView) {
-		this.metriculatorView = metriculatorView;
-	}
 
 	private void createDropDownMenuMgr() {
 		if (this.dropDownMenuMgr == null) {

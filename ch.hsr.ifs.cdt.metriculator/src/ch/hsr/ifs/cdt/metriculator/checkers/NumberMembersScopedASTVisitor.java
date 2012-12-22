@@ -21,8 +21,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class NumberMembersScopedASTVisitor extends ScopedASTVisitor {

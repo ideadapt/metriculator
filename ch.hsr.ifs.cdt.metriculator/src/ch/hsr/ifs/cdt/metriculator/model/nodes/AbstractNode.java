@@ -29,8 +29,8 @@ import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
-import ch.hsr.ifs.cdt.metriculator.model.INodeVisitorAccepter;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitorAccepter;
 
 public abstract class AbstractNode implements Cloneable, INodeVisitorAccepter {
 

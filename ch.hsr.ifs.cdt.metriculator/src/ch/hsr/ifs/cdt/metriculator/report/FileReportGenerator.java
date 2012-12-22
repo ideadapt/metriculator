@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cdt.metriculator.views.reports;
+package ch.hsr.ifs.cdt.metriculator.report;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
@@ -18,12 +19,15 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public abstract class FileReportGenerator {
 
-	public abstract void run() throws Exception;
+	public static final String CONFIG_EXPORT_DIR = "export_path";
+	protected IPath export_to_dir = Path.EMPTY;
+	Collection<AbstractMetric> metrics;
+	AbstractNode root;
 
-	public static void copyFolder(String src, IPath dest) {
+	public static void copyBundleFolder(String fromFolderPath, IPath toFolderPath) {
 	
 		Bundle bundle = MetriculatorPluginActivator.getDefault().getBundle();
-		Enumeration<URL> paths = bundle.findEntries(src, "*.*", true);
+		Enumeration<URL> paths = bundle.findEntries(fromFolderPath, "*.*", true);
 		URL path = null;
 		while(paths.hasMoreElements() && (path = paths.nextElement()) != null){
 
@@ -31,11 +35,11 @@ public abstract class FileReportGenerator {
 			InputStream is = null;
 			try {
 				String relativeSourcePath = path.toURI().getRawPath();
-				String relativeDestPath = relativeSourcePath.substring(src.length());
+				String relativeDestPath = relativeSourcePath.substring(fromFolderPath.length());
 
 				is = bundle.getEntry(relativeSourcePath).openStream();
 				
-				File file = createFile(dest.toOSString() + relativeDestPath);
+				File file = createFile(toFolderPath.toOSString() + relativeDestPath);
 				fos = new FileOutputStream(file);
 				
 				byte[] buffer = new byte[1024];
@@ -47,8 +51,10 @@ public abstract class FileReportGenerator {
 				e.printStackTrace();
 			}finally {
 				try {
-					is.close();
-					fos.close();
+					if(is != null)
+						is.close();
+					if(fos != null)
+						fos.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -66,18 +72,8 @@ public abstract class FileReportGenerator {
 		}
 		return file;
 	}
-	
-	IPath export_to_dir;
-	Collection<AbstractMetric> metrics;
-	AbstractNode root;
 
-	public FileReportGenerator(IPath export_to_dir, AbstractNode root, Collection<AbstractMetric> metrics) {
-		this.export_to_dir = export_to_dir;
-		this.metrics = metrics;
-		this.root = root;
-	}
-
-	protected void open(IPath filename) {
+	protected void openFileWithDefaultHandler(IPath filename) {
 		File file = new File(filename.toOSString());
 		try {
 			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -122,4 +118,6 @@ public abstract class FileReportGenerator {
 			}
 		}
 	}
+	
+	public abstract void run(ReportConfigurationStore configStore, AbstractNode root, Collection<AbstractMetric> metrics) throws Exception;
 }
