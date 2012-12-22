@@ -92,6 +92,7 @@ Desktop.ini
 # stuff
 *.exe
 .DS_STORE
+aquota.group
 
 !testing-project/plugins/**
 !testing-project/mvn/**
