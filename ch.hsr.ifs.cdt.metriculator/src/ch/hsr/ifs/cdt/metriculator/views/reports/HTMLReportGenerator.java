@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cdt.metriculator.views.reports;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.xml.transform.Templates;
@@ -23,6 +22,7 @@ import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class HTMLReportGenerator extends FileReportGenerator {
 
+	private static final String RESOURCES_BASE_PATH = "/export-resources/reports/html/";
 	public String theme = "simple";
 	public String report = "static";
 	
@@ -49,7 +49,7 @@ public class HTMLReportGenerator extends FileReportGenerator {
 		String xml = x.getFormattedXML();
 		writeTo(xmlFilename, xml);
 		StreamSource xmlStream = new StreamSource(new File(xmlFilename.toOSString()));
-		StreamSource xslStream = new StreamSource(getProjectFile("export-resources/reports/html/"+report+"/html.xslt"));
+		StreamSource xslStream = new StreamSource(getProjectFile(RESOURCES_BASE_PATH+report+"/html.xslt"));
 		
 		copyResourcesTo(export_to_dir);
 		/*
@@ -80,9 +80,7 @@ public class HTMLReportGenerator extends FileReportGenerator {
 		}
 	}
 
-	private void copyResourcesTo(IPath export_location) throws IOException {
-		File source = getProjectFile("export-resources/reports/html/" + report);
-		File dest = new File(export_location.toOSString());
-		copyFolder(source, dest);
+	private void copyResourcesTo(IPath export_location) {
+		copyFolder(RESOURCES_BASE_PATH + report, export_location);
 	}
 }
