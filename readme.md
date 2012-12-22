@@ -1,5 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/ideadapt/metriculator.png?branch=master)](http://travis-ci.org/ideadapt/metriculator)
-
+[![Build Status](https://travis-ci.org/ideadapt/metriculator.png?branch=master)](https://travis-ci.org/ideadapt/metriculator)
 Installation
 ============
 * Download Eclipse CDT (or install C++ Development Tools as plug-in) from eclipse.org
