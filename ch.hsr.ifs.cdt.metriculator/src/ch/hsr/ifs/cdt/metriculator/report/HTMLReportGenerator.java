@@ -60,7 +60,7 @@ public class HTMLReportGenerator extends FileReportGenerator implements IConfigu
 		 * http://netbeans.org/bugzilla/show_bug.cgi?id=64574
 		 * */
 		transform(xmlStream, xslStream, new StreamResult(htmlFilename.toOSString()));
-		openFileWithDefaultHandler(export_to_dir);
+		selectPathInOSFileBrowser(htmlFilename);
 	}
 
 	private void injectProperties(MetriculatorXMLDocument xml) {

@@ -26,7 +26,7 @@ public class TextReportGenerator extends FileReportGenerator implements IConfigu
 	
 		IPath textFilename = export_to_dir.append("metrics").addFileExtension("txt");
 		writeTo(textFilename, a.getResult());
-		openFileWithDefaultHandler(textFilename);
+		selectPathInOSFileBrowser(textFilename);
 	}
 
 	@Override

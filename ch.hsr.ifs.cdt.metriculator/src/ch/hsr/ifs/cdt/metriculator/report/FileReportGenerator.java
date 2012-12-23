@@ -72,12 +72,30 @@ public abstract class FileReportGenerator {
 		}
 		return file;
 	}
-
-	protected void openFileWithDefaultHandler(IPath filename) {
+	
+	protected void openPathWithDefaultHandler(IPath filename) {
 		File file = new File(filename.toOSString());
 		try {
 			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
 				String cmd = "rundll32 url.dll,FileProtocolHandler " + file.getCanonicalPath();
+				Runtime.getRuntime().exec(cmd);
+			} else {
+				Desktop.getDesktop().open(file);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected void selectPathInOSFileBrowser(IPath filename) {
+		File file = new File(filename.toOSString());
+		try {
+			String osname = System.getProperty("os.name").toLowerCase();
+			if (osname.contains("windows")) {
+				String cmd = "Explorer /select," + file.getCanonicalPath();
+				Runtime.getRuntime().exec(cmd);
+			} else if (osname.contains("os x")){
+				String cmd = "open -R " + file.getCanonicalPath();
 				Runtime.getRuntime().exec(cmd);
 			} else {
 				Desktop.getDesktop().open(file);
