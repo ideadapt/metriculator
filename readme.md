@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/ideadapt/metriculator.png?branch=master)](https://travis-ci.org/ideadapt/metriculator)
 Features
 ========
-* Various C++ Source Code metrics (McCabe Complexity, Logical Lines of Code, Number of Params, Efferent Coupling, Number of Members)
-* Smoothly integrated into Eclipse (Juno and earlier) UI
+* Various C++ source code metrics (McCabe Complexity, Logical Lines of Code, Number of Params, Efferent Coupling, Number of Members)
+* Smoothly integrated into Eclipse UI (Juno and earlier)
 * Rich export functions (tag cloud image, HTML report, ASCII Text file, plain XML)
 * Configurable limits per metric (e.g. maximum lines of code per function)
 * Designed to easily add your own metrics (via separate plugin or via project contribution)
