@@ -24,7 +24,7 @@ import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.FlatTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.HybridTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.LogicTreeBuilder;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.TypeDefNode;
@@ -73,7 +73,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	
 	
 	public void testCreateTreeFromFileWithLeadingSeparator() {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("/Test.cpp"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("/Test.cpp"), null);
 				
 		assertTrue(file instanceof FileNode);
 		
@@ -81,7 +81,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromFile()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("Test.cpp"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("Test.cpp"), null);
 				
 		assertTrue(file instanceof FileNode);
 		
@@ -89,7 +89,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromFileFolder()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("cute/Test.cpp"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("cute/Test.cpp"), null);
 				
 		assertTrue(file instanceof FileNode);
 		assertTrue(file.getParent() instanceof FolderNode);
@@ -98,7 +98,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromFileInNestedFolders()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("cute/tests/Test.cpp"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("cute/tests/Test.cpp"), null);
 				
 		assertTrue(file instanceof FileNode);
 		assertTrue(file.getParent() instanceof FolderNode);
@@ -108,7 +108,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromOneSegment()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("cute"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("cute"), null);
 				
 		assertTrue(file instanceof FileNode);
 		
@@ -116,7 +116,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromOneSegmentWithTrailingSeparator()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("cute/"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("cute/"), null);
 				
 		assertTrue(file instanceof FileNode);
 		assertEquals("cute", file.getScopeUniqueName());
@@ -126,7 +126,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromOneSegmentWithLeadingSeparator()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("/cute"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("/cute"), null);
 		
 		assertTrue(file instanceof FileNode);
 		
@@ -134,7 +134,7 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromFileInRoot()  {
-		AbstractNode file = TreeBuilder.createTreeFromPath(new Path("test.cpp"), null);
+		AbstractNode file = AbstractTreeBuilder.createTreeFromPath(new Path("test.cpp"), null);
 		
 		assertTrue(file instanceof FileNode);
 		
@@ -142,8 +142,8 @@ public class TreeBuilderTest extends MetriculatorCheckerTestCase {
 	}
 	
 	public void testCreateTreeFromPathAndMergeWithHybrid()  {
-		AbstractNode file1 = TreeBuilder.createTreeFromPath("workspace"+TreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/test.cpp"), null);
-		AbstractNode file11 = TreeBuilder.createTreeFromPath("workspace"+TreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/folder11/test.cpp"), null);
+		AbstractNode file1 = AbstractTreeBuilder.createTreeFromPath("workspace"+AbstractTreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/test.cpp"), null);
+		AbstractNode file11 = AbstractTreeBuilder.createTreeFromPath("workspace"+AbstractTreeBuilder.PATH_SEPARATOR+"project", new Path("/src/cute/folder1/folder11/test.cpp"), null);
 		AbstractNode fileSystemTop1  = file1.getRoot();
 		AbstractNode fileSystemTop11  = file11.getRoot();
 		

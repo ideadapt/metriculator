@@ -16,6 +16,8 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 
+import ch.hsr.ifs.cdt.metriculator.model.INodeVisitor;
+
 
 public class TypeDefNode extends TypeNode {
 
@@ -26,6 +28,11 @@ public class TypeDefNode extends TypeNode {
 	public TypeDefNode(ICPPASTCompositeTypeSpecifier astNode) {
 		super(astNode.getName().toString(), astNode);
 		typeKey = astNode.getKey();
+	}
+
+	@Override
+	public void accept(INodeVisitor v){
+		v.visit(this);
 	}
 
 	@Override

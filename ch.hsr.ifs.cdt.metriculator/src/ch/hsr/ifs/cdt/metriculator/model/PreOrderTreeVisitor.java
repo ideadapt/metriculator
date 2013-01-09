@@ -13,24 +13,48 @@
 package ch.hsr.ifs.cdt.metriculator.model;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.FolderNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.NamespaceNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.ProjectNode;
+import ch.hsr.ifs.cdt.metriculator.model.nodes.WorkspaceNode;
 
-
-public abstract class PreOrderTreeVisitor{
+public abstract class PreOrderTreeVisitor implements INodeVisitor{
 	
 	protected AbstractNode rootNode = null;
-
-	protected void visit(AbstractNode n){
+	
+	@Override
+	public void visit(AbstractNode n){
 		
 		visitNode(n);
 		
 		for(AbstractNode child : n.getChildren()){
-			visit(child);
+			child.accept(this);
 			leaveNode(child);
 		}
 	}
 	
-	abstract void visitNode(AbstractNode n);
+	protected abstract void visitNode(AbstractNode n);
 	
 	protected void leaveNode(AbstractNode n){
+	}
+
+	@Override
+	public void visit(WorkspaceNode n) {
+		visit((AbstractNode)n);
+	}
+
+	@Override
+	public void visit(ProjectNode n) {
+		visit((AbstractNode)n);
+	}
+	
+	@Override
+	public void visit(NamespaceNode n) {
+		visit((AbstractNode)n);
+	}
+	
+	@Override
+	public void visit(FolderNode n) {
+		visit((AbstractNode)n);
 	}
 }

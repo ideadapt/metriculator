@@ -38,8 +38,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTWhileStatement;
 
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.ScopedASTVisitor;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
 public class LSLOCScopedASTVisitor extends ScopedASTVisitor {
@@ -47,7 +47,7 @@ public class LSLOCScopedASTVisitor extends ScopedASTVisitor {
 	private List<IASTNode> astNodesToIgnore = new ArrayList<IASTNode>();
 	private String key = AbstractMetric.getKeyFor(LSLOCMetric.class);
 
-	public LSLOCScopedASTVisitor(AbstractNode scopeNode, TreeBuilder builder) {
+	public LSLOCScopedASTVisitor(AbstractNode scopeNode, AbstractTreeBuilder builder) {
 		super(scopeNode, builder);
 	}
 

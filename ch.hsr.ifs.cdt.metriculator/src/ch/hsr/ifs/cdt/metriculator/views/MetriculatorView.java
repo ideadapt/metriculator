@@ -25,6 +25,7 @@ import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -46,11 +47,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
@@ -59,8 +63,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import ch.hsr.ifs.cdt.metriculator.JobObservable.JobState;
 import ch.hsr.ifs.cdt.metriculator.MetriculatorPluginActivator;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.NodeFilter;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.LogicNode;
@@ -92,7 +96,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private IAction actionFilterFunction;
 	private IAction actionFilterNamespace;
 	private IAction actionFilterFile;
-	private TreeBuilder currTreeBuilder;
+	private AbstractTreeBuilder currTreeBuilder;
 	private ViewMode viewMode;
 	private Menu tableHeaderMenu;
 	private Composite treeComposite;
@@ -100,6 +104,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	private Composite parentComposite;
 	private StructuredViewer activeViewer;
 	private StackLayout stackLayout;
+	private Action actionExport;
 	
 	public enum ViewMode {
 		Hybrid,
@@ -314,6 +319,33 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 		createActionFilterFunction();
 		createActionFilterNamespace();
 		createActionFilterFile();
+		createActionExport();
+	}
+
+	private void createActionExport() {
+		actionExport = new Action("Export"){
+
+			@Override
+			public void runWithEvent(Event e) {
+				IMenuCreator mc = this.getMenuCreator();
+				Widget item = e.widget;
+				ToolItem ti = (ToolItem) item; 
+
+				if (mc != null) {
+					Menu m = mc.getMenu(ti.getParent());
+					if (m != null) {
+						// position the menu below the drop down item / next to cursor
+						Point point = item.getDisplay().getCursorLocation();
+						m.setLocation(point.x, point.y);
+						m.setVisible(true);
+						return; // we don't fire the action
+					}
+				}
+
+			}
+		};
+		actionExport.setImageDescriptor(MetriculatorPluginActivator.getDefault().getImageDescriptor(Icon.Size16.EXPORT));
+		actionExport.setMenuCreator(new ExportActionMenuCreator(this));
 	}
 
 	private void applyViewMode(ViewMode view, NodeFilter filter) {
@@ -500,6 +532,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 			manager.add(new Separator());
 			manager.add(actionExpandAll);
 			manager.add(actionCollapseAll);
+			manager.add(actionExport);
 		}
 	}
 

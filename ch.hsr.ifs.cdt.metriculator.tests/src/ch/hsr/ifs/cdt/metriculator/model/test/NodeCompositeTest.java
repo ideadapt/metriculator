@@ -17,7 +17,7 @@ import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetric;
 import ch.hsr.ifs.cdt.metriculator.checkers.LSLOCMetricChecker;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetric;
 import ch.hsr.ifs.cdt.metriculator.model.AbstractMetricChecker;
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 import ch.hsr.ifs.cdt.metriculator.model.TreePrinter;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 import ch.hsr.ifs.cdt.metriculator.model.nodes.FileNode;
@@ -112,8 +112,8 @@ public class NodeCompositeTest extends TestCase {
 		n.add(n2);
 
 		assertEquals(TESTWORKSPACE, root.getPath());
-		assertEquals(TESTWORKSPACE + TreeBuilder.PATH_SEPARATOR+ "testproject", n.getPath());
-		assertEquals(TESTWORKSPACE + TreeBuilder.PATH_SEPARATOR+ "testproject" + TreeBuilder.PATH_SEPARATOR + "file1", n2.getPath());
+		assertEquals(TESTWORKSPACE + AbstractTreeBuilder.PATH_SEPARATOR+ "testproject", n.getPath());
+		assertEquals(TESTWORKSPACE + AbstractTreeBuilder.PATH_SEPARATOR+ "testproject" + AbstractTreeBuilder.PATH_SEPARATOR + "file1", n2.getPath());
 	}
 	
 	public void testGetMetricResultWithEmptyTree(){

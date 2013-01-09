@@ -15,6 +15,8 @@ package ch.hsr.ifs.cdt.metriculator.tests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import ch.hsr.ifs.cdt.metriculator.converters.test.ASCIIModelConverterTest;
+import ch.hsr.ifs.cdt.metriculator.converters.test.XMLModelConverterTest;
 import ch.hsr.ifs.cdt.metriculator.model.test.NodeCompositeTest;
 import ch.hsr.ifs.cdt.metriculator.model.test.NodeFilterTest;
 import ch.hsr.ifs.cdt.metriculator.model.test.TreeBuilderIndexerTest;
@@ -30,8 +32,9 @@ import ch.hsr.ifs.cdt.metriculator.model.test.TreeBuilderTest;
 	McCabeMetricCheckerTest.class, 
 	NumberParamsCheckerTest.class,
 	NumberMembersCheckerTest.class,
-	EfferentCouplingMetricCheckerTest.class
-	 
+	EfferentCouplingMetricCheckerTest.class,
+	XMLModelConverterTest.class,
+	ASCIIModelConverterTest.class
 })
 
 public class AllTests {

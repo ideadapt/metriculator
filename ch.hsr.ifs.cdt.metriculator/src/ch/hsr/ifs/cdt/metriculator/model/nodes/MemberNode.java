@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 
-import ch.hsr.ifs.cdt.metriculator.model.TreeBuilder;
+import ch.hsr.ifs.cdt.metriculator.model.AbstractTreeBuilder;
 
 public abstract class MemberNode extends LogicNode {
 
@@ -100,7 +100,7 @@ public abstract class MemberNode extends LogicNode {
 		}
 
 
-		return buildLogicalOwnerName(newOwner, tu) + TreeBuilder.PATH_SEPARATOR + owner.getName() + (isAnonymousNamespace(node) ? node.hashCode() : "");
+		return buildLogicalOwnerName(newOwner, tu) + AbstractTreeBuilder.PATH_SEPARATOR + owner.getName() + (isAnonymousNamespace(node) ? node.hashCode() : "");
 	}
 
 	private boolean isAnonymousNamespace(IASTNode node) {

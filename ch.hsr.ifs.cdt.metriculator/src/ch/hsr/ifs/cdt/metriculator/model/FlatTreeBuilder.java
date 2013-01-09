@@ -14,13 +14,13 @@ package ch.hsr.ifs.cdt.metriculator.model;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
-public class FlatTreeBuilder extends TreeBuilder {
+public class FlatTreeBuilder extends AbstractTreeBuilder {
 
 	public FlatTreeBuilder(AbstractNode root) {
 		this.root = root;
 	}
 
-	public static FlatTreeBuilder buildFrom(TreeBuilder treeBuilder){
+	public static FlatTreeBuilder buildFrom(AbstractTreeBuilder treeBuilder){
 		PreOrderTreeVisitor visitor = new PreOrderFlatTreeVisitor();
 
 		visitor.visit(treeBuilder.root);
