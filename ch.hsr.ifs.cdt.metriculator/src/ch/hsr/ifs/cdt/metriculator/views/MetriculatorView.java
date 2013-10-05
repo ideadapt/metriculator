@@ -629,7 +629,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 	}
 
 	class MetriculatorCellLabelProvider extends CellLabelProvider{
-
+		
 		@Override
 		public void update(ViewerCell cell) {
 			switch (cell.getColumnIndex()) {

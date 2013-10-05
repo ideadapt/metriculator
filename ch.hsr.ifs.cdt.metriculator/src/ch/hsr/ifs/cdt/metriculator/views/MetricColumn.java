@@ -12,9 +12,13 @@
 
 package ch.hsr.ifs.cdt.metriculator.views;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -53,35 +57,65 @@ public final class MetricColumn {
 		column.setResizable(false);
 	}
 	
-	public static TreeColumn createFor(AbstractMetric metric, TreeViewer treeViewer) {
+	public static TreeColumn createFor(final AbstractMetric metric, TreeViewer treeViewer) {
 
-		TreeColumn column = new TreeColumn(treeViewer.getTree(), SWT.RIGHT);
-		column.setText(metric.getName());
-		column.setToolTipText(metric.getDescription());
+		TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.RIGHT);
+		column.setLabelProvider(new ColumnLabelProvider(){
+
+			@Override
+			public Color getBackground(Object element) {
+				// this override is required to force alternate row colors
+				// see https://github.com/ideadapt/metriculator/issues/4
+				return null;
+			}
+
+			@Override
+			public String getText(Object element) {
+				return metric.getName(); 
+			}
+		});
+		column.getColumn().setToolTipText(metric.getDescription());
 		
-		setMetric(metric, column);				
-		MetricColumnViewerSorter.registerFor(column, treeViewer);
+		setMetric(metric, column.getColumn());				
+		MetricColumnViewerSorter.registerFor(column.getColumn(), treeViewer);
 		
-		return column;
+		return column.getColumn();
 	}
 	
-	public static TableColumn createFor(AbstractMetric metric, TableViewer tableViewer) {
+	public static TableColumn createFor(final AbstractMetric metric, TableViewer tableViewer) {
 
-		TableColumn column = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
-		column.setText(metric.getName());
-		column.setToolTipText(metric.getDescription());
+		TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.RIGHT);
+		column.setLabelProvider(new ColumnLabelProvider(){
+
+			@Override
+			public Color getBackground(Object element) {
+				// this override is required to force alternate row colors
+				// see https://github.com/ideadapt/metriculator/issues/4
+				return null;
+			}
+
+			@Override
+			public String getText(Object element) {
+				return metric.getName(); 
+			}
+		});
+		column.getColumn().setToolTipText(metric.getDescription());
 		
-		setMetric(metric, column);				
-		MetricColumnViewerSorter.registerFor(column, tableViewer);
+		setMetric(metric, column.getColumn());				
+		MetricColumnViewerSorter.registerFor(column.getColumn(), tableViewer);
 		
-		return column;
+		return column.getColumn();
 	}
-
+	
 	public static AbstractMetric getMetric(Widget column) {
 		return (AbstractMetric) column.getData(DATAKEY_COLUMNMETRIC);
 	}
 	
 	public static void setMetric(AbstractMetric metric, Widget column) {
+		column.setData(DATAKEY_COLUMNMETRIC, metric);
+	}
+	
+	public static void setMetric(AbstractMetric metric, TreeColumn column) {
 		column.setData(DATAKEY_COLUMNMETRIC, metric);
 	}
 
