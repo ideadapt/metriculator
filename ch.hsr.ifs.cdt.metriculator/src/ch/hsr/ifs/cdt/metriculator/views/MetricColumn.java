@@ -114,10 +114,6 @@ public final class MetricColumn {
 	public static void setMetric(AbstractMetric metric, Widget column) {
 		column.setData(DATAKEY_COLUMNMETRIC, metric);
 	}
-	
-	public static void setMetric(AbstractMetric metric, TreeColumn column) {
-		column.setData(DATAKEY_COLUMNMETRIC, metric);
-	}
 
 	public static void createFillerColumnOnce(Tree tree) {
 		
