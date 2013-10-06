@@ -668,7 +668,7 @@ public class MetriculatorView extends ViewPart implements Observer, ITagCloudDat
 					}
 				}
 			}else{
-				toCell.setBackground(AwtSwtColorConverter.fromAwt(Color.WHITE));
+				toCell.setBackground(null);
 			}
 		}
 
