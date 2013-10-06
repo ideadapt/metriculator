@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.Plugin;
 
 import ch.hsr.ifs.cdt.metriculator.model.nodes.AbstractNode;
 
-public class MetriculatorCheckerTestCase extends CheckerTestCase {
+public abstract class MetriculatorCheckerTestCase extends CheckerTestCase {
 
 	@Override
 	public boolean isCpp() {
