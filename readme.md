@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/ideadapt/metriculator.png?branch=master)](https://travis-ci.org/ideadapt/metriculator)
+
+metriculator was subject of my bachelor thesis, the original documentation is available as PDF from http://eprints.hsr.ch/223/.
+
 Features
 ========
 * Various C++ source code metrics (McCabe Complexity, Logical Lines of Code, Number of Params, Efferent Coupling, Number of Members)
